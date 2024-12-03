@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Login from './login/login'
-import Layout from './layout/layout'
+import Layout from './layout/sidebar';
 
 function App() {
   const apiUrl = import.meta.env.VITE_API_URL;

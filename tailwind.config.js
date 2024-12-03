@@ -10,5 +10,5 @@ export default {
   colors: {
     'bharath-blue': '#0073e6',
   },
-  plugins: [],
-}
+  plugins:[],
+};
