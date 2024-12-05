@@ -12,6 +12,10 @@ const sidebar = () => {
           <span className="hidden md:inline">Dashboad</span>
         </li>
         <li className="flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer hover:bg-blue-600 hover:text-white">
+          <FaTachometerAlt />
+          <span className="hidden md:inline">Menu</span>
+        </li>
+        <li className="flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer hover:bg-blue-600 hover:text-white">
         <FaQuoteLeft /> 
         <span className="hidden md:inline">Quotation</span>
         </li>
