@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Logo from '../assets/upvc_logo.jpeg'
+import Logo from '../../assets/logo.jpeg'
 import { useNavigate } from 'react-router-dom'
 
 const login = () => {

@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import Login from './login/login';
-import Layout from './layout/sidebar';
-import Menu from './menu/menu';
-import Measure from './menu/measurement';
-import Submit from './menu/submitpage'; 
+import Login from './components/login/login';
+import Layout from './components/layout/sidebar';
+import Menu from './components/menu/menu';
+import Measure from './components/menu/measurement';
+import Calculate from './components/menu/calculation';
 
 function App() {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -17,7 +17,7 @@ function App() {
         <Route path='/layout' element={<Layout />} />
         <Route path='/menu' element={<Menu />} />
         <Route path='/measure' element={<Measure />} />
-        <Route path='/submitted' element={<Submit />} /> 
+        <Route path='/calculate' element={<Calculate />} />
       </Routes>
     </Router>
   );
