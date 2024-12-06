@@ -359,3 +359,206 @@ const Menu = () => {
 };
 
 export default Menu;
+
+
+
+
+// <div className="flex flex-row justify-center">
+// <table className="table-fixed border-collapse border border-black bg-white">
+//   <thead>
+//     <tr>
+//       <th className="border border-black px-4 py-2">Doors</th>
+//       <th className="border border-black px-4 py-2">Windows</th>
+//       <th className="border border-black px-4 py-2">Louvers</th>
+//     </tr>
+//   </thead>
+//   <tbody>
+//     <tr>
+//       <td className="border border-black px-4 py-2 align-top">
+//         <label>
+//           <input
+//             type="checkbox"
+//             onChange={() =>
+//               setSelectedOptions((prev) => ({ ...prev, doors: !prev.doors }))
+//             }
+//             checked={selectedOptions.doors}
+//           />
+//           Doors
+//         </label>
+//         {selectedOptions.doors && (
+//           <div className="mt-2">
+//             <h3 className="font-bold">Door Options</h3>
+//             <label>
+//               <input
+//                 type="checkbox"
+//                 onChange={() => handleSelection("bedRoomDoor", setDoorOptions)}
+//                 checked={doorOptions.bedRoomDoor}
+//               />
+//               Bed Room Door
+//             </label>
+//             {doorOptions.bedRoomDoor && (
+//               <div className="pl-4">
+//                 <h4 className="font-semibold">Bed Room Door Options</h4>
+//                 <label>
+//                   <input
+//                     type="checkbox"
+//                     onChange={() =>
+//                       handleSelection("fullyCovered", setBedRoomDoorOptions)
+//                     }
+//                     checked={bedRoomDoorOptions.fullyCovered}
+//                   />
+//                   Fully Covered UPVC Panel Door
+//                 </label>
+//                 <label>
+//                   <input
+//                     type="checkbox"
+//                     onChange={() =>
+//                       handleSelection("semiCovered", setBedRoomDoorOptions)
+//                     }
+//                     checked={bedRoomDoorOptions.semiCovered}
+//                   />
+//                   Semi-Covered UPVC Panel Door with Glass
+//                 </label>
+//               </div>
+//             )}
+//             <label>
+//               <input
+//                 type="checkbox"
+//                 onChange={() => handleSelection("mainDoor", setDoorOptions)}
+//                 checked={doorOptions.mainDoor}
+//               />
+//               Main Door
+//             </label>
+//             {doorOptions.mainDoor && (
+//               <div className="pl-4">
+//                 <h4 className="font-semibold">Main Door Options</h4>
+//                 <label>
+//                   <input
+//                     type="checkbox"
+//                     onChange={() =>
+//                       handleSelection("fullyCovered", setMainDoorOptions)
+//                     }
+//                     checked={mainDoorOptions.fullyCovered}
+//                   />
+//                   Fully Covered UPVC Panel Door
+//                 </label>
+//                 <label>
+//                   <input
+//                     type="checkbox"
+//                     onChange={() =>
+//                       handleSelection("semiCovered", setMainDoorOptions)
+//                     }
+//                     checked={mainDoorOptions.semiCovered}
+//                   />
+//                   Semi-Covered UPVC Panel Door with Glass
+//                 </label>
+//               </div>
+//             )}
+//           </div>
+//         )}
+//       </td>
+//       <td className="border border-black px-4 py-2 align-top">
+//         <label>
+//           <input
+//             type="checkbox"
+//             onChange={() =>
+//               setSelectedOptions((prev) => ({ ...prev, windows: !prev.windows }))
+//             }
+//             checked={selectedOptions.windows}
+//           />
+//           Windows
+//         </label>
+//         {selectedOptions.windows && (
+//           <div className="mt-2">
+//             <h3 className="font-bold">Window Options</h3>
+//             <label>
+//               <input
+//                 type="checkbox"
+//                 onChange={() =>
+//                   handleSelection("fixedWindows", setWindowOptions)
+//                 }
+//                 checked={windowOptions.fixedWindows}
+//               />
+//               Fixed Windows
+//             </label>
+//             <label>
+//               <input
+//                 type="checkbox"
+//                 onChange={() =>
+//                   handleSelection("slidingWindows", setWindowOptions)
+//                 }
+//                 checked={windowOptions.slidingWindows}
+//               />
+//               Sliding Windows
+//             </label>
+//             {windowOptions.slidingWindows && (
+//               <div className="pl-4">
+//                 <h4 className="font-semibold">Sliding Window Options</h4>
+//                 <label>
+//                   <input
+//                     type="checkbox"
+//                     onChange={() =>
+//                       handleSelection("track2", setSlidingWindowOptions)
+//                     }
+//                     checked={slidingWindowOptions.track2}
+//                   />
+//                   2 Track
+//                 </label>
+//                 <label>
+//                   <input
+//                     type="checkbox"
+//                     onChange={() =>
+//                       handleSelection("track25", setSlidingWindowOptions)
+//                     }
+//                     checked={slidingWindowOptions.track25}
+//                   />
+//                   2.5 Track
+//                 </label>
+//               </div>
+//             )}
+//           </div>
+//         )}
+//       </td>
+//       <td className="border border-black px-4 py-2 align-top">
+//         <label>
+//           <input
+//             type="checkbox"
+//             onChange={() =>
+//               setSelectedOptions((prev) => ({ ...prev, louvers: !prev.louvers }))
+//             }
+//             checked={selectedOptions.louvers}
+//           />
+//           Louvers
+//         </label>
+//         {selectedOptions.louvers && (
+//           <div className="mt-2">
+//             <h3 className="font-bold">Louver Options</h3>
+//             <label>
+//               <input
+//                 type="checkbox"
+//                 onChange={() =>
+//                   handleSelection("withFan", setLouverOptions)
+//                 }
+//                 checked={louverOptions.withFan}
+//               />
+//               With Fan
+//             </label>
+//             <label>
+//               <input
+//                 type="checkbox"
+//                 onChange={() =>
+//                   handleSelection("withoutFan", setLouverOptions)
+//                 }
+//                 checked={louverOptions.withoutFan}
+//               />
+//               Without Fan
+//             </label>
+//           </div>
+//         )}
+//       </td>
+//     </tr>
+//   </tbody>
+// </table>
+// </div>
+
+

@@ -20,7 +20,7 @@ const login = () => {
                 <div className="h-96 w-auto flex flex-row justify-center items-center">
                     <div className="flex flex-col gap-10">
                         <div className="flex flex-row gap-3">
-                            <span className="font-bold flex flex-row items-center text-gray-200">USERNAME:</span>
+                            <span className="font-bold flex flex-row items-center text-gray-200">USERNAME :</span>
                             <input
                                 type="text"
                                 className="w-80 p-3 rounded-xl border border-black-400"
@@ -28,7 +28,7 @@ const login = () => {
                             />
                         </div>
                         <div className="flex flex-row gap-3">
-                            <span className="font-bold flex flex-row items-center text-gray-200">PASSWORD:</span>
+                            <span className="font-bold flex flex-row items-center text-gray-200">PASSWORD :</span>
                             <input
                                 type="password"
                                 className="w-80 p-3 rounded-xl border border-black-400"
