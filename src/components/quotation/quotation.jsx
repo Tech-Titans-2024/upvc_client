@@ -13,7 +13,6 @@ function Quotation() {
             try {
                 const response = await axios.get(`${apiUrl}/product`);
                 setProducts(response.data);
-                console.log('Products:', response.data);
             } catch (err) {
                 console.error('Error fetching products:', err.message);
             }
@@ -23,16 +22,24 @@ function Quotation() {
     }, [apiUrl]);
 
     // Function to handle product selection
-    const handleProductSelect = async (productName) => {
-        setSelectedProduct(productName); // Set selected product
+
+    const handleProductSelect = async (value) => {
+        setSelectedProduct(value); // Set selected product
         try {
-            const response = await axios.get(`${apiUrl}/subcategories`);
-            setSubCategories(response.data); // Assuming the backend returns subcategories for the selected product
-        } catch (err) {
-            console.error('Error fetching subcategories:', err.message);
-            setSubCategories([]); // Reset if error occurs
+          // Send the product name to the backend
+          const response = await axios.post(`${apiUrl}/subcategory`, {
+            products: value,
+          });
+          console.log("select value:",value)
+      
+          // Store the response data (sub_categories)
+          setSubCategories(response.data.sub_categories); 
+      
+        } catch (error) {
+          console.error("Error posting category:", error);
         }
-    };
+      };
+      
 
     return (
         <div className="p-6 min-h-full">
@@ -57,8 +64,8 @@ function Quotation() {
                                             <input
                                                 type="checkbox"
                                                 className="form-checkbox h-4 w-4 text-blue-500"
-                                                value={product.product_name}
-                                                onChange={() => handleProductSelect(product.product_name)} // Handle click event
+                                                value={product}
+                                                onChange={(e) => handleProductSelect(product.product_name)} // Handle click event
                                             />
                                             <span>{product.product_name}</span>
                                         </label>
