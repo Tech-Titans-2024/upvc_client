@@ -4,12 +4,12 @@ import axios from 'axios';
 function Quotation() {
     const apiUrl = import.meta.env.VITE_API_URL;
 
-    const [products, setProducts] = useState([]);
-    const [selectedProduct, setSelectedProduct] = useState(null); // Track selected product
-    const [subCategories, setSubCategories] = useState([]); // Store subcategories of selected product
+    const [products, setProducts] = useState([]); // Array to store products
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
+    // Fetch products on component mount
     useEffect(() => {
-        const fetchProduct = async () => {
+        const fetchProducts = async () => {
             try {
                 const response = await axios.get(`${apiUrl}/product`);
                 setProducts(response.data);
@@ -18,28 +18,32 @@ function Quotation() {
             }
         };
 
-        fetchProduct();
+        fetchProducts();
     }, [apiUrl]);
 
-    // Function to handle product selection
-
-    const handleProductSelect = async (value) => {
-        setSelectedProduct(value); // Set selected product
+    // Handle product selection and fetch subcategories
+    const handleProductSelect = async (productName) => {
+        setSelectedProduct(productName);
         try {
-          // Send the product name to the backend
-          const response = await axios.post(`${apiUrl}/subcategory`, {
-            products: value,
-          });
-          console.log("select value:",value)
-      
-          // Store the response data (sub_categories)
-          setSubCategories(response.data.sub_categories); 
-      
+            const response = await axios.post(`${apiUrl}/subcategory`, {
+                product_name: productName,
+            });
+            console.log(response.data)
+
+            const subCategories = response.data.sub_categories || [];
+
+            // Update the products array to include subcategories for the selected product
+            setProducts((prevProducts) =>
+                prevProducts.map((product) =>
+                    product.product_name === productName
+                        ? { ...product, subItems: subCategories } // Add subItems (subcategories) to the product
+                        : product
+                )
+            );
         } catch (error) {
-          console.error("Error posting category:", error);
+            console.error('Error fetching subcategories:', error);
         }
-      };
-      
+    };
 
     return (
         <div className="p-6 min-h-full">
@@ -59,18 +63,35 @@ function Quotation() {
                             products.map((product, index) => (
                                 <tr key={index} className="border-t text-sm text-gray-700">
                                     <td className="px-6 py-3">
-                                        {/* Checkbox for the Product Name */}
                                         <label className="flex items-center space-x-2">
                                             <input
                                                 type="checkbox"
                                                 className="form-checkbox h-4 w-4 text-blue-500"
-                                                value={product}
-                                                onChange={(e) => handleProductSelect(product.product_name)} // Handle click event
+                                                value={product.product_name}
+                                                onChange={() => handleProductSelect(product.product_name)}
                                             />
                                             <span>{product.product_name}</span>
                                         </label>
                                     </td>
-                                    <td className="px-6 py-3">{product.subItems || 'N/A'}</td>
+                                    <td className="px-6 py-3">
+                                        {product.subItems ? (
+                                            product.subItems.map((subItem, subIndex) => (
+                                                <label
+                                                    key={subIndex}
+                                                    className="flex items-center space-x-2 mb-1"
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        className="form-checkbox h-4 w-4 text-blue-500"
+                                                        value={subItem}
+                                                    />
+                                                    <span>{subItem}</span>
+                                                </label>
+                                            ))
+                                        ) : (
+                                            'N/A'
+                                        )}
+                                    </td>
                                     <td className="px-6 py-3">{product.fields || 'N/A'}</td>
                                     <td className="px-6 py-3">{product.quantity || 'N/A'}</td>
                                 </tr>
@@ -84,8 +105,6 @@ function Quotation() {
                         )}
                     </tbody>
                 </table>
-
-                
             </div>
         </div>
     );
