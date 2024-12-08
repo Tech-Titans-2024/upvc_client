@@ -1,15 +1,26 @@
-export default 
+export default
 {
 	content: [
 		"./index.html",
-		"./src/**/*.{js,ts,jsx,tsx}", 
+		"./src/**/*.{js,ts,jsx,tsx}",
 	],
-	theme: 
+	theme:
 	{
-		extend: 
+		extend:
 		{
+			fontFamily: 
+			{
+				cambria: [
+					'Cambria',
+					'Cochin',
+					'Georgia',
+					'Times',
+					'"Times New Roman"',
+					'serif',
+				],
+			},
 			width: {
-				'72': '20rem', 
+				'72': '20rem',
 			},
 		},
 	},
