@@ -7,6 +7,7 @@ import Measure from './components/menu/measurement';
 import Calculate from './components/menu/calculation';
 import Quotation from './components/quotation/quotation';
 import Dashboard from './components/dashboard/dashboard';
+import MeasurementDisplay from "./components/quotation/details";
 
 function App() 
 {
@@ -26,6 +27,8 @@ function App()
 				</Route>
 				<Route path='/measure' element={<Measure />} />
 				<Route path='/calculate' element={<Calculate />} />
+				<Route path="/measurement-display" element={<MeasurementDisplay />} />
+
 			</Routes>
 		</Router>
 	)
