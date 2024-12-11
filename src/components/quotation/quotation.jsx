@@ -92,7 +92,7 @@ function Quotation() {
             if (!updatedTypes[productName]) updatedTypes[productName] = {};
             if (!updatedTypes[productName][subCategory])
                 updatedTypes[productName][subCategory] = [];
-    
+
             if (isChecked) {
                 if (!updatedTypes[productName][subCategory].some(t => t._id === type._id)) {
                     updatedTypes[productName][subCategory].push(type);
@@ -120,6 +120,22 @@ function Quotation() {
             },
         });
     };
+
+    const handleGroupMeasurement = () => {
+        const allSelectedTypes = Object.entries(selectedTypes).map(([productName, subCategories]) => {
+            return Object.entries(subCategories).map(([subCategory, types]) => ({
+                productName,
+                subCategory,
+                types,
+            }));
+        }).flat();
+
+        // Navigate to the measurement page with the selected products and types
+        navigate("/upvc/measurement", {
+            state: { selectedTypes: allSelectedTypes },
+        });
+    };
+
 
     return (
         <div className="p-4 bg-gray-50 min-h-screen">
@@ -231,6 +247,12 @@ function Quotation() {
                         </div>
                     ))}
             </div>
+            <button
+                className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md"
+                onClick={handleGroupMeasurement}
+            >
+                Group Measurement
+            </button>
         </div>
     );
 }

@@ -8,7 +8,7 @@ import Calculate from './components/menu/calculation';
 import Quotation from './components/quotation/quotation';
 import Dashboard from './components/dashboard/dashboard';
 import SalesExecutive from './components/salesexecutive/salesexecutive';
-import Measurement from "./components/quotation/details";  // Import the correct Measurement component
+import Measurement from "./components/quotation/details";
 
 function App() 
 {

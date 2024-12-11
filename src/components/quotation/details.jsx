@@ -1,9 +1,25 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const WindowCalculationForm = ({ type }) => {
-    const [size, setSize] = useState({ width: '', height: '' });
-    const [area, setArea] = useState(0);
+const WindowCalculationForm = ({ type, onFormChange, onSubmit }) => {
+    const [formData, setFormData] = useState({
+        quantity: '',
+        series: '',
+        designType: '',
+        width: '',
+        height: '',
+        area: 0,
+        glass: '',
+        color: '',
+        sliderOF: '',
+        sliderSash: '',
+        alRail: '',
+        espag: '',
+        accessoriesType: '',
+        handleType: '',
+        handleColor: '',
+        roller: '',
+    });
 
     const listBoxOptions = {
         series: ['Series 1', 'Series 2', 'Series 3'],
@@ -20,15 +36,17 @@ const WindowCalculationForm = ({ type }) => {
         roller: ['Roller 1', 'Roller 2', 'Roller 3'],
     };
 
-    const handleSizeChange = (e) => {
+    const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setSize({ ...size, [name]: value });
-    };
-
-    const calculateArea = () => {
-        const { width, height } = size;
-        const calculatedArea = (parseFloat(width) || 0) * (parseFloat(height) || 0);
-        setArea(calculatedArea);
+        setFormData((prev) => {
+            const updatedData = { ...prev, [name]: value };
+            if (name === 'width' || name === 'height') {
+                const calculatedArea = (parseFloat(updatedData.width) || 0) * (parseFloat(updatedData.height) || 0);
+                updatedData.area = calculatedArea;
+            }
+            onFormChange(type, updatedData);
+            return updatedData;
+        });
     };
 
     return (
@@ -38,14 +56,21 @@ const WindowCalculationForm = ({ type }) => {
                 <div>
                     <input
                         type="text"
+                        name="quantity"
+                        value={formData.quantity}
+                        onChange={handleInputChange}
                         className="w-full p-2 border rounded-md mt-6 border-black"
                         placeholder="Quantity"
                     />
                 </div>
-                {/* Series */}
                 <div>
                     <label className="block text-gray-700 font-medium">Series</label>
-                    <select className="w-full p-2 border rounded-md" name="series">
+                    <select
+                        name="series"
+                        value={formData.series}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border rounded-md"
+                    >
                         {listBoxOptions.series.map((option, index) => (
                             <option key={index} value={option}>
                                 {option}
@@ -53,11 +78,14 @@ const WindowCalculationForm = ({ type }) => {
                         ))}
                     </select>
                 </div>
-
-                {/* Design Type */}
                 <div>
                     <label className="block text-gray-700 font-medium">Design Type</label>
-                    <select className="w-full p-2 border rounded-md" name="designType">
+                    <select
+                        name="designType"
+                        value={formData.designType}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border rounded-md"
+                    >
                         {listBoxOptions.designType.map((option, index) => (
                             <option key={index} value={option}>
                                 {option}
@@ -65,9 +93,6 @@ const WindowCalculationForm = ({ type }) => {
                         ))}
                     </select>
                 </div>
-
-                {/* Size */}
-                
                 <div>
                     <label className="block text-gray-700 font-medium">(Width x Height)</label>
                     <div className="flex gap-4">
@@ -75,37 +100,26 @@ const WindowCalculationForm = ({ type }) => {
                             type="number"
                             name="width"
                             placeholder="Width"
-                            value={size.width}
-                            onChange={handleSizeChange}
+                            value={formData.width}
+                            onChange={handleInputChange}
                             className="w-full p-2 border rounded-md"
                         />
                         <input
                             type="number"
                             name="height"
                             placeholder="Height"
-                            value={size.height}
-                            onChange={handleSizeChange}
+                            value={formData.height}
+                            onChange={handleInputChange}
                             className="w-full p-2 border rounded-md"
                         />
                     </div>
                 </div>
-
-                {/* Area */}
                 <div>
                     <label className="block text-gray-700 font-medium">Area</label>
                     <div className="p-2 border rounded-md bg-gray-200">
-                        {area} sq units
+                        {formData.area} sq units
                     </div>
-                    <button
-                        type="button"
-                        onClick={calculateArea}
-                        className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md"
-                    >
-                        Calculate Area
-                    </button>
                 </div>
-
-                {/* Dynamic Fields */}
                 {Object.keys(listBoxOptions)
                     .filter((key) => !['series', 'designType'].includes(key))
                     .map((field, idx) => (
@@ -113,7 +127,12 @@ const WindowCalculationForm = ({ type }) => {
                             <label className="block text-gray-700 font-medium capitalize">
                                 {field.replace(/([A-Z])/g, ' $1')}
                             </label>
-                            <select className="w-full p-2 border rounded-md" name={field}>
+                            <select
+                                name={field}
+                                value={formData[field]}
+                                onChange={handleInputChange}
+                                className="w-full p-2 border rounded-md"
+                            >
                                 {listBoxOptions[field].map((option, index) => (
                                     <option key={index} value={option}>
                                         {option}
@@ -123,6 +142,12 @@ const WindowCalculationForm = ({ type }) => {
                         </div>
                     ))}
             </form>
+            <button
+                onClick={() => onSubmit(type, formData)}
+                className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md"
+            >
+                Submit
+            </button>
         </div>
     );
 };
@@ -130,9 +155,29 @@ const WindowCalculationForm = ({ type }) => {
 function Measurement() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { productName, selectedTypes } = location.state || {};
+    const { selectedTypes } = location.state || [];
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [formData, setFormData] = useState({});
 
-    if (!productName || !selectedTypes || selectedTypes.length === 0) {
+    const handleFormChange = (type, data) => {
+        setFormData((prev) => ({ ...prev, [type]: data }));
+    };
+
+    const handleSubmit = (type, data) => {
+        console.log(`Measurement Data for ${type}:`, data);
+    };
+
+    const handleNext = () => {
+        if (currentIndex < selectedTypes.length - 1) {
+            setCurrentIndex((prev) => prev + 1);
+        } else {
+            // Navigate to summary or next page after all measurements
+            console.log("All measurements completed:", formData);
+            navigate("/summary", { state: { formData } });
+        }
+    };
+
+    if (!selectedTypes || selectedTypes.length === 0) {
         return (
             <div className="p-4 bg-gray-50 min-h-screen">
                 <h1 className="text-2xl font-semibold text-gray-800">Invalid Data</h1>
@@ -146,29 +191,30 @@ function Measurement() {
         );
     }
 
+    const { productName, subCategory, types } = selectedTypes[currentIndex];
+
     return (
         <div className="p-4 bg-gray-50 min-h-screen">
             <h1 className="text-3xl font-semibold text-gray-800 mb-6">
-                Measurement Details for {productName}
+                Measurement Details: {productName} - {subCategory}
             </h1>
             <div className="bg-white shadow-lg rounded-lg p-6 border border-gray-300">
-                {selectedTypes.map(({ subCategory, types }) => (
-                    <div key={subCategory} className="mb-6">
-                        <h1 className="text-md font-medium mb-2">{subCategory}</h1>
-                        {types.map((typeItem, index) => (
-                            <div key={index} className="mb-6">
-                                <WindowCalculationForm type={typeItem.type} />
-                            </div>
-                        ))}
+                {types.map((typeItem, index) => (
+                    <div key={index} className="mb-6">
+                        <WindowCalculationForm
+                            type={typeItem.type}
+                            onFormChange={handleFormChange}
+                            onSubmit={handleSubmit}
+                        />
                     </div>
                 ))}
-                <button
-                    onClick={() => navigate("/upvc/quotation")}
-                    className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md"
-                >
-                    Quotation
-                </button>
             </div>
+            <button
+                className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md"
+                onClick={handleNext}
+            >
+                {currentIndex < selectedTypes.length - 1 ? "Continue" : "Finish"}
+            </button>
         </div>
     );
 }
