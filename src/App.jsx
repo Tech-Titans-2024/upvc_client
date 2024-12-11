@@ -7,7 +7,8 @@ import Measure from './components/menu/measurement';
 import Calculate from './components/menu/calculation';
 import Quotation from './components/quotation/quotation';
 import Dashboard from './components/dashboard/dashboard';
-import MeasurementDisplay from "./components/quotation/details";
+import SalesExecutive from './components/salesexecutive/salesexecutive';
+import Measurement from "./components/quotation/details";  // Import the correct Measurement component
 
 function App() 
 {
@@ -24,10 +25,11 @@ function App()
 					<Route path='/upvc/order' element={<Dashboard />} />
 					<Route path='/upvc/guidelines' element={<Dashboard />} />
 					<Route path='/upvc/quotation' element={<Quotation />} />
+					<Route path="/upvc/measurement" element={<Measurement />} />
+					<Route path="/upvc/salesexecutive" element={<SalesExecutive />} />
 				</Route>
 				<Route path='/measure' element={<Measure />} />
 				<Route path='/calculate' element={<Calculate />} />
-				<Route path="/measurement-display" element={<MeasurementDisplay />} />
 
 			</Routes>
 		</Router>

@@ -49,6 +49,11 @@ function Sidebar()
 			path: '/upvc/guidelines'
 		},
 		{
+			icon:  faUserAlt,
+			name: 'SalesExecutive',
+			path: '/upvc/salesexecutive'
+		},
+		{
 			icon: faSignOutAlt,
 			name: 'Logout',
 			path: '/'
