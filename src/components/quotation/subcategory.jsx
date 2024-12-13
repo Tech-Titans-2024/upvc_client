@@ -6,6 +6,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 function SubCategory() {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [currentTypeIndex, setCurrentTypeIndex] = useState(0);
     const [categoryData, setCategoryData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -20,6 +21,9 @@ function SubCategory() {
     const [selectedvalues, setSelectedvalues] = useState([]);
     const [itemIndex, setItemIndex] = useState(0);
     const [mappedItems, setMappedItems] = useState([]);
+    const [selectItems, setSelectItems] = useState([])
+    const [formDataArray, setFormDataArray] = useState([]);
+    const [formData, setFormData] = useState([]);
     // const [itemIndex, setItemIndex] = useState(0);
 
     useEffect(() => {
@@ -115,6 +119,8 @@ function SubCategory() {
         let updatedSelected = [...selectedvalues];  // Accessing the current state directly
         if (isChecked) {
             updatedSelected.push({ category, type });
+            console.log("updatedSelected", updatedSelected)
+            setSelectItems(updatedSelected)
         } else {
             updatedSelected = updatedSelected.filter(
                 (item) => !(item.category === category && item.type === type)
@@ -122,26 +128,80 @@ function SubCategory() {
         }
 
         // Log updatedSelected here directly
-        console.log("Updated Selected Values:", updatedSelected);
+        console.log("Updated Selected Values:", selectItems);
 
         // Set the new state
         setSelectedvalues(updatedSelected);
     };
     //  setSelectedvalues(selectedvalues[0])
 
+    //Add button func
+    // const handleAddSection = () => {
+    //     setSelectedItems((prevSections) => [
+    //         ...prevSections,
+    //         { id: prevSections.length, quantity: '', width: '', height: '' },
+    //     ]);
+    // };
+
+    //measurement value get func
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+
+        // If width or height changes, recalculate area
+        if (name === "width" || name === "height") {
+            const width = parseFloat(formData.width) || 0;
+            const height = parseFloat(formData.height) || 0;
+            const area = width * height;
+            setFormData((prevState) => ({
+                ...prevState,
+                area,
+            }));
+        }
+    };
+
     const handleSubmit = () => {
+        if (currentTypeIndex < selectItems.length - 1) {
+            setCurrentTypeIndex(currentTypeIndex + 1); // Move to the next item
+        } else {
+            console.log("All items submitted");
+            // You can add logic to handle the end of the process, such as resetting the form
+        }
         if (itemIndex < selectedvalues.length) {
             const currentItem = selectedvalues[itemIndex];
             console.log("Next Selected Value:", currentItem);
 
             // Store the item in mappedItems array
             setMappedItems((prevMappedItems) => [...prevMappedItems, currentItem]);
-
+            console.log("mappedItems", mappedItems)
             setItemIndex(prevIndex => prevIndex + 1); // Move to the next item
             console.log("Current Item Index:", currentItem); // Log the current index
         } else {
             console.log("No more values to display.");
         }
+
+
+        const category = selectItems[currentTypeIndex]?.category;
+        const type = selectItems[currentTypeIndex]?.type;
+        const { quantity, width, height, area } = formData;
+
+        const newFormData = {
+            category,
+            type,
+            quantity,
+            width,
+            height,
+            area,
+        };
+
+        setFormDataArray((prevFormDataArray) => {
+            const updatedArray = [...prevFormDataArray, newFormData];
+            console.log("Updated Form Data Array:", updatedArray);
+            return updatedArray;
+        });
     };
 
 
@@ -244,14 +304,154 @@ function SubCategory() {
 
 
             {measurement && (
-
                 <div className="p-6 w-1/2 h-1/2 top-{10px} bg-gray-400 rounded-lg shadow-md" >
-                    {mappedItems.map((items)=>{
-                    <h2 className="text-xl font-semibold mb-4">Type: {items.category}</h2>
-                    {console.log(items.type)}
-                        
-                    })}
-                    <form className="grid grid-cols-3 gap-5">
+                    {selectItems.length > 0 && currentTypeIndex < selectItems.length && (
+                        <div>
+                            <h2 className="text-xl font-semibold mb-4"> Type: {selectItems[currentTypeIndex]?.category}, {selectItems[currentTypeIndex]?.type}</h2>
+                            <form className="grid grid-cols-3 gap-5">
+                                <div>
+                                    <input
+                                        type="text"
+                                        className="w-full p-2 border rounded-md mt-6 border-black"
+                                        placeholder="Quantity"
+                                        name='quantity'
+                                        value={formData.quantity}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-gray-700 font-medium">Series</label>
+                                    <select className="w-full p-2 border rounded-md"
+                                        name='series'
+                                        value={formData.series}
+                                        onChange={handleInputChange}>
+                                        <option value="Option 1">Option 1</option>
+                                        <option value="Option 2">Option 2</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-gray-700 font-medium">Design Type</label>
+                                    <select className="w-full p-2 border rounded-md"
+                                        name='design type'
+                                        value={formData.designType}
+                                        onChange={handleInputChange}
+                                    >
+                                        <option value="Option 1">Option 1</option>
+                                        <option value="Option 2">Option 2</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-gray-700 font-medium">(Width x Height)</label>
+                                    <div className="flex gap-4">
+                                        <input
+                                            type="number"
+                                            placeholder="Width"
+                                            className="w-full p-2 border rounded-md"
+                                            name='width'
+                                            value={formData.width}
+                                            onChange={handleInputChange}
+                                        />
+                                        <input
+                                            type="number"
+                                            placeholder="Height"
+                                            className="w-full p-2 border rounded-md"
+                                            name='height'
+                                            value={formData.height}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-gray-700 font-medium">Area</label>
+                                    <div className="p-2 border rounded-md bg-gray-200">
+                                        {/* Calculated area value displayed here */}
+                                        {formData.area} sq units
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-gray-700 font-medium">Additional Field</label>
+                                    <select className="w-full p-2 border rounded-md"
+                                        name="additionalField"
+                                        onChange={handleInputChange}
+                                        value={formData.additionalField}
+                                    >
+                                        <option value="Option 1">Option 1</option>
+                                        <option value="Option 2">Option 2</option>
+                                    </select>
+                                </div>
+                            </form>
+                            {/* <button
+                                className="mt-4 bg-green-600 text-white py-2 px-4 rounded-md"
+                                onClick={handleAddSection}
+                            >
+                                Add
+                            </button> */}
+                            <button className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md" onClick={handleSubmit}>Submit</button>
+
+                            {/* {console.log("items.type", items.type)} */}
+                        </div>
+                    )}
+                    {/* {selectItems.map((items, index) =>
+                        <div key={index} className="mb-6">
+                            <h2 className="text-xl font-semibold mb-4">Type: {items.category},{items.type}</h2>
+                            <form className="grid grid-cols-3 gap-5">
+                                <div>
+                                    <input
+                                        type="text"
+                                        className="w-full p-2 border rounded-md mt-6 border-black"
+                                        placeholder="Quantity"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-gray-700 font-medium">Series</label>
+                                    <select className="w-full p-2 border rounded-md">
+                                        <option value="Option 1">Option 1</option>
+                                        <option value="Option 2">Option 2</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-gray-700 font-medium">Design Type</label>
+                                    <select className="w-full p-2 border rounded-md">
+                                        <option value="Option 1">Option 1</option>
+                                        <option value="Option 2">Option 2</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-gray-700 font-medium">(Width x Height)</label>
+                                    <div className="flex gap-4">
+                                        <input
+                                            type="number"
+                                            placeholder="Width"
+                                            className="w-full p-2 border rounded-md"
+                                        />
+                                        <input
+                                            type="number"
+                                            placeholder="Height"
+                                            className="w-full p-2 border rounded-md"
+                                        />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-gray-700 font-medium">Area</label>
+                                    <div className="p-2 border rounded-md bg-gray-200">
+                                        0 sq units
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-gray-700 font-medium">Additional Field</label>
+                                    <select className="w-full p-2 border rounded-md">
+                                        <option value="Option 1">Option 1</option>
+                                        <option value="Option 2">Option 2</option>
+                                    </select>
+                                </div>
+                            </form>
+                            <button className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md" onClick={handleSubmit}>Submit</button>
+
+                            {console.log("items.type", items.type)}
+                        </div>
+
+                    )} */}
+                    {/* <form className="grid grid-cols-3 gap-5">
                         <div>
                             <input
                                 type="text"
@@ -292,7 +492,7 @@ function SubCategory() {
                             <label className="block text-gray-700 font-medium">Area</label>
                             <div className="p-2 border rounded-md bg-gray-200">
                                 {/* Calculated area value displayed here */}
-                                0 sq units
+                    {/* 0 sq units
                             </div>
                         </div>
                         <div>
@@ -303,7 +503,7 @@ function SubCategory() {
                             </select>
                         </div>
                     </form>
-                    <button className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md" onClick={handleSubmit}>Submit</button>
+                    <button className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md" onClick={handleSubmit}>Submit</button> */}
                 </div>
 
             )}
