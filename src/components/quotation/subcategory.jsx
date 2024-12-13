@@ -136,12 +136,40 @@ function SubCategory() {
     //  setSelectedvalues(selectedvalues[0])
 
     //Add button func
-    // const handleAddSection = () => {
-    //     setSelectedItems((prevSections) => [
-    //         ...prevSections,
-    //         { id: prevSections.length, quantity: '', width: '', height: '' },
-    //     ]);
-    // };
+    const handleAddSection = () => {
+        console.log("Saved Data:", formData);
+        
+        const category = selectItems[currentTypeIndex]?.category;
+        const type = selectItems[currentTypeIndex]?.type;
+        const { quantity, width, height, area } = formData;
+
+        const newFormData = {
+            category,
+            type,
+            quantity,
+            width,
+            height,
+            area,
+        };
+
+        setFormDataArray((prevFormDataArray) => {
+            const updatedArray = [...prevFormDataArray, newFormData];
+            console.log("Updated Form Data Array:", updatedArray);
+            return updatedArray;
+        });
+
+        setFormData({
+            quantity: '',
+            series: '',
+            designType: '',
+            width: '',
+            height: '',
+            area: '',
+            additionalField: '',
+        });
+
+        setCurrentTypeIndex(selectItems.length - 1);
+    };
 
     //measurement value get func
     const handleInputChange = (e) => {
@@ -380,12 +408,12 @@ function SubCategory() {
                                     </select>
                                 </div>
                             </form>
-                            {/* <button
+                            <button
                                 className="mt-4 bg-green-600 text-white py-2 px-4 rounded-md"
                                 onClick={handleAddSection}
                             >
                                 Add
-                            </button> */}
+                            </button>
                             <button className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md" onClick={handleSubmit}>Submit</button>
 
                             {/* {console.log("items.type", items.type)} */}
