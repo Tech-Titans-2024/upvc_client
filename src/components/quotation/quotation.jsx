@@ -7,155 +7,148 @@ function Quotation() {
     const navigate = useNavigate();
 
     const [products, setProducts] = useState([]);
-    const [subCategories, setSubCategories] = useState({});
-    const [selectedCategories, setSelectedCategories] = useState({});
-    const [types, setTypes] = useState({});
-    const [selectedTypes, setSelectedTypes] = useState({});
     const [selectedProducts, setSelectedProducts] = useState({});
+
+
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 const response = await axios.get(`${apiUrl}/product`);
+                console.log(response.data);
                 setProducts(response.data);
             } catch (err) {
                 console.error("Error fetching products:", err.message);
             }
         };
-
+        
         fetchProducts();
     }, [apiUrl]);
 
-    const handleProductSelect = async (productName, isChecked) => {
+
+    // const handleSubCategorySelect = async (productName, subCategory, isChecked) => {
+    //     setSelectedCategories((prev) => {
+    //         const updatedCategories = { ...prev };
+    //         if (isChecked) {
+    //             if (!updatedCategories[productName]) updatedCategories[productName] = [];
+    //             updatedCategories[productName] = [...updatedCategories[productName], subCategory];
+    //         } else {
+    //             updatedCategories[productName] = updatedCategories[productName].filter(
+    //                 (item) => item !== subCategory
+    //             );
+    //         }
+    //         return updatedCategories;
+    //     });
+
+    //     if (isChecked) {
+    //         try {
+    //             const response = await axios.post(`${apiUrl}/type`, {
+    //                 sub_category: subCategory,
+    //             });
+    //             setTypes((prev) => {
+    //                 const updatedTypes = { ...prev };
+    //                 if (!updatedTypes[productName]) updatedTypes[productName] = {};
+    //                 updatedTypes[productName][subCategory] = response.data.type || [];
+    //                 return updatedTypes;
+    //             });
+    //         } catch (error) {
+    //             console.error("Error fetching types:", error);
+    //         }
+    //     } else {
+    //         setTypes((prev) => {
+    //             const updatedTypes = { ...prev };
+    //             if (updatedTypes[productName] && updatedTypes[productName][subCategory]) {
+    //                 delete updatedTypes[productName][subCategory];
+    //             }
+    //             return updatedTypes;
+    //         });
+    //     }
+    // };
+
+    // const handleTypeSelect = (productName, subCategory, type, isChecked) => {
+    //     setSelectedTypes((prev) => {
+    //         const updatedTypes = { ...prev };
+    //         if (!updatedTypes[productName]) updatedTypes[productName] = {};
+    //         if (!updatedTypes[productName][subCategory])
+    //             updatedTypes[productName][subCategory] = [];
+
+    //         if (isChecked) {
+    //             if (!updatedTypes[productName][subCategory].some(t => t._id === type._id)) {
+    //                 updatedTypes[productName][subCategory].push(type);
+    //             }
+    //         } else {
+    //             updatedTypes[productName][subCategory] = updatedTypes[productName][subCategory].filter(
+    //                 (item) => item._id !== type._id
+    //             );
+    //         }
+    //         return updatedTypes;
+    //     });
+    // };
+
+    // const handleMeasurement = (productName) => {
+    //     const typesForProduct = Object.entries(selectedTypes[productName] || {}).map(
+    //         ([subCategory, typeIds]) => ({
+    //             subCategory,
+    //             types: typeIds,
+    //         })
+    //     );
+    //     navigate("/upvc/measurement", {
+    //         state: {
+    //             productName,
+    //             selectedTypes: typesForProduct,
+    //         },
+    //     });
+    // };
+
+    // const handleGroupMeasurement = () => {
+    //     const allSelectedTypes = Object.entries(selectedTypes).map(([productName, subCategories]) => {
+    //         return Object.entries(subCategories).map(([subCategory, types]) => ({
+    //             productName,
+    //             subCategory,
+    //             types,
+    //         }));
+    //     }).flat();
+
+    //     // Navigate to the measurement page with the selected products and types
+    //     navigate("/upvc/measurement", {
+    //         state: { selectedTypes: allSelectedTypes },
+    //     });
+    // };
+    const handleProductSelect = (productId, isChecked) => {
         setSelectedProducts((prev) => ({
             ...prev,
-            [productName]: isChecked,
+            [productId]: isChecked,
         }));
-
-        if (isChecked && !subCategories[productName]) {
-            try {
-                const response = await axios.post(`${apiUrl}/subcategory`, {
-                    product_name: productName,
-                });
-                setSubCategories((prev) => ({
-                    ...prev,
-                    [productName]: response.data.sub_categories || [],
-                }));
-            } catch (error) {
-                console.error("Error fetching subcategories:", error);
-            }
-        }
     };
 
-    const handleSubCategorySelect = async (productName, subCategory, isChecked) => {
-        setSelectedCategories((prev) => {
-            const updatedCategories = { ...prev };
-            if (isChecked) {
-                if (!updatedCategories[productName]) updatedCategories[productName] = [];
-                updatedCategories[productName] = [...updatedCategories[productName], subCategory];
-            } else {
-                updatedCategories[productName] = updatedCategories[productName].filter(
-                    (item) => item !== subCategory
-                );
-            }
-            return updatedCategories;
-        });
-
-        if (isChecked) {
-            try {
-                const response = await axios.post(`${apiUrl}/type`, {
-                    sub_category: subCategory,
-                });
-                setTypes((prev) => {
-                    const updatedTypes = { ...prev };
-                    if (!updatedTypes[productName]) updatedTypes[productName] = {};
-                    updatedTypes[productName][subCategory] = response.data.type || [];
-                    return updatedTypes;
-                });
-            } catch (error) {
-                console.error("Error fetching types:", error);
-            }
-        } else {
-            setTypes((prev) => {
-                const updatedTypes = { ...prev };
-                if (updatedTypes[productName] && updatedTypes[productName][subCategory]) {
-                    delete updatedTypes[productName][subCategory];
-                }
-                return updatedTypes;
-            });
-        }
-    };
-
-    const handleTypeSelect = (productName, subCategory, type, isChecked) => {
-        setSelectedTypes((prev) => {
-            const updatedTypes = { ...prev };
-            if (!updatedTypes[productName]) updatedTypes[productName] = {};
-            if (!updatedTypes[productName][subCategory])
-                updatedTypes[productName][subCategory] = [];
-
-            if (isChecked) {
-                if (!updatedTypes[productName][subCategory].some(t => t._id === type._id)) {
-                    updatedTypes[productName][subCategory].push(type);
-                }
-            } else {
-                updatedTypes[productName][subCategory] = updatedTypes[productName][subCategory].filter(
-                    (item) => item._id !== type._id
-                );
-            }
-            return updatedTypes;
-        });
-    };
-
-    const handleMeasurement = (productName) => {
-        const typesForProduct = Object.entries(selectedTypes[productName] || {}).map(
-            ([subCategory, typeIds]) => ({
-                subCategory,
-                types: typeIds,
-            })
+    const handleSubmit = () => {
+        const selected = Object.keys(selectedProducts).filter(
+            (productId) => selectedProducts[productId],
         );
-        navigate("/upvc/measurement", {
-            state: {
-                productName,
-                selectedTypes: typesForProduct,
-            },
-        });
+        console.log("Checked Products:", selected);
+        navigate('/upvc/subcategory', { state: { selected } });
     };
-
-    const handleGroupMeasurement = () => {
-        const allSelectedTypes = Object.entries(selectedTypes).map(([productName, subCategories]) => {
-            return Object.entries(subCategories).map(([subCategory, types]) => ({
-                productName,
-                subCategory,
-                types,
-            }));
-        }).flat();
-
-        // Navigate to the measurement page with the selected products and types
-        navigate("/upvc/measurement", {
-            state: { selectedTypes: allSelectedTypes },
-        });
-    };
-
 
     return (
-        <div className="p-4 bg-gray-50 min-h-screen">
+        <div className="p-4 bg-gray-50 min-h-screen ">
             <h1 className="text-3xl font-semibold text-gray-800 mb-6">
                 Quotation Details
             </h1>
             <div className="flex space-x-6 mb-6">
-                {["Door", "Window", "Louvers"].map((product) => (
-                    <div key={product} className="flex items-center">
+                {products.map((product,index) => (
+                    <div key={index} className="flex items-center">
                         <input
                             type="checkbox"
                             className="form-checkbox h-5 w-5 text-blue-500"
-                            onChange={(e) => handleProductSelect(product, e.target.checked)}
+                            onChange={(e) => handleProductSelect(product.product_id,product.product_name, e.target.checked)} // Use product_name here
                         />
-                        <span className="ml-2 font-medium text-gray-800">{product}</span>
+                        <span className="ml-2 font-medium text-gray-800">{product.product_name}</span> {/* Use product_name here */}
                     </div>
                 ))}
+
             </div>
 
-            <div className="space-y-9">
+            {/* <div className="space-y-9">
                 {Object.entries(selectedProducts)
                     .filter(([_, isSelected]) => isSelected)
                     .map(([productName]) => (
@@ -169,89 +162,15 @@ function Quotation() {
                                 </span>
                             </div>
 
-                            <div className="flex w-[100%] justify-between border-t border-gray-300 pt-6">
-                                <div className="w-[20%] border-r border-gray-300 p-1 flex flex-col">
-                                    <h3 className="font-semibold text-gray-700 mb-5">
-                                        SUB CATEGORIES :
-                                    </h3>
-                                    {subCategories[productName]?.length > 0 ? (
-                                        subCategories[productName].map((subItem, subIndex) => (
-                                            <div
-                                                key={subIndex}
-                                                className="flex items-center w-full space-x-2 mb-4"
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    className="form-checkbox text-center h-4 w-4 text-blue-500"
-                                                    value={subItem}
-                                                    onChange={(e) =>
-                                                        handleSubCategorySelect(
-                                                            productName,
-                                                            subItem,
-                                                            e.target.checked
-                                                        )
-                                                    }
-                                                />
-                                                <span>{subItem}</span>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <span className="text-gray-500">N / A</span>
-                                    )}
-                                </div>
-
-                                <div className="w-[75%] mr-3">
-                                    <h3 className="font-semibold text-gray-700 mb-5">
-                                        TYPES :
-                                    </h3>
-                                    {selectedCategories[productName]?.length > 0 &&
-                                        selectedCategories[productName].map((subItem) => (
-                                            <div key={subItem} className="mb-6">
-                                                <h4 className="font-semibold mb-2">{subItem}</h4>
-                                                {types[productName]?.[subItem]?.map((typeItem) => (
-                                                    <div
-                                                        key={typeItem._id}
-                                                        className="flex items-center gap-3 mt-3"
-                                                    >
-                                                        <input
-                                                            type="checkbox"
-                                                            className="form-checkbox text-center h-4 w-4 text-blue-500"
-                                                            onChange={(e) =>
-                                                                handleTypeSelect(
-                                                                    productName,
-                                                                    subItem,
-                                                                    typeItem,
-                                                                    e.target.checked
-                                                                )
-                                                            }
-                                                        />
-                                                        <span>{typeItem.type}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        ))}
-                                    {Object.keys(selectedCategories[productName] || {}).length > 0 &&
-                                        Object.entries(selectedTypes[productName] || {}).some(
-                                            ([subCategory, typesForSubCategory]) =>
-                                                typesForSubCategory.length > 0
-                                        ) && (
-                                            <button
-                                                className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md"
-                                                onClick={() => handleMeasurement(productName)}
-                                            >
-                                                Measurement
-                                            </button>
-                                        )}
-                                </div>
-                            </div>
+                           
                         </div>
                     ))}
-            </div>
+            </div> */}
             <button
                 className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md"
-                onClick={handleGroupMeasurement}
+                onClick={handleSubmit}
             >
-                Group Measurement
+                Submit
             </button>
         </div>
     );

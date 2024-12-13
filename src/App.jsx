@@ -5,13 +5,11 @@ import Layout from './components/layout/layout';
 import Menu from './components/menu/menu';
 import Measure from './components/menu/measurement';
 import Calculate from './components/menu/calculation';
-// import Quotation from './components/quotation/quotation';
-import Quotation from './Quotation/Quotation';
+import Quotation from './components/quotation/quotation';
 import Dashboard from './components/dashboard/dashboard';
 import SalesExecutive from './components/salesexecutive/salesexecutive';
 import Measurement from "./components/quotation/details";
-import Types from "./Types/Types";
-
+import Subcategory from './components/quotation/subcategory'
 function App() 
 {
 	return (
@@ -26,9 +24,8 @@ function App()
 					<Route path='/upvc/settings' element={<Dashboard />} />
 					<Route path='/upvc/order' element={<Dashboard />} />
 					<Route path='/upvc/guidelines' element={<Dashboard />} />
-					{/* <Route path='/upvc/quotation' element={<Quotation />} /> */}
 					<Route path='/upvc/quotation' element={<Quotation />} />
-					<Route path='/upvc/types' element={<Types />} />
+					<Route path='/upvc/subcategory' element={<Subcategory />} />
 					<Route path="/upvc/measurement" element={<Measurement />} />
 					<Route path="/upvc/salesexecutive" element={<SalesExecutive />} />
 				</Route>
