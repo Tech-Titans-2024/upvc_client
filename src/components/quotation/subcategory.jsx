@@ -19,8 +19,6 @@ function SubCategory() {
     const [typesByCategory, setTypesByCategory] = useState({});
     const [measurement, setMeasurement] = useState(false);
     const [selectedvalues, setSelectedvalues] = useState([]);
-    const [itemIndex, setItemIndex] = useState(0);
-    const [mappedItems, setMappedItems] = useState([]);
     const [selectItems, setSelectItems] = useState([])
     const [formDataArray, setFormDataArray] = useState([]);
     const [formData, setFormData] = useState([]);
@@ -174,21 +172,21 @@ function SubCategory() {
     //measurement value get func
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevState) => ({
-            ...prevState,
-            [name]: value,
-        }));
-
-        // If width or height changes, recalculate area
-        if (name === "width" || name === "height") {
-            const width = parseFloat(formData.width) || 0;
-            const height = parseFloat(formData.height) || 0;
-            const area = width * height;
-            setFormData((prevState) => ({
+        setFormData((prevState) => {
+            const updatedFormData = {
                 ...prevState,
-                area,
-            }));
-        }
+                [name]: value,
+            };
+    
+            // If width or height changes, recalculate area
+            if (name === "width" || name === "height") {
+                const width = parseFloat(updatedFormData.width) || 0;
+                const height = parseFloat(updatedFormData.height) || 0;
+                updatedFormData.area = width * height;
+            }
+    
+            return updatedFormData;
+        });
     };
 
     const handleSubmit = () => {
@@ -198,20 +196,7 @@ function SubCategory() {
             console.log("All items submitted");
             // You can add logic to handle the end of the process, such as resetting the form
         }
-        if (itemIndex < selectedvalues.length) {
-            const currentItem = selectedvalues[itemIndex];
-            console.log("Next Selected Value:", currentItem);
-
-            // Store the item in mappedItems array
-            setMappedItems((prevMappedItems) => [...prevMappedItems, currentItem]);
-            console.log("mappedItems", mappedItems)
-            setItemIndex(prevIndex => prevIndex + 1); // Move to the next item
-            console.log("Current Item Index:", currentItem); // Log the current index
-        } else {
-            console.log("No more values to display.");
-        }
-
-
+       
         const category = selectItems[currentTypeIndex]?.category;
         const type = selectItems[currentTypeIndex]?.type;
         const { quantity, width, height, area } = formData;
