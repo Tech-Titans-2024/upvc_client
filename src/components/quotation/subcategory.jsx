@@ -13,7 +13,7 @@ function SubCategory() {
     const location = useLocation();
     const selected = location.state ? location.state.selected : [];
     const [unique, setUnique] = useState([]);
-    const [product, setProduct] = useState("");
+    const [product, setProduct] = useState(' ');
     const [productname, setProductname] = useState("");
     const [productdetails, setProductdetails] = useState("");
     const [typesByCategory, setTypesByCategory] = useState({});
@@ -29,14 +29,16 @@ function SubCategory() {
     useEffect(() => {
         if (selected.length > 0) {
             fetchCategoryData(selected[currentIndex]);
-
             const currentProduct = selected[currentIndex];
             setProduct(currentProduct);
         }
         const fetchDetails = async () => {
             setProductname(product)
+            console.log("product", product)
+            console.log("product-inside-if", selected[currentIndex])
+            let pid = selected[currentIndex]
             try {
-                const response = await axios.get(`${apiUrl}/productdetails`, { productname })
+                const response = await axios.get(`${apiUrl}/productdetails/${pid}`)
                 if (response.data) {
                     console.log("P NAme", response.data)
                     setProductdetails(response.data.product_name);
@@ -138,7 +140,7 @@ function SubCategory() {
     //Add button func
     const handleAddSection = () => {
         console.log("Saved Data:", formData);
-        
+
         const category = selectItems[currentTypeIndex]?.category;
         const type = selectItems[currentTypeIndex]?.type;
         const { quantity, width, height, area } = formData;
@@ -273,17 +275,21 @@ function SubCategory() {
                                 SUB CATEGORIES :
                             </h3>
                             {unique && unique.length > 0 ? (
-                                unique.map((Category) => (
-                                    <div key={Category.category_id} className="flex items-center">
-                                        <input
-                                            type="checkbox"
-                                            className="form-checkbox h-5 w-5 text-blue-500"
-                                            onChange={(e) => handleSubCategorySelect(Category.category, e.target.checked)} // Pass category_name and checked status
-                                        />
-                                        <h3>{Category.product_name}</h3>
-                                        <span className="ml-2 font-medium text-gray-800">{Category.category}</span>
-                                    </div>
-                                ))
+                                unique.map((Category, index) => {
+                                    const checkboxId = `${Category.category_id}-${index}`;
+                                    return (
+                                        <div key={Category.category_id} className="flex items-center cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                id={checkboxId}
+                                                className="form-checkbox h-5 w-5 text-blue-500"
+                                                onChange={(e) => handleSubCategorySelect(Category.category, e.target.checked)} // Pass category_name and checked status
+                                            />
+                                            <h3>{Category.product_name}</h3>
+                                            <label htmlFor={checkboxId} className="ml-2 font-medium text-gray-800 cursor-pointer">{Category.category}</label>
+                                        </div>
+                                    )}
+                                )
                             ) : (
                                 <p>No categories available</p>
                             )}
@@ -297,18 +303,23 @@ function SubCategory() {
                                 <div key={Category.category_id} className="mb-6">
                                     <h4 className="font-semibold mb-2">{Category.category}</h4>
                                     {typesByCategory[Category.category] && typesByCategory[Category.category].length > 0 && (
-                                        typesByCategory[Category.category].map((item, index) => (
-                                            <div key={index} className="flex items-center gap-3 mt-3">
-                                                <input
-                                                    type="checkbox"
-                                                    className="form-checkbox text-center h-4 w-4 text-blue-500"
-                                                    onChange={(e) =>
-                                                        handleCheckboxClick(Category.category, item, e.target.checked)
-                                                    }
-                                                />
-                                                <span>{item}</span> {/* Display the type */}
-                                            </div>
-                                        ))
+                                        typesByCategory[Category.category].map((item, index) => {
+                                            const checkboxId = `${Category.category}-${index}`; // Generate unique id
+                                            return (
+                                                <div key={index} className="flex items-center gap-3 mt-3 cursor-pointer">
+                                                    <input
+                                                        type="checkbox"
+                                                        id={checkboxId}
+                                                        className="form-checkbox text-center h-4 w-4 text-blue-500 cursor-pointer"
+                                                        onChange={(e) =>
+                                                            handleCheckboxClick(Category.category, item, e.target.checked)
+                                                        }
+                                                    />
+                                                    <label htmlFor={checkboxId} className='cursor-pointer'>{item}</label>
+                                                </div>
+                                            )
+                                        }
+                                        )
                                     )}
                                 </div>
                             ))}
@@ -409,13 +420,13 @@ function SubCategory() {
                                 </div>
                             </form>
                             <div className=' flex justify-between mt-10'>
-                            <button
-                                className=" bg-green-500 hover:bg-green-600 text-white w-24 h-12 font-bold rounded-md"
-                                onClick={handleAddSection}
-                            >
-                                Add
-                            </button>
-                            <button className="bg-blue-600 hover:bg-blue-800 text-white  w-24 h-12 font-bold  rounded-md" onClick={handleSubmit}>Submit</button>
+                                <button
+                                    className=" bg-green-500 hover:bg-green-600 text-white w-24 h-12 font-bold rounded-md"
+                                    onClick={handleAddSection}
+                                >
+                                    Add
+                                </button>
+                                <button className="bg-blue-600 hover:bg-blue-800 text-white  w-24 h-12 font-bold  rounded-md" onClick={handleSubmit}>Submit</button>
                             </div>
 
                             {/* {console.log("items.type", items.type)} */}
