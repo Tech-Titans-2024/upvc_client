@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Logo from '../../assets/logo.jpeg';
 
 function Quotation() {
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -9,111 +10,19 @@ function Quotation() {
     const [products, setProducts] = useState([]);
     const [selectedProducts, setSelectedProducts] = useState({});
 
-
-
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 const response = await axios.get(`${apiUrl}/product`);
-                console.log(response.data);
                 setProducts(response.data);
             } catch (err) {
                 console.error("Error fetching products:", err.message);
             }
         };
-        
+
         fetchProducts();
     }, [apiUrl]);
 
-
-    // const handleSubCategorySelect = async (productName, subCategory, isChecked) => {
-    //     setSelectedCategories((prev) => {
-    //         const updatedCategories = { ...prev };
-    //         if (isChecked) {
-    //             if (!updatedCategories[productName]) updatedCategories[productName] = [];
-    //             updatedCategories[productName] = [...updatedCategories[productName], subCategory];
-    //         } else {
-    //             updatedCategories[productName] = updatedCategories[productName].filter(
-    //                 (item) => item !== subCategory
-    //             );
-    //         }
-    //         return updatedCategories;
-    //     });
-
-    //     if (isChecked) {
-    //         try {
-    //             const response = await axios.post(`${apiUrl}/type`, {
-    //                 sub_category: subCategory,
-    //             });
-    //             setTypes((prev) => {
-    //                 const updatedTypes = { ...prev };
-    //                 if (!updatedTypes[productName]) updatedTypes[productName] = {};
-    //                 updatedTypes[productName][subCategory] = response.data.type || [];
-    //                 return updatedTypes;
-    //             });
-    //         } catch (error) {
-    //             console.error("Error fetching types:", error);
-    //         }
-    //     } else {
-    //         setTypes((prev) => {
-    //             const updatedTypes = { ...prev };
-    //             if (updatedTypes[productName] && updatedTypes[productName][subCategory]) {
-    //                 delete updatedTypes[productName][subCategory];
-    //             }
-    //             return updatedTypes;
-    //         });
-    //     }
-    // };
-
-    // const handleTypeSelect = (productName, subCategory, type, isChecked) => {
-    //     setSelectedTypes((prev) => {
-    //         const updatedTypes = { ...prev };
-    //         if (!updatedTypes[productName]) updatedTypes[productName] = {};
-    //         if (!updatedTypes[productName][subCategory])
-    //             updatedTypes[productName][subCategory] = [];
-
-    //         if (isChecked) {
-    //             if (!updatedTypes[productName][subCategory].some(t => t._id === type._id)) {
-    //                 updatedTypes[productName][subCategory].push(type);
-    //             }
-    //         } else {
-    //             updatedTypes[productName][subCategory] = updatedTypes[productName][subCategory].filter(
-    //                 (item) => item._id !== type._id
-    //             );
-    //         }
-    //         return updatedTypes;
-    //     });
-    // };
-
-    // const handleMeasurement = (productName) => {
-    //     const typesForProduct = Object.entries(selectedTypes[productName] || {}).map(
-    //         ([subCategory, typeIds]) => ({
-    //             subCategory,
-    //             types: typeIds,
-    //         })
-    //     );
-    //     navigate("/upvc/measurement", {
-    //         state: {
-    //             productName,
-    //             selectedTypes: typesForProduct,
-    //         },
-    //     });
-    // };
-
-    // const handleGroupMeasurement = () => {
-    //     const allSelectedTypes = Object.entries(selectedTypes).map(([productName, subCategories]) => {
-    //         return Object.entries(subCategories).map(([subCategory, types]) => ({
-    //             productName,
-    //             subCategory,
-    //             types,
-    //         }));
-    //     }).flat();
-
-    //     // Navigate to the measurement page with the selected products and types
-    //     navigate("/upvc/measurement", {
-    //         state: { selectedTypes: allSelectedTypes },
-    //     });
-    // };
     const handleProductSelect = (productId, isChecked) => {
         setSelectedProducts((prev) => ({
             ...prev,
@@ -123,60 +32,321 @@ function Quotation() {
 
     const handleSubmit = () => {
         const selected = Object.keys(selectedProducts).filter(
-            (productId) => selectedProducts[productId],
+            (productId) => selectedProducts[productId]
         );
-        console.log("Checked Products:", selected);
-        navigate('/upvc/subcategory', { state: { selected } });
+        navigate("/upvc/subcategory", { state: { selected } });
     };
 
     return (
-        <div className="p-4 bg-gray-50 min-h-screen ">
-            <h1 className="text-3xl font-semibold text-gray-800 mb-6">
+        <div className="relative w-full h-[100%]">
+        {/* Background Image with Opacity */}
+        <div
+            className="absolute inset-0 flex items-center justify-center my-auto mx-auto mb-6"
+            style={{
+                backgroundImage: `url(${Logo})`,
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                width: '80%',
+                height: '80%',
+                opacity: 0.2, // Background opacity
+                zIndex: -1, // Send background image behind content
+            }}
+        ></div>
+    
+        {/* Content */}
+        <div className="relative p-6">
+            <h1 className="text-3xl tracking-wide font-bold text-center font-sans text-gray-800 mb-8 uppercase">
                 Quotation Details
             </h1>
-            <div className="flex space-x-6 mb-6">
-                {products.map((product,index) => (
-                    <div key={index} className="flex items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {products.map((product) => (
+                    <div
+                        key={product.product_id}
+                        className="bg-gray-200 p-4 rounded-lg shadow-md flex items-center"
+                    >
                         <input
                             type="checkbox"
                             className="form-checkbox h-5 w-5 text-blue-500"
-                            onChange={(e) => handleProductSelect(product.product_id,product.product_name, e.target.checked)} // Use product_name here
+                            onChange={(e) =>
+                                handleProductSelect(product.product_id, e.target.checked)
+                            }
                         />
-                        <span className="ml-2 font-medium text-gray-800">{product.product_name}</span> {/* Use product_name here */}
+                        <span className="text-lg font-medium text-gray-700 ml-3 uppercase">
+                            {product.product_name}
+                        </span>
                     </div>
                 ))}
-
             </div>
-
-            {/* <div className="space-y-9">
-                {Object.entries(selectedProducts)
-                    .filter(([_, isSelected]) => isSelected)
-                    .map(([productName]) => (
-                        <div
-                            key={productName}
-                            className="bg-white shadow-lg rounded-lg p-4 mb-6 border border-gray-300"
-                        >
-                            <div className="flex items-center mb-6">
-                                <span className="font-medium text-md ml-2 uppercase">
-                                    {productName}
-                                </span>
-                            </div>
-
-                           
-                        </div>
-                    ))}
-            </div> */}
-            <button
-                className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md"
-                onClick={handleSubmit}
-            >
-                Submit
-            </button>
+            <div className="flex justify-end mt-8">
+                <button
+                    className="bg-blue-700 text-white py-2.5 px-6 rounded-lg shadow hover:bg-blue-800 transition duration-200"
+                    onClick={handleSubmit}
+                >
+                    Submit
+                </button>
+            </div>
         </div>
+    </div>
+    
     );
 }
 
 export default Quotation;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useEffect, useState } from "react";
+// import axios from "axios";
+// import { useNavigate } from "react-router-dom";
+
+// function Quotation() {
+//     const apiUrl = import.meta.env.VITE_API_URL;
+//     const navigate = useNavigate();
+
+//     const [products, setProducts] = useState([]);
+//     const [selectedProducts, setSelectedProducts] = useState({});
+
+
+
+//     useEffect(() => {
+//         const fetchProducts = async () => {
+//             try {
+//                 const response = await axios.get(`${apiUrl}/product`);
+//                 console.log(response.data);
+//                 setProducts(response.data);
+//             } catch (err) {
+//                 console.error("Error fetching products:", err.message);
+//             }
+//         };
+        
+//         fetchProducts();
+//     }, [apiUrl]);
+
+
+//     // const handleSubCategorySelect = async (productName, subCategory, isChecked) => {
+//     //     setSelectedCategories((prev) => {
+//     //         const updatedCategories = { ...prev };
+//     //         if (isChecked) {
+//     //             if (!updatedCategories[productName]) updatedCategories[productName] = [];
+//     //             updatedCategories[productName] = [...updatedCategories[productName], subCategory];
+//     //         } else {
+//     //             updatedCategories[productName] = updatedCategories[productName].filter(
+//     //                 (item) => item !== subCategory
+//     //             );
+//     //         }
+//     //         return updatedCategories;
+//     //     });
+
+//     //     if (isChecked) {
+//     //         try {
+//     //             const response = await axios.post(`${apiUrl}/type`, {
+//     //                 sub_category: subCategory,
+//     //             });
+//     //             setTypes((prev) => {
+//     //                 const updatedTypes = { ...prev };
+//     //                 if (!updatedTypes[productName]) updatedTypes[productName] = {};
+//     //                 updatedTypes[productName][subCategory] = response.data.type || [];
+//     //                 return updatedTypes;
+//     //             });
+//     //         } catch (error) {
+//     //             console.error("Error fetching types:", error);
+//     //         }
+//     //     } else {
+//     //         setTypes((prev) => {
+//     //             const updatedTypes = { ...prev };
+//     //             if (updatedTypes[productName] && updatedTypes[productName][subCategory]) {
+//     //                 delete updatedTypes[productName][subCategory];
+//     //             }
+//     //             return updatedTypes;
+//     //         });
+//     //     }
+//     // };
+
+//     // const handleTypeSelect = (productName, subCategory, type, isChecked) => {
+//     //     setSelectedTypes((prev) => {
+//     //         const updatedTypes = { ...prev };
+//     //         if (!updatedTypes[productName]) updatedTypes[productName] = {};
+//     //         if (!updatedTypes[productName][subCategory])
+//     //             updatedTypes[productName][subCategory] = [];
+
+//     //         if (isChecked) {
+//     //             if (!updatedTypes[productName][subCategory].some(t => t._id === type._id)) {
+//     //                 updatedTypes[productName][subCategory].push(type);
+//     //             }
+//     //         } else {
+//     //             updatedTypes[productName][subCategory] = updatedTypes[productName][subCategory].filter(
+//     //                 (item) => item._id !== type._id
+//     //             );
+//     //         }
+//     //         return updatedTypes;
+//     //     });
+//     // };
+
+//     // const handleMeasurement = (productName) => {
+//     //     const typesForProduct = Object.entries(selectedTypes[productName] || {}).map(
+//     //         ([subCategory, typeIds]) => ({
+//     //             subCategory,
+//     //             types: typeIds,
+//     //         })
+//     //     );
+//     //     navigate("/upvc/measurement", {
+//     //         state: {
+//     //             productName,
+//     //             selectedTypes: typesForProduct,
+//     //         },
+//     //     });
+//     // };
+
+//     // const handleGroupMeasurement = () => {
+//     //     const allSelectedTypes = Object.entries(selectedTypes).map(([productName, subCategories]) => {
+//     //         return Object.entries(subCategories).map(([subCategory, types]) => ({
+//     //             productName,
+//     //             subCategory,
+//     //             types,
+//     //         }));
+//     //     }).flat();
+
+//     //     // Navigate to the measurement page with the selected products and types
+//     //     navigate("/upvc/measurement", {
+//     //         state: { selectedTypes: allSelectedTypes },
+//     //     });
+//     // };
+//     const handleProductSelect = (productId, isChecked) => {
+//         setSelectedProducts((prev) => ({
+//             ...prev,
+//             [productId]: isChecked,
+//         }));
+//     };
+
+//     const handleSubmit = () => {
+//         const selected = Object.keys(selectedProducts).filter(
+//             (productId) => selectedProducts[productId],
+//         );
+//         console.log("Checked Products:", selected);
+//         navigate('/upvc/subcategory', { state: { selected } });
+//     };
+
+//     return (
+//         <div className="p-4 bg-gray-50 min-h-screen ">
+//             <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6 uppercase">
+//                 Quotation Details
+//             </h1>
+//             <div className="flex space-x-6 mb-6">
+//                 {products.map((product,index) => (
+//                     <div key={index} className="flex items-center">
+//                         <input
+//                             type="checkbox"
+//                             className="form-checkbox h-6 w-6 text-blue-500"
+//                             onChange={(e) => handleProductSelect(product.product_id,product.product_name, e.target.checked)} // Use product_name here
+//                         />
+//                         <span className="ml-2 font-medium text-gray-800">{product.product_name}</span> {/* Use product_name here */}
+//                     </div>
+//                 ))}
+
+//             </div>
+
+//             {/* <div className="space-y-9">
+//                 {Object.entries(selectedProducts)
+//                     .filter(([_, isSelected]) => isSelected)
+//                     .map(([productName]) => (
+//                         <div
+//                             key={productName}
+//                             className="bg-white shadow-lg rounded-lg p-4 mb-6 border border-gray-300"
+//                         >
+//                             <div className="flex items-center mb-6">
+//                                 <span className="font-medium text-md ml-2 uppercase">
+//                                     {productName}
+//                                 </span>
+//                             </div>
+
+                           
+//                         </div>
+//                     ))}
+//             </div> */}
+//             <button
+//                 className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md"
+//                 onClick={handleSubmit}
+//             >
+//                 Submit
+//             </button>
+//         </div>
+//     );
+// }
+
+// export default Quotation;
 
 
 
