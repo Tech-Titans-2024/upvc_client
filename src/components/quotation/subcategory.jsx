@@ -168,7 +168,7 @@ function SubCategory() {
             additionalField: '',
         });
 
-        setCurrentTypeIndex(selectItems.length - 1);
+        // setCurrentTypeIndex(selectItems.length - 1);
     };
 
     //measurement value get func
