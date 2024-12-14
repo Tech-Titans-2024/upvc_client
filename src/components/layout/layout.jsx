@@ -50,7 +50,7 @@ function Sidebar()
 		},
 		{
 			icon:  faUserAlt,
-			name: 'SalesExecutive',
+			name: 'Sales Executive',
 			path: '/upvc/salesexecutive'
 		},
 		{
@@ -62,7 +62,7 @@ function Sidebar()
 
 	return (
         <div className="flex flex-row h-screen">
-			<div className="bg-gradient-to-b from-blue-600 to-blue-700 w-[23%] p-4 flex flex-col overflow-y-auto hide-scrollbar shadow-lg gap-6 h-full">
+			<div className="bg-gradient-to-b from-blue-600 to-blue-700 w-[21%] p-4 flex flex-col overflow-y-auto hide-scrollbar shadow-lg gap-6 h-full">
 				<div className="flex-none flex flex-col items-center">
 					<img
 						src={Logo}

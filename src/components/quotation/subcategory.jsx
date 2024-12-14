@@ -240,7 +240,7 @@ function SubCategory() {
             {selected.length > 0 ? (
                 <div>
                     <div>
-                        <p>{selected[currentIndex]}</p>
+                        {/* <p>{selected[currentIndex]}</p> */}
 
                         {loading ? (
                             <p>Loading...</p>
@@ -248,7 +248,7 @@ function SubCategory() {
                             <p style={{ color: 'red' }}>Error: {error}</p>
                         ) : categoryData ? (
                             <div>
-                                <h3>Category Data for {selected[currentIndex]}:</h3>
+                                {/* <h3>Category Data for {selected[currentIndex]}:</h3> */}
                             </div>
                         ) : (
                             <p>No category data available</p>
@@ -260,16 +260,16 @@ function SubCategory() {
             )}
 
             <div className="space-y-9">
-                <div className="bg-white shadow-lg rounded-lg p-4 mb-6 border border-gray-300">
+                <div className="bg-teal-400 shadow-lg rounded-lg p-4 mb-6">
                     <div className="flex items-center mb-6">
-                        <span className="font-medium text-md ml-2 uppercase">
+                        <h1 className="font-bold text-md ml-2 uppercase">
                             Product Name: {productdetails}
-                        </span>
+                        </h1>
                     </div>
 
-                    <div className="flex w-[100%] justify-between border-t border-gray-300 pt-6">
-                        <div className="w-[20%] border-r border-gray-300 p-1 flex flex-col">
-                            <h3 className="font-semibold text-gray-700 mb-5">
+                    <div className="flex w-[100%] justify-between border-t border-black pt-6">
+                        <div className="w-[20%] border-r border-black p-1 flex flex-col">
+                            <h3 className="font-bold mb-5">
                                 SUB CATEGORIES :
                             </h3>
                             {unique && unique.length > 0 ? (
@@ -290,7 +290,7 @@ function SubCategory() {
                         </div>
 
                         <div className="w-[75%] mr-3">
-                            <h3 className="font-semibold text-gray-700 mb-5">
+                            <h3 className="font-bold mb-5">
                                 TYPES :
                             </h3>
                             {unique && unique.length > 0 && unique.map((Category) => (
@@ -332,7 +332,7 @@ function SubCategory() {
 
 
             {measurement && (
-                <div className="p-6 w-1/2 h-1/2 top-{10px} bg-gray-400 rounded-lg shadow-md" >
+                <div className="p-6 bg-blue-300 rounded-lg shadow-md" >
                     {selectItems.length > 0 && currentTypeIndex < selectItems.length && (
                         <div>
                             <h2 className="text-xl font-semibold mb-4"> Type: {selectItems[currentTypeIndex]?.category}, {selectItems[currentTypeIndex]?.type}</h2>
@@ -408,13 +408,15 @@ function SubCategory() {
                                     </select>
                                 </div>
                             </form>
+                            <div className=' flex justify-between mt-10'>
                             <button
-                                className="mt-4 bg-green-600 text-white py-2 px-4 rounded-md"
+                                className=" bg-green-500 hover:bg-green-600 text-white w-24 h-12 font-bold rounded-md"
                                 onClick={handleAddSection}
                             >
                                 Add
                             </button>
-                            <button className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md" onClick={handleSubmit}>Submit</button>
+                            <button className="bg-blue-600 hover:bg-blue-800 text-white  w-24 h-12 font-bold  rounded-md" onClick={handleSubmit}>Submit</button>
+                            </div>
 
                             {/* {console.log("items.type", items.type)} */}
                         </div>
@@ -539,7 +541,7 @@ function SubCategory() {
 
 
 
-            <button onClick={handleNext} className='mt-4 bg-blue-600 text-white py-2 px-4 rounded-md'>Next</button>
+            <button onClick={handleNext} className='mt-4 bg-blue-600 hover:bg-blue-800 text-white w-24 h-12 font-bold rounded-md'>Next</button>
         </div>
     );
 }
