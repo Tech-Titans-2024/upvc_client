@@ -269,9 +269,9 @@ function SubCategory() {
                         </h1>
                     </div>
 
-                    <div className="flex w-full p-6">
+                    <div className="flex w-full p-5 justify-center items-center">
                         <div className="">
-                            {/* Sub Categories Column  "  grid grid-cols-1 gap-4 p-4 */} 
+                            {/* Sub Categories Column  "  grid grid-cols-1 gap-4 p-4 */}
                             {/* <div className="border-r border-gray-300 pr-4">
     <h3 className="font-bold mb-5 text-lg text-gray-700">SUB CATEGORIES :</h3>
     {unique && unique.length > 0 ? (
@@ -371,13 +371,13 @@ function SubCategory() {
                                 </h3> */}
 
                                 {/* Grid Layout */}
-                                <div className="grid grid-cols-3 w-auto border  border-black">
+                                <div className="grid grid-cols-4 w-auto border  border-black">
                                     {unique &&
                                         unique.length > 0 &&
                                         unique.map((Category, index) => (
                                             <React.Fragment key={Category.category_id}>
                                                 {/* Subcategory Column */}
-                                                <div className="flex flex-col  justify-center border text-xl font-bold border-black py-3 px-24">
+                                                <div className="flex flex-col col-span-2  justify-center border text-xl font-bold border-black py-3 px-10">
                                                     {/* <h4 className="font-semibold text-gray-800 mb-2">
                                                         {Category.category}
                                                     </h4> */}
@@ -458,96 +458,99 @@ function SubCategory() {
 
 
             {measurement && (
-                <div className="p-6 bg-blue-300 rounded-lg shadow-md" >
-                    {selectItems.length > 0 && currentTypeIndex < selectItems.length && (
-                        <div>
-                            <h2 className="text-xl font-semibold mb-4"> Type: {selectItems[currentTypeIndex]?.category}, {selectItems[currentTypeIndex]?.type}</h2>
-                            <form className="grid grid-cols-3 gap-5">
-                                <div>
-                                    <input
-                                        type="text"
-                                        className="w-full p-2 border rounded-md mt-6 border-black"
-                                        placeholder="Quantity"
-                                        name='quantity'
-                                        value={formData.quantity}
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-gray-700 font-medium">Series</label>
-                                    <select className="w-full p-2 border rounded-md"
-                                        name='series'
-                                        value={formData.series}
-                                        onChange={handleInputChange}>
-                                        <option value="Option 1">Option 1</option>
-                                        <option value="Option 2">Option 2</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-gray-700 font-medium">Design Type</label>
-                                    <select className="w-full p-2 border rounded-md"
-                                        name='design type'
-                                        value={formData.designType}
-                                        onChange={handleInputChange}
-                                    >
-                                        <option value="Option 1">Option 1</option>
-                                        <option value="Option 2">Option 2</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-gray-700 font-medium">(Width x Height)</label>
-                                    <div className="flex gap-4">
-                                        <input
-                                            type="number"
-                                            placeholder="Width"
-                                            className="w-full p-2 border rounded-md"
-                                            name='width'
-                                            value={formData.width}
-                                            onChange={handleInputChange}
-                                        />
-                                        <input
-                                            type="number"
-                                            placeholder="Height"
-                                            className="w-full p-2 border rounded-md"
-                                            name='height'
-                                            value={formData.height}
-                                            onChange={handleInputChange}
-                                        />
+                <div className="fixed inset-0  flex items-center justify-center">
+                    <div className="p-6 bg-blue-300 ml-64 w-5/6 h-full  overflow-auto " >
+                        {selectItems.length > 0 && currentTypeIndex < selectItems.length && (
+                            <div>
+                                <h2 className="text-xl font-semibold mb-4"> Type: {selectItems[currentTypeIndex]?.category}, {selectItems[currentTypeIndex]?.type}</h2>
+                                <div className='border-4 border-black rounded-xl p-6'>
+                                    <form className="grid grid-cols-3 gap-5">
+                                        <div>
+                                            <input
+                                                type="text"
+                                                className="w-full p-2 border rounded-md mt-6 border-black"
+                                                placeholder="Quantity"
+                                                name='quantity'
+                                                value={formData.quantity}
+                                                onChange={handleInputChange}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-gray-700 font-medium">Series</label>
+                                            <select className="w-full p-2 border rounded-md"
+                                                name='series'
+                                                value={formData.series}
+                                                onChange={handleInputChange}>
+                                                <option value="Option 1">Option 1</option>
+                                                <option value="Option 2">Option 2</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-gray-700 font-medium">Design Type</label>
+                                            <select className="w-full p-2 border rounded-md"
+                                                name='design type'
+                                                value={formData.designType}
+                                                onChange={handleInputChange}
+                                            >
+                                                <option value="Option 1">Option 1</option>
+                                                <option value="Option 2">Option 2</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-gray-700 font-medium">(Width x Height)</label>
+                                            <div className="flex gap-4">
+                                                <input
+                                                    type="number"
+                                                    placeholder="Width"
+                                                    className="w-full p-2 border rounded-md"
+                                                    name='width'
+                                                    value={formData.width}
+                                                    onChange={handleInputChange}
+                                                />
+                                                <input
+                                                    type="number"
+                                                    placeholder="Height"
+                                                    className="w-full p-2 border rounded-md"
+                                                    name='height'
+                                                    value={formData.height}
+                                                    onChange={handleInputChange}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-gray-700 font-medium">Area</label>
+                                            <div className="p-2 border rounded-md bg-gray-200">
+                                                {/* Calculated area value displayed here */}
+                                                {formData.area} sq units
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-gray-700 font-medium">Additional Field</label>
+                                            <select className="w-full p-2 border rounded-md"
+                                                name="additionalField"
+                                                onChange={handleInputChange}
+                                                value={formData.additionalField}
+                                            >
+                                                <option value="Option 1">Option 1</option>
+                                                <option value="Option 2">Option 2</option>
+                                            </select>
+                                        </div>
+                                        {/*  */}
+                                        
+                                    </form>
+                                    <div className=' flex justify-between mt-10'>
+                                        <button
+                                            className=" bg-green-500 hover:bg-green-600 text-white w-24 h-12 font-bold rounded-md"
+                                            onClick={handleAddSection}
+                                        >
+                                            Add
+                                        </button>
+                                        <button className="bg-blue-600 hover:bg-blue-800 text-white  w-24 h-12 font-bold  rounded-md" onClick={handleSubmit}>Submit</button>
                                     </div>
                                 </div>
-                                <div>
-                                    <label className="block text-gray-700 font-medium">Area</label>
-                                    <div className="p-2 border rounded-md bg-gray-200">
-                                        {/* Calculated area value displayed here */}
-                                        {formData.area} sq units
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="block text-gray-700 font-medium">Additional Field</label>
-                                    <select className="w-full p-2 border rounded-md"
-                                        name="additionalField"
-                                        onChange={handleInputChange}
-                                        value={formData.additionalField}
-                                    >
-                                        <option value="Option 1">Option 1</option>
-                                        <option value="Option 2">Option 2</option>
-                                    </select>
-                                </div>
-                            </form>
-                            <div className=' flex justify-between mt-10'>
-                                <button
-                                    className=" bg-green-500 hover:bg-green-600 text-white w-24 h-12 font-bold rounded-md"
-                                    onClick={handleAddSection}
-                                >
-                                    Add
-                                </button>
-                                <button className="bg-blue-600 hover:bg-blue-800 text-white  w-24 h-12 font-bold  rounded-md" onClick={handleSubmit}>Submit</button>
                             </div>
-
-                            {/* {console.log("items.type", items.type)} */}
-                        </div>
-                    )}
-                    {/* {selectItems.map((items, index) =>
+                        )}
+                        {/* {selectItems.map((items, index) =>
                         <div key={index} className="mb-6">
                             <h2 className="text-xl font-semibold mb-4">Type: {items.category},{items.type}</h2>
                             <form className="grid grid-cols-3 gap-5">
@@ -607,7 +610,7 @@ function SubCategory() {
                         </div>
 
                     )} */}
-                    {/* <form className="grid grid-cols-3 gap-5">
+                        {/* <form className="grid grid-cols-3 gap-5">
                         <div>
                             <input
                                 type="text"
@@ -648,7 +651,7 @@ function SubCategory() {
                             <label className="block text-gray-700 font-medium">Area</label>
                             <div className="p-2 border rounded-md bg-gray-200">
                                 {/* Calculated area value displayed here */}
-                    {/* 0 sq units
+                        {/* 0 sq units
                             </div>
                         </div>
                         <div>
@@ -660,8 +663,8 @@ function SubCategory() {
                         </div>
                     </form>
                     <button className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md" onClick={handleSubmit}>Submit</button> */}
+                    </div>
                 </div>
-
             )}
 
 
