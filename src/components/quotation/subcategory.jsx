@@ -99,7 +99,7 @@ function SubCategory() {
 
     const handleBack = () => {
         setQuotation(false);
-        setMeasurement(false);
+        // setMeasurement(false);
     }
     //-------------------------------------- 
     // measurement
@@ -291,8 +291,7 @@ function SubCategory() {
                 <p>No products selected</p>
             )}
 
-            <div className="space-y-9">
-                <div className="bg-teal-300 shadow-lg rounded-lg p-4 mb-6">
+            <div className="bg-teal-300 h-screen w-full shadow-lg rounded-lg p-4">
                     <div className="flex items-center mb-6">
                         <h1 className="font-bold text-xl ml-5 uppercase">
                             {productdetails}
@@ -477,19 +476,19 @@ function SubCategory() {
                         </div>
 
                     </div>
-                </div>
-                {currentIndex >= selected.length - 1 && (
+                
+                {/* {currentIndex >= selected.length - 1 && (
                     <div>
                         <p>You've reached the end of the list!</p>
                     </div>
-                )}
+                )} */}
             </div>
 
 
 
             {measurement && (
                 <div className="fixed inset-0  flex items-center justify-center">
-                    <div className="p-6 bg-blue-300 ml-64 w-5/6 h-full  overflow-auto " >
+                    <div className="p-6 bg-blue-300 ml-80 w-5/6 h-full  overflow-auto " >
                         {selectItems.length > 0 && currentTypeIndex < selectItems.length && (
                             <div>
                                 <h2 className="text-xl font-semibold mb-4"> Type: {selectItems[currentTypeIndex]?.category}, {selectItems[currentTypeIndex]?.type}</h2>
@@ -807,9 +806,9 @@ function SubCategory() {
 
             {quotation && (
                 <div className="fixed inset-0  flex items-center justify-center">
-                    <div className="p-6 bg-white ml-64 w-5/6 h-full  overflow-auto " >
+                    <div className="p-6 bg-white ml-80 w-5/6 h-full  overflow-auto " >
                         <div className="text-right font-bold text-xl ml-28 ">No of Items:  {formDataArray.length}</div>
-                        <div className='mt-6 grid grid-cols-6 w-auto text-white bg-blue-500 sticky top-0'>
+                        <div className='mt-6 grid grid-cols-6 w-auto text-white text-xl bg-blue-500 sticky top-0'>
                             <div className="font-bold border border-black text-center py-3">Category</div>
                             <div className="font-bold border border-black text-center py-3">Varient</div>
                             <div className="font-bold border border-black text-center py-3">Height</div>
@@ -820,8 +819,8 @@ function SubCategory() {
                         <div className="overflow-y-auto max-h-[500px] scrollbar-hide">
                             {formDataArray.map((user, index) => (
                                 <div key={index} className={`grid grid-cols-6 ${index % 2 === 0 ? "bg-blue-100" : "bg-blue-200"}`}>
-                                    <div className="font-bold border border-black text-center uppercase py-3">{user.category}</div>
-                                    <div className="font-bold border border-black text-center uppercase py-3">{user.type}</div>
+                                    <div className="font-bold border border-black text-center  py-3">{user.category}</div>
+                                    <div className="font-bold border border-black text-center  py-3">{user.type}</div>
                                     <div className="font-bold border border-black text-center uppercase py-3">{user.height}</div>
                                     <div className="font-bold border border-black text-center uppercase py-3">{user.width}</div>
                                     <div className="font-bold border border-black text-center uppercase py-3">{user.area}</div>
