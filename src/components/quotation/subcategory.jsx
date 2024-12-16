@@ -24,6 +24,7 @@ function SubCategory() {
     const [selectItems, setSelectItems] = useState([])
     const [formDataArray, setFormDataArray] = useState([]);
     const [formData, setFormData] = useState([]);
+    const [quotation, setQuotation] = useState(false);
     // const [itemIndex, setItemIndex] = useState(0);
 
     useEffect(() => {
@@ -90,11 +91,16 @@ function SubCategory() {
 
 
     const handleNext = () => {
+        setMeasurement(false);
         if (currentIndex < selected.length - 1) {
             setCurrentIndex((prevIndex) => prevIndex + 1);
         }
     };
 
+    const handleBack = () => {
+        setQuotation(false);
+        setMeasurement(false);
+    }
     //-------------------------------------- 
     // measurement
 
@@ -143,11 +149,24 @@ function SubCategory() {
 
         const category = selectItems[currentTypeIndex]?.category;
         const type = selectItems[currentTypeIndex]?.type;
-        const { quantity, width, height, area } = formData;
+        const { quantity, width, height, area, series, designType, glass, color,
+            sliderof, slidersash, alrail, espag, accessories, handletype, handlecolor, roller } = formData;
 
         const newFormData = {
             category,
             type,
+            series,
+            designType,
+            glass,
+            color,
+            sliderof,
+            slidersash,
+            alrail,
+            espag,
+            accessories,
+            handletype,
+            handlecolor,
+            roller,
             quantity,
             width,
             height,
@@ -176,27 +195,25 @@ function SubCategory() {
     //measurement value get func
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+
+        // Parse the input values for width and height
+        const width = name === "width" ? parseFloat(value) || 0 : parseFloat(formData.width) || 0;
+        const height = name === "height" ? parseFloat(value) || 0 : parseFloat(formData.height) || 0;
+        const area = width * height;
+
+        // Update the state, including recalculating area
         setFormData((prevState) => ({
             ...prevState,
             [name]: value,
+            area, // Recalculate and update the area
         }));
-
-        // If width or height changes, recalculate area
-        if (name === "width" || name === "height") {
-            const width = parseFloat(formData.width) || 0;
-            const height = parseFloat(formData.height) || 0;
-            const area = width * height;
-            setFormData((prevState) => ({
-                ...prevState,
-                area,
-            }));
-        }
     };
 
     const handleSubmit = () => {
         if (currentTypeIndex < selectItems.length - 1) {
             setCurrentTypeIndex(currentTypeIndex + 1); // Move to the next item
         } else {
+            setQuotation(true);
             console.log("All items submitted");
             // You can add logic to handle the end of the process, such as resetting the form
         }
@@ -216,11 +233,24 @@ function SubCategory() {
 
         const category = selectItems[currentTypeIndex]?.category;
         const type = selectItems[currentTypeIndex]?.type;
-        const { quantity, width, height, area } = formData;
+        const { quantity, width, height, area, series, designType, glass, color,
+            sliderof, slidersash, alrail, espag, accessories, handletype, handlecolor, roller } = formData;
 
         const newFormData = {
             category,
             type,
+            series,
+            designType,
+            glass,
+            color,
+            sliderof,
+            slidersash,
+            alrail,
+            espag,
+            accessories,
+            handletype,
+            handlecolor,
+            roller,
             quantity,
             width,
             height,
@@ -466,9 +496,10 @@ function SubCategory() {
                                 <div className='border-4 border-black rounded-xl p-6'>
                                     <form className="grid grid-cols-3 gap-5">
                                         <div>
+                                            <label className="block text-gray-700 font-medium">Quantity</label>
                                             <input
                                                 type="text"
-                                                className="w-full p-2 border rounded-md mt-6 border-black"
+                                                className="w-full p-2 border rounded-md border-black"
                                                 placeholder="Quantity"
                                                 name='quantity'
                                                 value={formData.quantity}
@@ -481,8 +512,8 @@ function SubCategory() {
                                                 name='series'
                                                 value={formData.series}
                                                 onChange={handleInputChange}>
-                                                <option value="Option 1">Option 1</option>
-                                                <option value="Option 2">Option 2</option>
+                                                <option value="Series 1">Series 1</option>
+                                                <option value="Series 2">Series 2</option>
                                             </select>
                                         </div>
                                         <div>
@@ -492,30 +523,31 @@ function SubCategory() {
                                                 value={formData.designType}
                                                 onChange={handleInputChange}
                                             >
-                                                <option value="Option 1">Option 1</option>
-                                                <option value="Option 2">Option 2</option>
+                                                <option value="Type A">Type A</option>
+                                                <option value="Type B">Type B</option>
                                             </select>
                                         </div>
                                         <div>
-                                            <label className="block text-gray-700 font-medium">(Width x Height)</label>
-                                            <div className="flex gap-4">
-                                                <input
-                                                    type="number"
-                                                    placeholder="Width"
-                                                    className="w-full p-2 border rounded-md"
-                                                    name='width'
-                                                    value={formData.width}
-                                                    onChange={handleInputChange}
-                                                />
-                                                <input
-                                                    type="number"
-                                                    placeholder="Height"
-                                                    className="w-full p-2 border rounded-md"
-                                                    name='height'
-                                                    value={formData.height}
-                                                    onChange={handleInputChange}
-                                                />
-                                            </div>
+                                            <label className="block text-gray-700 font-medium">Width</label>
+                                            <input
+                                                type="number"
+                                                placeholder="Width"
+                                                className="w-full p-2 border rounded-md"
+                                                name='width'
+                                                value={formData.width}
+                                                onChange={handleInputChange}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-gray-700 font-medium">Height</label>
+                                            <input
+                                                type="number"
+                                                placeholder="Height"
+                                                className="w-full p-2 border rounded-md"
+                                                name='height'
+                                                value={formData.height}
+                                                onChange={handleInputChange}
+                                            />
                                         </div>
                                         <div>
                                             <label className="block text-gray-700 font-medium">Area</label>
@@ -525,27 +557,130 @@ function SubCategory() {
                                             </div>
                                         </div>
                                         <div>
-                                            <label className="block text-gray-700 font-medium">Additional Field</label>
+                                            <label className="block text-gray-700 font-medium">Glass</label>
                                             <select className="w-full p-2 border rounded-md"
-                                                name="additionalField"
+                                                name="glass"
                                                 onChange={handleInputChange}
-                                                value={formData.additionalField}
+                                                value={formData.glass}
                                             >
                                                 <option value="Option 1">Option 1</option>
                                                 <option value="Option 2">Option 2</option>
                                             </select>
                                         </div>
-                                        {/*  */}
-                                        
+                                        <div>
+                                            <label className="block text-gray-700 font-medium">Color</label>
+                                            <select className="w-full p-2 border rounded-md"
+                                                name="color"
+                                                onChange={handleInputChange}
+                                                value={formData.color}
+                                            >
+                                                <option value="Silver">Silver</option>
+                                                <option value="Gold">Gold</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-gray-700 font-medium">Slider OF</label>
+                                            <select className="w-full p-2 border rounded-md"
+                                                name="sliderof"
+                                                onChange={handleInputChange}
+                                                value={formData.sliderof}
+                                            >
+                                                <option value="Option 1">Option 1</option>
+                                                <option value="Option 2">Option 2</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-gray-700 font-medium">Slider Sash</label>
+                                            <select className="w-full p-2 border rounded-md"
+                                                name="slidersash"
+                                                onChange={handleInputChange}
+                                                value={formData.slidersash}
+                                            >
+                                                <option value="Sash A">Sash A</option>
+                                                <option value="Sash B">Sash B</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-gray-700 font-medium">AlRail</label>
+                                            <select className="w-full p-2 border rounded-md"
+                                                name="alrail"
+                                                onChange={handleInputChange}
+                                                value={formData.alrail}
+                                            >
+                                                <option value="Rail X">Rail X</option>
+                                                <option value="Rail Y">Rail Y</option>
+                                                <option value="Rail Z">Rail Z</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-gray-700 font-medium">Espag</label>
+                                            <select className="w-full p-2 border rounded-md"
+                                                name="espag"
+                                                onChange={handleInputChange}
+                                                value={formData.espag}
+                                            >
+                                                <option value="Silver">Espag 1</option>
+                                                <option value="Gold">Espag 2</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-gray-700 font-medium">Accessories Type</label>
+                                            <select className="w-full p-2 border rounded-md"
+                                                name="accessories"
+                                                onChange={handleInputChange}
+                                                value={formData.accessories}
+                                            >
+                                                <option value="Type 1">Type 1</option>
+                                                <option value="Type 2">Type 2</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-gray-700 font-medium">Handle Type</label>
+                                            <select className="w-full p-2 border rounded-md"
+                                                name="handletype"
+                                                onChange={handleInputChange}
+                                                value={formData.handletype}
+                                            >
+                                                <option value="Handle A">Handle A</option>
+                                                <option value="Handle B">Handle B</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-gray-700 font-medium">Handle Color</label>
+                                            <select className="w-full p-2 border rounded-md"
+                                                name="handlecolor"
+                                                onChange={handleInputChange}
+                                                value={formData.handlecolor}
+                                            >
+                                                <option value="Silver">Silver</option>
+                                                <option value="Gold">Gold</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-gray-700 font-medium">Roller</label>
+                                            <select className="w-full p-2 border rounded-md"
+                                                name="roller"
+                                                onChange={handleInputChange}
+                                                value={formData.roller}
+                                            >
+                                                <option value="Roller 1">Roller 1</option>
+                                                <option value="Roller 2">Roller 2</option>
+                                            </select>
+                                        </div>
                                     </form>
                                     <div className=' flex justify-between mt-10'>
-                                        <button
-                                            className=" bg-green-500 hover:bg-green-600 text-white w-24 h-12 font-bold rounded-md"
-                                            onClick={handleAddSection}
-                                        >
-                                            Add
-                                        </button>
-                                        <button className="bg-blue-600 hover:bg-blue-800 text-white  w-24 h-12 font-bold  rounded-md" onClick={handleSubmit}>Submit</button>
+                                        <div className=''>
+                                            <button onClick={handleNext} className='bg-blue-600 hover:bg-blue-800 text-white w-24 h-12 font-bold rounded-md'>Submit</button>
+                                        </div>
+                                        <div className=''>
+                                            <button
+                                                className=" bg-green-500 hover:bg-green-600 text-white w-24 h-12 font-bold rounded-md mx-2"
+                                                onClick={handleAddSection}
+                                            >
+                                                Add
+                                            </button>
+                                            <button className="bg-blue-600 hover:bg-blue-800 text-white  w-24 h-12 font-bold  rounded-md" onClick={handleSubmit}>Next</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -664,14 +799,42 @@ function SubCategory() {
                     </form>
                     <button className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md" onClick={handleSubmit}>Submit</button> */}
                     </div>
+                </div >
+            )
+            }
+
+            {/* <button onClick={handleNext} className='mt-4 bg-blue-600 hover:bg-blue-800 text-white w-24 h-12 font-bold rounded-md'>Next</button> */}
+
+            {quotation && (
+                <div className="fixed inset-0  flex items-center justify-center">
+                    <div className="p-6 bg-white ml-64 w-5/6 h-full  overflow-auto " >
+                        <div className="text-right font-bold text-xl ml-28 ">No of Items:  {formDataArray.length}</div>
+                        <div className='mt-6 grid grid-cols-6 w-auto text-white bg-blue-500 sticky top-0'>
+                            <div className="font-bold border border-black text-center py-3">Category</div>
+                            <div className="font-bold border border-black text-center py-3">Varient</div>
+                            <div className="font-bold border border-black text-center py-3">Height</div>
+                            <div className="font-bold border border-black text-center py-3">Width</div>
+                            <div className='font-bold border border-black text-center py-3'>Area</div>
+                            <div className='font-bold border border-black text-center py-3'>Quantity</div>
+                        </div>
+                        <div className="overflow-y-auto max-h-[500px] scrollbar-hide">
+                            {formDataArray.map((user, index) => (
+                                <div key={index} className={`grid grid-cols-6 ${index % 2 === 0 ? "bg-blue-100" : "bg-blue-200"}`}>
+                                    <div className="font-bold border border-black text-center uppercase py-3">{user.category}</div>
+                                    <div className="font-bold border border-black text-center uppercase py-3">{user.type}</div>
+                                    <div className="font-bold border border-black text-center uppercase py-3">{user.height}</div>
+                                    <div className="font-bold border border-black text-center uppercase py-3">{user.width}</div>
+                                    <div className="font-bold border border-black text-center uppercase py-3">{user.area}</div>
+                                    <div className="font-bold border border-black text-center uppercase py-3">{user.quantity}</div>
+                                </div>
+                            ))}
+                        </div>
+                        <button onClick={handleBack} className='mt-4 bg-blue-600 hover:bg-blue-800 text-white w-24 h-12 font-bold rounded-md'>Next</button>
+                    </div>
                 </div>
             )}
 
-
-
-
-            <button onClick={handleNext} className='mt-4 bg-blue-600 hover:bg-blue-800 text-white w-24 h-12 font-bold rounded-md'>Next</button>
-        </div>
+        </div >
     );
 }
 
