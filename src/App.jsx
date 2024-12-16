@@ -10,7 +10,10 @@ import Dashboard from './components/dashboard/dashboard';
 import SalesExecutive from './components/salesexecutive/salesexecutive';
 import Measurement from "./components/quotation/details";
 import Subcategory from './components/quotation/subcategory'
-import PriceList from "./components/pricelist/pricelist";
+// import PriceList from "./components/pricelist/pricelist";
+import PriceList from './components/manage/priceList';
+import StaffManage from './components/manage/StaffManage';
+import CustomerManage from './components/manage/CustomerManage';
 function App() 
 {
 	return (
@@ -28,7 +31,9 @@ function App()
 					<Route path='/upvc/subcategory' element={<Subcategory />} />
 					<Route path="/upvc/measurement" element={<Measurement />} />
 					<Route path="/upvc/salesexecutive" element={<SalesExecutive />} />
-					<Route path='/upvc/pricelist' element={<PriceList />} />
+					<Route path="/upvc/manage/pricelist" element={<PriceList />} />
+					<Route path="/upvc/manage/staff" element={<StaffManage />} />
+					<Route path="/upvc/manage/customer" element={<CustomerManage />} />
 				</Route>
 				<Route path='/measure' element={<Measure />} />
 				<Route path='/calculate' element={<Calculate />} />
