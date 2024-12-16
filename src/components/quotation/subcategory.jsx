@@ -19,6 +19,8 @@ function SubCategory() {
     const [typesByCategory, setTypesByCategory] = useState({});
     const [measurement, setMeasurement] = useState(false);
     const [selectedvalues, setSelectedvalues] = useState([]);
+    const [itemIndex, setItemIndex] = useState(0);
+    const [mappedItems, setMappedItems] = useState([]);
     const [selectItems, setSelectItems] = useState([])
     const [formDataArray, setFormDataArray] = useState([]);
     const [formData, setFormData] = useState([]);
@@ -174,21 +176,21 @@ function SubCategory() {
     //measurement value get func
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevState) => {
-            const updatedFormData = {
+        setFormData((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+
+        // If width or height changes, recalculate area
+        if (name === "width" || name === "height") {
+            const width = parseFloat(formData.width) || 0;
+            const height = parseFloat(formData.height) || 0;
+            const area = width * height;
+            setFormData((prevState) => ({
                 ...prevState,
-                [name]: value,
-            };
-    
-            // If width or height changes, recalculate area
-            if (name === "width" || name === "height") {
-                const width = parseFloat(updatedFormData.width) || 0;
-                const height = parseFloat(updatedFormData.height) || 0;
-                updatedFormData.area = width * height;
-            }
-    
-            return updatedFormData;
-        });
+                area,
+            }));
+        }
     };
 
     const handleSubmit = () => {
@@ -198,7 +200,20 @@ function SubCategory() {
             console.log("All items submitted");
             // You can add logic to handle the end of the process, such as resetting the form
         }
-       
+        if (itemIndex < selectedvalues.length) {
+            const currentItem = selectedvalues[itemIndex];
+            console.log("Next Selected Value:", currentItem);
+
+            // Store the item in mappedItems array
+            setMappedItems((prevMappedItems) => [...prevMappedItems, currentItem]);
+            console.log("mappedItems", mappedItems)
+            setItemIndex(prevIndex => prevIndex + 1); // Move to the next item
+            console.log("Current Item Index:", currentItem); // Log the current index
+        } else {
+            console.log("No more values to display.");
+        }
+
+
         const category = selectItems[currentTypeIndex]?.category;
         const type = selectItems[currentTypeIndex]?.type;
         const { quantity, width, height, area } = formData;
@@ -247,75 +262,190 @@ function SubCategory() {
             )}
 
             <div className="space-y-9">
-                <div className="bg-teal-400 shadow-lg rounded-lg p-4 mb-6">
+                <div className="bg-teal-300 shadow-lg rounded-lg p-4 mb-6">
                     <div className="flex items-center mb-6">
-                        <h1 className="font-bold text-md ml-2 uppercase">
-                            Product Name: {productdetails}
+                        <h1 className="font-bold text-xl ml-5 uppercase">
+                            {productdetails}
                         </h1>
                     </div>
 
-                    <div className="flex w-[100%] justify-between border-t border-black pt-6">
-                        <div className="w-[20%] border-r border-black p-1 flex flex-col">
-                            <h3 className="font-bold mb-5">
-                                SUB CATEGORIES :
-                            </h3>
-                            {unique && unique.length > 0 ? (
-                                unique.map((Category, index) => {
-                                    const checkboxId = `${Category.category_id}-${index}`;
-                                    return (
-                                        <div key={Category.category_id} className="flex items-center cursor-pointer">
-                                            <input
-                                                type="checkbox"
-                                                id={checkboxId}
-                                                className="form-checkbox h-5 w-5 text-blue-500"
-                                                onChange={(e) => handleSubCategorySelect(Category.category, e.target.checked)} // Pass category_name and checked status
-                                            />
-                                            <h3>{Category.product_name}</h3>
-                                            <label htmlFor={checkboxId} className="ml-2 font-medium text-gray-800 cursor-pointer">{Category.category}</label>
-                                        </div>
-                                    )}
-                                )
-                            ) : (
-                                <p>No categories available</p>
-                            )}
-                        </div>
+                    <div className="flex w-full p-6">
+                        <div className="">
+                            {/* Sub Categories Column  "  grid grid-cols-1 gap-4 p-4 */} 
+                            {/* <div className="border-r border-gray-300 pr-4">
+    <h3 className="font-bold mb-5 text-lg text-gray-700">SUB CATEGORIES :</h3>
+    {unique && unique.length > 0 ? (
+      <div className="grid gap-3">
+        {unique.map((Category, index) => {
+          const checkboxId = `${Category.category_id}-${index}`;
+          return (
+            <div
+              key={Category.category_id}
+              className="flex items-center gap-3 border border-gray-300 p-2 rounded-md"
+            >
+              <input
+                type="checkbox"
+                id={checkboxId}
+                className="form-checkbox h-5 w-5 text-blue-500"
+                onChange={(e) =>
+                  handleSubCategorySelect(Category.category, e.target.checked)
+                }
+              />
+              <label
+                htmlFor={checkboxId}
+                className="font-medium text-gray-800 cursor-pointer"
+              >
+                {Category.category}
+              </label>
+            </div>
+          );
+        })}
+      </div>
+    ) : (
+      <p className="text-gray-600">No categories available</p>
+    )}
+  </div> */}
 
-                        <div className="w-[75%] mr-3">
-                            <h3 className="font-bold mb-5">
-                                TYPES :
-                            </h3>
-                            {unique && unique.length > 0 && unique.map((Category) => (
-                                <div key={Category.category_id} className="mb-6">
-                                    <h4 className="font-semibold mb-2">{Category.category}</h4>
-                                    {typesByCategory[Category.category] && typesByCategory[Category.category].length > 0 && (
-                                        typesByCategory[Category.category].map((item, index) => {
-                                            const checkboxId = `${Category.category}-${index}`; // Generate unique id
-                                            return (
-                                                <div key={index} className="flex items-center gap-3 mt-3 cursor-pointer">
-                                                    <input
-                                                        type="checkbox"
-                                                        id={checkboxId}
-                                                        className="form-checkbox text-center h-4 w-4 text-blue-500 cursor-pointer"
-                                                        onChange={(e) =>
-                                                            handleCheckboxClick(Category.category, item, e.target.checked)
-                                                        }
-                                                    />
-                                                    <label htmlFor={checkboxId} className='cursor-pointer'>{item}</label>
+                            {/* Types Column */}
+                            {/* <div className="pl-4">
+    <h3 className="font-bold mb-5 text-lg text-gray-700">TYPES :</h3>
+    {unique && unique.length > 0 ? (
+      <div className="grid gap-6">
+        {unique.map((Category) => (
+          <div
+            key={Category.category_id}
+            className="border border-gray-300 p-4 rounded-md shadow-md"
+          >
+            <h4 className="font-semibold mb-4 text-gray-700">
+              {Category.category}
+            </h4>
+            {typesByCategory[Category.category] &&
+              typesByCategory[Category.category].length > 0 &&
+              typesByCategory[Category.category].map((item, index) => {
+                const checkboxId = `${Category.category}-${index}`;
+                return (
+                  <div
+                    key={index}
+                    className="flex items-center gap-3 mb-3"
+                  >
+                    <input
+                      type="checkbox"
+                      id={checkboxId}
+                      className="form-checkbox h-5 w-5 text-blue-500"
+                      onChange={(e) =>
+                        handleCheckboxClick(
+                          Category.category,
+                          item,
+                          e.target.checked
+                        )
+                      }
+                    />
+                    <label
+                      htmlFor={checkboxId}
+                      className="cursor-pointer text-gray-700"
+                    >
+                      {item}
+                    </label>
+                  </div>
+                );
+              })}
+          </div>
+        ))}
+      </div>
+    ) : (
+      <p className="text-gray-600">No types available</p>
+    )}
+
+    <div className="text-right mt-6">
+      <button
+        className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition"
+        onClick={handlemeasurement}
+      >
+        Measurement
+      </button>
+    </div>
+  </div> */}
+                            <div className="flex flex-col">
+                                {/* <h3 className="font-bold mb-5 text-xl text-center text-gray-800">
+                                    PRODUCT NAME: DOOR
+                                </h3> */}
+
+                                {/* Grid Layout */}
+                                <div className="grid grid-cols-3 w-auto border  border-black">
+                                    {unique &&
+                                        unique.length > 0 &&
+                                        unique.map((Category, index) => (
+                                            <React.Fragment key={Category.category_id}>
+                                                {/* Subcategory Column */}
+                                                <div className="flex flex-col  justify-center border text-xl font-bold border-black py-3 px-24">
+                                                    {/* <h4 className="font-semibold text-gray-800 mb-2">
+                                                        {Category.category}
+                                                    </h4> */}
+                                                    <div className="flex items-center gap-3">
+                                                        <input
+                                                            type="checkbox"
+                                                            id={`subcategory-${index}`}
+                                                            className="form-checkbox h-5 w-5 text-blue-500"
+                                                            onChange={(e) =>
+                                                                handleSubCategorySelect(Category.category, e.target.checked)
+                                                            }
+                                                        />
+                                                        <label
+                                                            htmlFor={`subcategory-${index}`}
+                                                            className="text-gray-700 cursor-pointer"
+                                                        >
+                                                            {Category.category}
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            )
-                                        }
-                                        )
-                                    )}
-                                </div>
-                            ))}
 
-                            <button
-                                className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md"
-                                onClick={handlemeasurement}
-                            >
-                                Measurement
-                            </button>
+                                                {/* Types Column */}
+                                                <div className="border border-black p-3 col-span-2">
+                                                    {typesByCategory[Category.category] &&
+                                                        typesByCategory[Category.category].length > 0 ? (
+                                                        typesByCategory[Category.category].map((item, idx) => (
+                                                            <div key={idx} className="flex items-center text-xl font-bold py-6 px-20 gap-3 mb-2">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    id={`type-${index}-${idx}`}
+                                                                    className="form-checkbox h-5 w-5 text-blue-500"
+                                                                    onChange={(e) =>
+                                                                        handleCheckboxClick(
+                                                                            Category.category,
+                                                                            item,
+                                                                            e.target.checked
+                                                                        )
+                                                                    }
+                                                                />
+                                                                <label
+                                                                    htmlFor={`type-${index}-${idx}`}
+                                                                    className="text-gray-700 cursor-pointer"
+                                                                >
+                                                                    {item}
+                                                                </label>
+                                                            </div>
+                                                        ))
+                                                    ) : (
+                                                        <p className="text-gray-500"> </p>
+                                                    )}
+                                                </div>
+                                            </React.Fragment>
+                                        ))}
+                                </div>
+
+                                {/* Measurement Button */}
+                                <div className="mt-6 text-right font-bold ">
+                                    <button
+                                        className="bg-blue-600 text-white p-3 px-4 rounded-md hover:bg-blue-700 transition"
+                                        onClick={handlemeasurement}
+                                    >
+                                        Measurement
+                                    </button>
+                                </div>
+                            </div>
+
                         </div>
+
                     </div>
                 </div>
                 {currentIndex >= selected.length - 1 && (

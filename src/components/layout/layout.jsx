@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
-import { faTachometerAlt, faQuoteLeft, faShoppingCart, faListAlt, faSignOutAlt, faUserAlt, faTools, faCogs, faBookmark } from '@fortawesome/free-solid-svg-icons';
+import { faTachometerAlt, faQuoteLeft, faShoppingCart, faListAlt, faSignOutAlt, faUserAlt, faTools, faCogs, faBookmark, faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../assets/logo.jpeg';
 import './layout.css'
 
@@ -17,6 +17,12 @@ function Sidebar()
 			icon: faQuoteLeft,
 			name: 'Quotation Management',
 			path: '/upvc/quotation'
+		},
+		{
+				icon:  faPeopleGroup ,
+				name: 'Sales Executive',
+				path: '/upvc/salesexecutive'
+			
 		},
 		{
 			icon: faListAlt,
@@ -48,11 +54,7 @@ function Sidebar()
 			name: 'Guidelines',
 			path: '/upvc/guidelines'
 		},
-		{
-			icon:  faUserAlt,
-			name: 'Sales Executive',
-			path: '/upvc/salesexecutive'
-		},
+	
 		{
 			icon: faSignOutAlt,
 			name: 'Logout',
