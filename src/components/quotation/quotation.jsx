@@ -41,7 +41,7 @@ function Quotation() {
         <div className="relative w-full h-[100%]">
         {/* Background Image with Opacity */}
         <div
-            className="absolute inset-0 flex items-center justify-center my-auto mx-auto mb-6"
+            className="absolute inset-0 flex items-center justify-center my-auto mx-auto mb-10"
             style={{
                 backgroundImage: `url(${Logo})`,
                 backgroundSize: "contain",
@@ -54,16 +54,65 @@ function Quotation() {
             }}
         ></div>
     
-        {/* Content */}
         <div className="relative p-6">
             <h1 className="text-3xl tracking-wide font-bold text-center font-sans text-gray-800 mb-8 uppercase">
                 Quotation Details
-            </h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        </h1>
+        <div className="h-auto flex flex-col gap-6 border-2 p-4 border-black rounded-lg">
+  <div className="flex flex-wrap gap-4 items-center justify-between">
+    <div className="flex flex-col gap-1">
+      <label className="font-bold">Quotation Id:</label>
+      <input
+        type="text"
+        placeholder="Quotation Id"
+        className="bg-gray-100 w-60 p-2 border border-black rounded-md"
+        disabled
+      />
+    </div>
+    <div className="flex flex-col gap-1">
+      <label className="font-bold">Customer Name:</label>
+      <input
+        type="text"
+        placeholder="Name"
+        className="w-60 p-2 border border-black rounded-md"
+      />
+    </div>
+    <div className="flex flex-col gap-1">
+      <label className="font-bold">Customer Address:</label>
+      <input
+        type="text"
+        placeholder="Address"
+        className="w-60 p-2 border border-black rounded-md"
+      />
+    </div>
+  </div>
+
+  <div className="flex flex-wrap gap-4 items-center justify-between">
+    <div className="flex flex-col gap-1">
+      <label className="font-bold">Customer Phone No:</label>
+      <input
+        type="text"
+        placeholder="Phone No"
+        className="w-60 p-2 border border-black rounded-md"
+      />
+    </div>
+    <div className="flex flex-col gap-1">
+      <label className="font-bold">Salesman Id:</label>
+      <input
+        type="text"
+        placeholder="Salesman Id"
+        className="bg-gray-100 w-60 p-2 border border-black rounded-md"
+        disabled
+      />
+    </div>
+  </div>
+</div>
+
+            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {products.map((product) => (
                     <div
                         key={product.product_id}
-                        className="bg-gray-200 p-4 rounded-lg shadow-md flex items-center"
+                        className="bg-slate-300 p-4 rounded-lg shadow-md flex items-center"
                     >
                         <input
                             type="checkbox"
@@ -72,7 +121,7 @@ function Quotation() {
                                 handleProductSelect(product.product_id, e.target.checked)
                             }
                         />
-                        <span className="text-lg font-medium text-gray-700 ml-3 uppercase">
+                        <span className="text-lg font-medium text-black ml-3 uppercase">
                             {product.product_name}
                         </span>
                     </div>

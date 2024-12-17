@@ -291,17 +291,20 @@ function SubCategory() {
                 <p>No products selected</p>
             )}
 
-            <div className="bg-teal-300 h-screen w-full shadow-lg rounded-lg p-4">
-                    <div className="flex items-center mb-6">
-                        <h1 className="font-bold text-xl ml-5 uppercase">
-                            {productdetails}
-                        </h1>
-                    </div>
+            <div className="bg-white h-1/2 w-full shadow-lg rounded-lg p-7">
+                {/* Header Section */}
+                <div className="flex items-center mb-6">
+                    <h1 className="font-bold text-xl uppercase bg-slate-400 text-white rounded-sm w-full h-10 flex items-center px-4 shadow-md">
+                        {productdetails}
+                    </h1>
+                </div>
 
-                    <div className="flex w-full p-5 justify-center items-center">
-                        <div className="">
-                            {/* Sub Categories Column  "  grid grid-cols-1 gap-4 p-4 */}
-                            {/* <div className="border-r border-gray-300 pr-4">
+                {/* Table Section */}
+                <div className="flex w-full p-10 justify-center items-center">
+                    <div className="w-full max-w-screen-lg  rounded-lg overflow-hidden">
+                        {/* Table Header */}
+                        {/* Sub Categories Column  "  grid grid-cols-1 gap-4 p-4 */}
+                        {/* <div className="border-r border-gray-300 pr-4">
     <h3 className="font-bold mb-5 text-lg text-gray-700">SUB CATEGORIES :</h3>
     {unique && unique.length > 0 ? (
       <div className="grid gap-3">
@@ -335,8 +338,8 @@ function SubCategory() {
     )}
   </div> */}
 
-                            {/* Types Column */}
-                            {/* <div className="pl-4">
+                        {/* Types Column */}
+                        {/* <div className="pl-4">
     <h3 className="font-bold mb-5 text-lg text-gray-700">TYPES :</h3>
     {unique && unique.length > 0 ? (
       <div className="grid gap-6">
@@ -394,34 +397,49 @@ function SubCategory() {
       </button>
     </div>
   </div> */}
-                            <div className="flex flex-col">
-                                {/* <h3 className="font-bold mb-5 text-xl text-center text-gray-800">
+
+
+
+
+
+                        {/* <h3 className="font-bold mb-5 text-xl text-center text-gray-800">
                                     PRODUCT NAME: DOOR
                                 </h3> */}
 
-                                {/* Grid Layout */}
-                                <div className="grid grid-cols-4 w-auto border  border-black">
+                        {/* Table Body */}
+                        {/* Table Section */}
+                        <div className="flex w-full p-10 justify-center items-center">
+                            <div className="w-full max-w-screen-lg bg-white shadow-lg rounded-lg overflow-hidden">
+                                {/* Table Header */}
+                                <div className="grid grid-cols-2 bg-blue-600 text-white font-semibold text-lg">
+                                    <div className="flex justify-center items-center border-r border-blue-500 py-2">
+                                        Types
+                                    </div>
+                                    <div className="flex justify-center items-center py-2">
+                                        Variant
+                                    </div>
+                                </div>
+
+                                {/* Table Body */}
+                                <div className="grid grid-cols-4 border border-black">
                                     {unique &&
                                         unique.length > 0 &&
                                         unique.map((Category, index) => (
                                             <React.Fragment key={Category.category_id}>
                                                 {/* Subcategory Column */}
-                                                <div className="flex flex-col col-span-2  justify-center border text-xl font-bold border-black py-3 px-10">
-                                                    {/* <h4 className="font-semibold text-gray-800 mb-2">
-                                                        {Category.category}
-                                                    </h4> */}
+                                                <div className="col-span-2 flex items-center p-4 border border-black border-r-2 hover:bg-blue-50 transition">
                                                     <div className="flex items-center gap-3">
                                                         <input
                                                             type="checkbox"
                                                             id={`subcategory-${index}`}
-                                                            className="form-checkbox h-5 w-5 text-blue-500"
+                                                            className="form-checkbox h-5 w-5 text-blue-600"
                                                             onChange={(e) =>
                                                                 handleSubCategorySelect(Category.category, e.target.checked)
                                                             }
                                                         />
                                                         <label
                                                             htmlFor={`subcategory-${index}`}
-                                                            className="text-gray-700 cursor-pointer"
+                                                            className="text-gray-700 font-semibold cursor-pointer"
                                                         >
                                                             {Category.category}
                                                         </label>
@@ -429,15 +447,18 @@ function SubCategory() {
                                                 </div>
 
                                                 {/* Types Column */}
-                                                <div className="border border-black p-3 col-span-2">
+                                                <div className="col-span-2 p-4 border border-black">
                                                     {typesByCategory[Category.category] &&
                                                         typesByCategory[Category.category].length > 0 ? (
                                                         typesByCategory[Category.category].map((item, idx) => (
-                                                            <div key={idx} className="flex items-center text-xl font-bold py-6 px-20 gap-3 mb-2">
+                                                            <div
+                                                                key={idx}
+                                                                className="flex items-center gap-3 py-1 hover:text-blue-600 transition"
+                                                            >
                                                                 <input
                                                                     type="checkbox"
                                                                     id={`type-${index}-${idx}`}
-                                                                    className="form-checkbox h-5 w-5 text-blue-500"
+                                                                    className="form-checkbox h-5 w-5 text-blue-600"
                                                                     onChange={(e) =>
                                                                         handleCheckboxClick(
                                                                             Category.category,
@@ -455,7 +476,7 @@ function SubCategory() {
                                                             </div>
                                                         ))
                                                     ) : (
-                                                        <p className="text-gray-500"> </p>
+                                                        <p className="text-gray-500 italic"></p>
                                                     )}
                                                 </div>
                                             </React.Fragment>
@@ -463,32 +484,26 @@ function SubCategory() {
                                 </div>
 
                                 {/* Measurement Button */}
-                                <div className="mt-6 text-right font-bold ">
+                                <div className=" py-4 px-6 text-right">
                                     <button
-                                        className="bg-blue-600 text-white p-3 px-4 rounded-md hover:bg-blue-700 transition"
+                                        className="bg-blue-600 text-white font-bold px-6 py-2 rounded hover:bg-blue-700 transition duration-300"
                                         onClick={handlemeasurement}
                                     >
                                         Measurement
                                     </button>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
-                
-                {/* {currentIndex >= selected.length - 1 && (
-                    <div>
-                        <p>You've reached the end of the list!</p>
-                    </div>
-                )} */}
+                </div>
             </div>
 
 
-
             {measurement && (
-                <div className="fixed inset-0  flex items-center justify-center">
-                    <div className="p-6 bg-blue-300 ml-80 w-5/6 h-full  overflow-auto " >
+                // fixed inset-0  flex items-center justify-center
+                // 
+                <div className="">
+                    <div className="p-6 bg-blue-300 w-full h-1/2  overflow-auto " >
                         {selectItems.length > 0 && currentTypeIndex < selectItems.length && (
                             <div>
                                 <h2 className="text-xl font-semibold mb-4"> Type: {selectItems[currentTypeIndex]?.category}, {selectItems[currentTypeIndex]?.type}</h2>
