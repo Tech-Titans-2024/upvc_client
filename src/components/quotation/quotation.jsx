@@ -13,7 +13,7 @@ function Quotation() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/product`);
+                // const response = await axios.get(`${apiUrl}/product`);
                 setProducts(response.data);
             } catch (err) {
                 console.error("Error fetching products:", err.message);
