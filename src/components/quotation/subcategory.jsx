@@ -234,7 +234,7 @@ function SubCategory() {
         const category = selectItems[currentTypeIndex]?.category;
         const type = selectItems[currentTypeIndex]?.type;
         const { quantity, width, height, area, series, designType, glass, color,
-            sliderof, slidersash, alrail, espag, accessories, handletype, handlecolor, roller } = formData;
+             handletype, roller,price,totalprice } = formData;
 
         const newFormData = {
             category,
@@ -243,18 +243,14 @@ function SubCategory() {
             designType,
             glass,
             color,
-            sliderof,
-            slidersash,
-            alrail,
-            espag,
-            accessories,
             handletype,
-            handlecolor,
             roller,
             quantity,
             width,
             height,
             area,
+            price,
+            totalprice
         };
 
         setFormDataArray((prevFormDataArray) => {
@@ -571,6 +567,28 @@ function SubCategory() {
                                             </div>
                                         </div>
                                         <div>
+                                            <label className="block text-gray-700 font-medium">Price</label>
+                                            <input
+                                                type="text"
+                                                className="w-full p-2 border rounded-md border-black"
+                                                placeholder="Quantity"
+                                                name='quantity'
+                                                value={formData.price}
+                                                onChange={handleInputChange}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-gray-700 font-medium">Total Price</label>
+                                            <input
+                                                type="text"
+                                                className="w-full p-2 border rounded-md border-black"
+                                                placeholder="Quantity"
+                                                name='quantity'
+                                                value={formData.totalprice}
+                                                onChange={handleInputChange}
+                                            />
+                                        </div>
+                                        <div>
                                             <label className="block text-gray-700 font-medium">Glass</label>
                                             <select className="w-full p-2 border rounded-md"
                                                 name="glass"
@@ -592,7 +610,7 @@ function SubCategory() {
                                                 <option value="Gold">Gold</option>
                                             </select>
                                         </div>
-                                        <div>
+                                        {/* <div>
                                             <label className="block text-gray-700 font-medium">Slider OF</label>
                                             <select className="w-full p-2 border rounded-md"
                                                 name="sliderof"
@@ -647,7 +665,7 @@ function SubCategory() {
                                                 <option value="Type 1">Type 1</option>
                                                 <option value="Type 2">Type 2</option>
                                             </select>
-                                        </div>
+                                        </div> */}
                                         <div>
                                             <label className="block text-gray-700 font-medium">Handle Type</label>
                                             <select className="w-full p-2 border rounded-md"
@@ -659,7 +677,7 @@ function SubCategory() {
                                                 <option value="Handle B">Handle B</option>
                                             </select>
                                         </div>
-                                        <div>
+                                        {/* <div>
                                             <label className="block text-gray-700 font-medium">Handle Color</label>
                                             <select className="w-full p-2 border rounded-md"
                                                 name="handlecolor"
@@ -669,7 +687,7 @@ function SubCategory() {
                                                 <option value="Silver">Silver</option>
                                                 <option value="Gold">Gold</option>
                                             </select>
-                                        </div>
+                                        </div> */}
                                         <div>
                                             <label className="block text-gray-700 font-medium">Roller</label>
                                             <select className="w-full p-2 border rounded-md"

@@ -11,13 +11,7 @@ const WindowCalculationForm = ({ type, onFormChange, onSubmit }) => {
         area: 0,
         glass: '',
         color: '',
-        sliderOF: '',
-        sliderSash: '',
-        alRail: '',
-        espag: '',
-        accessoriesType: '',
         handleType: '',
-        handleColor: '',
         roller: '',
     });
 
@@ -26,13 +20,7 @@ const WindowCalculationForm = ({ type, onFormChange, onSubmit }) => {
         designType: ['Type A', 'Type B', 'Type C'],
         glass: ['Clear', 'Frosted', 'Tinted'],
         color: ['White', 'Black', 'Silver'],
-        sliderOF: ['Option 1', 'Option 2', 'Option 3'],
-        sliderSash: ['Sash A', 'Sash B', 'Sash C'],
-        alRail: ['Rail X', 'Rail Y', 'Rail Z'],
-        espag: ['Espag 1', 'Espag 2', 'Espag 3'],
-        accessoriesType: ['Type 1', 'Type 2', 'Type 3'],
         handleType: ['Handle A', 'Handle B', 'Handle C'],
-        handleColor: ['Gold', 'Silver', 'Black'],
         roller: ['Roller 1', 'Roller 2', 'Roller 3'],
     };
 
