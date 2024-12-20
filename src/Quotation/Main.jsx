@@ -24,6 +24,7 @@ function Door() {
         roller: '',
         handleType: '',
         color: '',
+        additionalcost:'',
         quantity: '',
         total: ''
     });
@@ -53,7 +54,7 @@ function Door() {
     const handleSelectedType = async (value) => {
         const selectedValue = value;
         setSelectedType(selectedValue);
-        console.log('Selected Type:', selectedValue);
+        // console.log('Selected Type:', selectedValue);
         try {
             const response = await axios.post(`${apiUrl}/varientTypes`, {
                 selected_type: selectedValue,
@@ -93,7 +94,7 @@ function Door() {
 
     const handleSave = () => {
 
-        console.log('Current Data Before Save:', currentData);
+        // console.log('Current Data Before Save:', currentData);
         setFormData((prev) => [...prev, currentData]);
         setSavedData((prev) => [...prev, currentData]);
 
@@ -113,6 +114,7 @@ function Door() {
             roller: '',
             handleType: '',
             color: '',
+            additionalcost:'',
             quantity: '',
             total: '',
         });
@@ -120,16 +122,20 @@ function Door() {
 
 
     const handleFinish = () => {
-        console.log('Final FormData:', formData);
+        // console.log('Final FormData:', formData);
     };
 
 
     return (
-        <div className="flex flex-col bg-blue-300 p-7 gap-10 mb-3 rounded-lg">
-            <span className="text-2xl font-semibold text-blue-800">MEASUREMENTS</span>
-            <div className='border-2 border-black h-44 rounded-lg'>
-                <div className="grid grid-cols-5 gap-7 p-5">
-                    <div className="flex flex-col gap-5">
+        <div className="flex flex-col bg-blue-300 gap-5 h-screen rounded-lg p-5">
+            <div className='flex flex-col border border-black rounded-lg'>
+
+                <span className="text-2xl font-semibold text-blue-800 px-7 pt-8">MEASUREMENTS</span>
+
+
+
+                <div className="grid grid-cols-5 gap-7 p-7 border-b border-black   py-12">
+                    <div className="flex flex-col gap-2.5">
                         <label className="font-semibold ml-1 uppercase">Brand : </label>
                         <select
                             className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -143,7 +149,7 @@ function Door() {
                         </select>
                     </div>
                     {/* Product Selection */}
-                    <div className="flex flex-col gap-5">
+                    <div className="flex flex-col gap-2.5">
                         <label className="font-semibold ml-1 uppercase">Product : </label>
                         <select
                             className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -157,7 +163,7 @@ function Door() {
                         </select>
                     </div>
                     {/* Type Selection */}
-                    <div className="flex flex-col gap-5">
+                    <div className="flex flex-col gap-2.5">
                         <label className="font-semibold ml-1 uppercase">Type : </label>
                         <select
                             className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -171,7 +177,7 @@ function Door() {
                         </select>
                     </div>
                     {/* Varient Selection */}
-                    <div className="flex flex-col gap-5">
+                    <div className="flex flex-col gap-2.5">
                         <label className="font-semibold ml-1 uppercase">Varient : </label>
                         <select
                             className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -187,7 +193,7 @@ function Door() {
 
                     {(selectedProduct === 'Window' || selectedProduct === 'Louver') && (
                         <>
-                            <div className="flex flex-col gap-5">
+                            <div className="flex flex-col gap-2.5">
                                 <label className="font-semibold ml-1 uppercase">Mesh : </label>
                                 <select
                                     className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -203,115 +209,126 @@ function Door() {
                         </>
                     )}
                 </div>
-            </div>
-            <div className="grid grid-cols-4 gap-7">
+                <div className="grid grid-cols-6 gap-7 px-7 py-10 rounded-lg">
 
-                {/* Width */}
-                <div className="flex flex-col gap-5">
-                    <label className="font-semibold ml-1 uppercase">Width : </label>
-                    <input
-                        className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        name="width"
-                        value={currentData.width}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                {/* Height */}
-                <div className="flex flex-col gap-5">
-                    <label className="font-semibold ml-1 uppercase">Height : </label>
-                    <input
-                        className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        name="height"
-                        value={currentData.height}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                {/* Area (Sq Units) */}
-                <div className="flex flex-col gap-5">
-                    <label className="font-semibold ml-1 uppercase">Sq Units : </label>
-                    <input
-                        className="w-full bg-white p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        name="area"
-                        value={currentData.area}
-                        disabled
-                    />
-                </div>
-                {/* Price */}
-                <div className="flex flex-col gap-5">
-                    <label className="font-semibold ml-1 uppercase">Price : </label>
-                    <input
-                        className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        name="price"
-                        value={currentData.price}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                {/* Glass */}
-                <div className="flex flex-col gap-5">
-                    <label className="font-semibold ml-1 uppercase">Glass : </label>
-                    <select
-                        className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        name="glass"
-                        value={currentData.glass}
-                        onChange={handleInputChange}
-                    >
-                        <option>SELECT</option>
-                        <option>NORMAL GLASS</option>
-                        <option>TOUGHENED GLASS</option>
-                    </select>
-                </div>
-                {/* Roller */}
-                <div className="flex flex-col gap-5">
-                    <label className="font-semibold ml-1 uppercase">Roller : </label>
-                    <input
-                        className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        name="roller"
-                        value={currentData.roller}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                {/* Handle Type */}
-                <div className="flex flex-col gap-5">
-                    <label className="font-semibold ml-1 uppercase">Handle Type : </label>
-                    <input
-                        className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        name="handleType"
-                        value={currentData.handleType}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                {/* Color */}
-                <div className="flex flex-col gap-5">
-                    <label className="font-semibold ml-1 uppercase">Color : </label>
-                    <input
-                        className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        name="color"
-                        value={currentData.color}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                {/* Quantity */}
-                <div className="flex flex-col gap-5">
-                    <label className="font-semibold ml-1 uppercase">Quantity : </label>
-                    <input
-                        className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        name="quantity"
-                        value={currentData.quantity}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                {/* Total */}
-                <div className="flex flex-col gap-5">
-                    <label className="font-semibold ml-1 uppercase">Total Qty Price : </label>
-                    <input
-                        className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        name="total"
-                        value={currentData.total}
-                        onChange={handleInputChange}
-                    />
+                    {/* Width */}
+                    <div className="flex flex-col gap-2.5">
+                        <label className="font-semibold ml-1 uppercase">Width : </label>
+                        <input
+                            className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="width"
+                            value={currentData.width}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    {/* Height */}
+                    <div className="flex flex-col gap-2.5">
+                        <label className="font-semibold ml-1 uppercase">Height : </label>
+                        <input
+                            className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="height"
+                            value={currentData.height}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    {/* Area (Sq Units) */}
+                    <div className="flex flex-col gap-2.5">
+                        <label className="font-semibold ml-1 uppercase">Sq Feet : </label>
+                        <input
+                            className="w-full bg-white p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="area"
+                            value={currentData.area}
+                            disabled
+                        />
+                    </div>
+                    {/* Price */}
+                    <div className="flex flex-col gap-2.5">
+                        <label className="font-semibold ml-1 uppercase">Price : </label>
+                        <input
+                            className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="price"
+                            value={currentData.price}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    {/* Quantity */}
+                    <div className="flex flex-col gap-2.5">
+                        <label className="font-semibold ml-1 uppercase">Quantity : </label>
+                        <input
+                            className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="quantity"
+                            value={currentData.quantity}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    {/* Total */}
+                    <div className="flex flex-col gap-2.5">
+                        <label className="font-semibold ml-1 uppercase">Total Qty Price : </label>
+                        <input
+                            className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="total"
+                            value={currentData.total}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    {/* Glass */}
+                    <div className="flex flex-col gap-2.5">
+                        <label className="font-semibold ml-1 uppercase">Glass : </label>
+                        <select
+                            className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="glass"
+                            value={currentData.glass}
+                            onChange={handleInputChange}
+                        >
+                            <option>SELECT</option>
+                            <option>NORMAL GLASS</option>
+                            <option>TOUGHENED GLASS</option>
+                        </select>
+                    </div>
+                    {/* Roller */}
+                    <div className="flex flex-col gap-2.5">
+                        <label className="font-semibold ml-1 uppercase">Roller : </label>
+                        <input
+                            className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="roller"
+                            value={currentData.roller}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    {/* Handle Type */}
+                    <div className="flex flex-col gap-2.5">
+                        <label className="font-semibold ml-1 uppercase">Handle Type : </label>
+                        <input
+                            className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="handleType"
+                            value={currentData.handleType}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    {/* Color */}
+                    <div className="flex flex-col gap-2.5">
+                        <label className="font-semibold ml-1 uppercase">Color : </label>
+                        <input
+                            className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="color"
+                            value={currentData.color}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <div className="flex flex-col gap-2.5">
+                        <label className="font-semibold ml-1 uppercase">Additional Cost : </label>
+                        <input
+                            className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="additionalcost"
+                            value={currentData.additionalcost}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+
                 </div>
             </div>
-            <div className="flex justify-between">
+
+            <div className="flex justify-between p-7">
                 <button
                     className="bg-red-600 w-32 font-bold text-white py-2.5 px-6 rounded-lg shadow hover:bg-red-700 transition duration-200"
                     onClick={handleFinish}
@@ -326,8 +343,8 @@ function Door() {
                 </button>
             </div>
             {savedData.length > 0 && (
-                <div className="mt-10">
-                    <h2 className="text-xl font-semibold text-blue-800">Summary Data</h2>
+                <div className="mt-10 p-7">
+                    <h2 className="text-xl font-semibold text-blue-800">SUMMARY DATA</h2>
                     <table className="min-w-full table-auto mt-5 border-collapse border-2 border-black">
                         <thead>
                             <tr className=' bg-orange-300'>
@@ -341,6 +358,7 @@ function Door() {
                                 <th className="border-2 border-black px-4 py-2 uppercase font-bold">Area (Sq Units)</th>
                                 <th className="border-2 border-black px-4 py-2 uppercase font-bold">Price</th>
                                 <th className="border-2 border-black px-4 py-2 uppercase font-bold">Total</th>
+                                <th className="border-2 border-black px-4 py-2 uppercase font-bold">Additional Cost</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -356,6 +374,7 @@ function Door() {
                                     <td className="border-2 border-black px-4 py-2 font-bold">{data.area}</td>
                                     <td className="border-2 border-black px-4 py-2 font-bold">{data.price}</td>
                                     <td className="border-2 border-black px-4 py-2 font-bold">{data.total}</td>
+                                    <td className="border-2 border-black px-4 py-2 font-bold">{data.additionalcost}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -371,7 +390,7 @@ function Door() {
 
 function Main() {
     return (
-        <div className="relative w-full h-[100%] flex flex-col gap-6">
+        <div className="">
             <Door />
         </div>
     );
