@@ -14,6 +14,7 @@ import Subcategory from './components/quotation/subcategory'
 import PriceList from './components/pricelist/pricelist';
 import Manage from './components/manage/manage';
 import CustomerManage from './components/customerManage/customer';
+import Guidelines from './components/guidelines/guidelines'
 function App() 
 {
 	return (
@@ -22,10 +23,10 @@ function App()
 				<Route path='/' element={<Login />} />
 				<Route path='/upvc' element={<Layout />} >
 					<Route path='/upvc/dashboard' element={<Dashboard />} />
-					<Route path='/upvc/customer' element={<Dashboard />} />
-					<Route path='/upvc/settings' element={<Dashboard />} />
-					<Route path='/upvc/order' element={<Dashboard />} />
-					<Route path='/upvc/guidelines' element={<Dashboard />} />
+					<Route path='/upvc/customer' element={<Guidelines />} />
+					<Route path='/upvc/settings' element={<Guidelines />} />
+					<Route path='/upvc/order' element={<Guidelines />} />
+					<Route path='/upvc/guidelines' element={<Guidelines />} />
 					<Route path='/upvc/quotation' element={<Quotation />} />
 					<Route path='/upvc/subcategory' element={<Subcategory />} />
 					<Route path="/upvc/measurement" element={<Measurement />} />
