@@ -49,7 +49,7 @@ const HorizontalBarChart = () => {
       },
       title: {
         display: true,
-        text: 'Horizontal Bar Chart Example',
+        text: '',
         font: {
           size: 20,
         },

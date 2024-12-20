@@ -127,7 +127,7 @@ function Door() {
 
 
     return (
-        <div className="flex flex-col bg-blue-300 gap-5 h-screen rounded-lg p-5">
+        <div className="flex flex-col bg-blue-300 gap-5 h-auto rounded-lg p-5">
             <div className='flex flex-col border border-black rounded-lg'>
 
                 <span className="text-2xl font-semibold text-blue-800 px-7 pt-8">MEASUREMENTS</span>
@@ -177,6 +177,8 @@ function Door() {
                         </select>
                     </div>
                     {/* Varient Selection */}
+                    {(selectedProduct === 'Door' || selectedProduct === 'Window') && (
+                        <>
                     <div className="flex flex-col gap-2.5">
                         <label className="font-semibold ml-1 uppercase">Varient : </label>
                         <select
@@ -190,6 +192,8 @@ function Door() {
                             ))}
                         </select>
                     </div>
+                    </>
+                    )}
 
                     {(selectedProduct === 'Window' || selectedProduct === 'Louver') && (
                         <>

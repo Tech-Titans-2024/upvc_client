@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
-import { faTachometerAlt, faQuoteLeft, faShoppingCart, faListAlt, faSignOutAlt, faUserAlt, faTools, faCogs, faBookmark, faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
+import { faTachometerAlt, faQuoteLeft, faShoppingCart, faListAlt, faSignOutAlt, faUserAlt, faCalculator, faTools, faCogs, faBookmark, faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../assets/logo.jpeg';
 import './layout.css'
 
@@ -33,6 +33,11 @@ function Sidebar()
 			icon: faUserAlt,
 			name: 'Customer Profile',
 			path: '/upvc/customerprofile'
+		},
+		{
+			icon: faCalculator,
+			name: 'Calculator',
+			path: '/upvc/calculator'
 		},
 		{
 			icon: faCogs,

@@ -13,13 +13,13 @@ function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         {/* Horizontal Bar Chart 1 */}
         <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h2 className="text-lg font-semibold text-gray-700 text-center mb-4">Horizontal Bar Chart 1</h2>
+          {/* <h2 className="text-lg font-semibold text-gray-700 text-center mb-4">Horizontal Bar Chart 1</h2> */}
           <BarChart1 />
         </div>
 
         {/* Horizontal Bar Chart 2 */}
         <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h2 className="text-lg font-semibold text-gray-700 text-center mb-4">Horizontal Bar Chart 2</h2>
+          {/* <h2 className="text-lg font-semibold text-gray-700 text-center mb-4">Horizontal Bar Chart 2</h2> */}
           <BarChart2 />
         </div>
       </div>
@@ -28,13 +28,13 @@ function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Vertical Bar Chart 1 */}
         <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h2 className="text-lg font-semibold text-gray-700 text-center mb-4">Vertical Bar Chart 1</h2>
+          {/* <h2 className="text-lg font-semibold text-gray-700 text-center mb-4">Vertical Bar Chart 1</h2> */}
           <BarChart3 />
         </div>
 
         {/* Vertical Bar Chart 2 */}
         <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h2 className="text-lg font-semibold text-gray-700 text-center mb-4">Vertical Bar Chart 2</h2>
+          {/* <h2 className="text-lg font-semibold text-gray-700 text-center mb-4">Vertical Bar Chart 2</h2> */}
           <BarChart4 />
         </div>
       </div>

@@ -12,6 +12,7 @@ import SalesExecutive from './components/salesexecutive/salesexecutive';
 import Measurement from "./components/quotation/details";
 import Subcategory from './components/quotation/subcategory'
 import PriceList from './components/pricelist/pricelist';
+import Calculator from './components/calculator/calculator';
 import Manage from './components/manage/manage';
 import CustomerManage from './components/customerManage/customer';
 import Guidelines from './components/guidelines/guidelines'
@@ -32,6 +33,7 @@ function App()
 					<Route path="/upvc/measurement" element={<Measurement />} />
 					<Route path="/upvc/salesexecutive" element={<SalesExecutive />} />
 					<Route path="/upvc/pricelist" element={<PriceList />} />
+					<Route path="/upvc/calculator" element={<Calculator />} />
 					<Route path="/upvc/manage" element={<Manage />} />
 					<Route path="/upvc/customerprofile" element={<CustomerManage />} />
 				</Route>
