@@ -19,10 +19,9 @@ function Sidebar()
 			path: '/upvc/quotation'
 		},
 		{
-				icon:  faPeopleGroup ,
-				name: 'Sales Executive',
-				path: '/upvc/salesexecutive'
-			
+			icon:  faPeopleGroup ,
+			name: 'Sales Executive',
+			path: '/upvc/salesexecutive'
 		},
 		{
 			icon: faListAlt,
@@ -59,7 +58,6 @@ function Sidebar()
 			name: 'Guidelines',
 			path: '/upvc/guidelines'
 		},
-	
 		{
 			icon: faSignOutAlt,
 			name: 'Logout',

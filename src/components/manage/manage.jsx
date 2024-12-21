@@ -1,9 +1,10 @@
-import React from 'react'
+import React from 'react';
 
-const manage = () => {
-  return (
-    <div>Work In Progress</div>
-  )
+function Manage() 
+{
+	return (
+		<div>Work In Progress</div>
+	)
 }
 
-export default manage
+export default Manage;

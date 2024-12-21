@@ -1,9 +1,12 @@
-import React from 'react'
+import React from 'react';
 
-const guidelines = () => {
-  return (
-    <div>Work In Progress</div>
-  )
+function Guidelines() {
+
+	return (
+		<div>
+			Work In Progress
+		</div>
+	)
 }
 
-export default guidelines
+export default Guidelines;
