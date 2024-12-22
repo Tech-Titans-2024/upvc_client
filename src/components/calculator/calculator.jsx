@@ -1,47 +1,77 @@
 import React, { useState } from 'react';
 
-const SqMeterToSqFeet = () => 
-{
-	const [sqMeters, setSqMeters] = useState('');
-	const [sqFeet, setSqFeet] = useState('');
+const App = () => {
+  const [squareMm, setSquareMm] = useState('');
+  const [squareFeet, setSquareFeet] = useState('');
 
-	const handleInputChange = (value) => {
-		setSqMeters(value);
-		if (value) {
-			const feet = parseFloat(value) * 10.7639; // Conversion factor
-			setSqFeet(feet.toFixed(2));
-		} else {
-			setSqFeet('');
-		}
-	};
+  const conversionFactorMmToFt = 10.764 / 1e6; // Square Millimeters to Square Feet
+  const conversionFactorFtToMm = 1e6 / 10.764; // Square Feet to Square Millimeters
 
-	return (
-		<div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-			<div className="w-full max-w-sm bg-white shadow-md rounded-lg p-6">
-				<div className="mb-4">
-					<label htmlFor="sqMeters" className="block text-sm font-medium text-gray-700">
-						Square Meters
-					</label>
-					<input
-						id="sqMeters"
-						type="number"
-						step="0.01"
-						value={sqMeters}
-						onChange={(e) => handleInputChange(e.target.value)}
-						placeholder="Enter value in square meters"
-						className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-					/>
-				</div>
-				{sqFeet && (
-					<div className="mt-4">
-						<p className="text-sm text-gray-600">
-							Area in Square Feet: <span className="font-bold">{sqFeet} ft²</span>
-						</p>
-					</div>
-				)}
-			</div>
-		</div>
-	);
+  // Handle square millimeters to square feet conversion
+  const handleSquareMmChange = (e) => {
+    const value = e.target.value;
+    setSquareMm(value);
+    if (value) {
+      setSquareFeet((value * conversionFactorMmToFt).toFixed(6)); // Convert to ft²
+    } else {
+      setSquareFeet('');
+    }
+  };
+
+  // Handle square feet to square millimeters conversion
+  const handleSquareFeetChange = (e) => {
+    const value = e.target.value;
+    setSquareFeet(value);
+    if (value) {
+      setSquareMm((value * conversionFactorFtToMm).toFixed(0)); // Convert to mm²
+    } else {
+      setSquareMm('');
+    }
+  };
+
+  return (
+    <div className="flex items-center justify-center min-h-screen rounded-lg bg-blue-300">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-96 h-80">
+        <h1 className="text-2xl font-bold mb-4 text-center">Area Converter</h1>
+
+        {/* Square Millimeter Input */}
+        <div className="mb-4">
+          <label
+            htmlFor="squareMm"
+            className="block  text-gray-700 text-xl font-medium mb-2"
+          >
+            Square Millimeters:
+          </label>
+          <input
+            type="number"
+            id="squareMm"
+            value={squareMm}
+            onChange={handleSquareMmChange}
+            placeholder="Enter value"
+            className="w-full px-4 py-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        {/* Square Feet Input */}
+        <div className="mb-4">
+          <label
+            htmlFor="squareFeet"
+            className="block text-gray-700 text-xl font-medium mb-2"
+          >
+            Square Feet:
+          </label>
+          <input
+            type="number"
+            id="squareFeet"
+            value={squareFeet}
+            onChange={handleSquareFeetChange}
+            placeholder="Enter value"
+            className="w-full px-4 py-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+      </div>
+    </div>
+  );
 };
 
-export default SqMeterToSqFeet;
+export default App;

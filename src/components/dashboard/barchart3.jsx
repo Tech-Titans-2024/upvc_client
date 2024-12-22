@@ -14,22 +14,20 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const HorizontalBarChart = () => {
   const data = {
-    labels: ['Product A', 'Product B', 'Product C', 'Product D'],
+    labels: ['Door', 'Window', 'Louvers',],
     datasets: [
       {
         label: 'Sales',
-        data: [65, 59, 80, 81],
+        data: [65, 95, 80],
         backgroundColor: [
           'rgba(255, 99, 132, 0.8)', // Solid colors
           'rgba(54, 162, 235, 0.8)',
           'rgba(255, 206, 86, 0.8)',
-          'rgba(75, 192, 192, 0.8)',
         ],
         hoverBackgroundColor: [
           'rgba(255, 99, 132, 1)', // Brighter on hover
           'rgba(54, 162, 235, 1)',
           'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
         ],
         borderRadius: 10,
         borderWidth: 2,

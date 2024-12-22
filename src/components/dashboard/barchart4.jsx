@@ -1,45 +1,62 @@
 import React from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
 } from 'chart.js';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const HorizontalBarChart = () => {
+const LineChart = () => {
   const data = {
-    labels: ['Product A', 'Product B', 'Product C', 'Product D'],
+    labels: ['January', 'February', 'March', 'April', 'May', 'June',],
     datasets: [
       {
-        label: 'Sales',
-        data: [65, 59, 80, 81],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.8)', // Solid colors
-          'rgba(54, 162, 235, 0.8)',
-          'rgba(255, 206, 86, 0.8)',
-          'rgba(75, 192, 192, 0.8)',
-        ],
-        hoverBackgroundColor: [
-          'rgba(255, 99, 132, 1)', // Brighter on hover
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-        ],
-        borderRadius: 10,
+        label: 'Sales Person 1',
+        data: [10,20,30, 50, 40, 60, 70, 90],
+        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(75, 192, 192, 1)',
+        tension: 0.4, // Makes the line smooth
         borderWidth: 2,
-        borderColor: 'rgba(0, 0, 0, 0.1)',
+      },
+      {
+        label: 'Sales Person 2',
+        data: [40, 60, 55, 70, 80, 100],
+        borderColor: 'rgba(153, 102, 255, 1)',
+        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+        pointBackgroundColor: 'rgba(153, 102, 255, 1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(153, 102, 255, 1)',
+        tension: 0.4,
+        borderWidth: 2,
+      },
+      {
+        label: ' Sales Person 3',
+        data: [20, 80, 50, 40, 70, 90],
+        borderColor: 'rgba(203, 202, 55, 1)',
+        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+        pointBackgroundColor: 'rgba(203, 202, 55, 1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(153, 102, 255, 1)',
+        tension: 0.4,
+        borderWidth: 2,
       },
     ],
   };
 
   const options = {
-    indexAxis: 'y', // Horizontal bar chart
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -49,42 +66,42 @@ const HorizontalBarChart = () => {
       },
       title: {
         display: true,
-        text: '',
+        text: 'Monthly Sales and Revenue Trends',
         font: {
-          size: 20,
+          size: 18,
         },
       },
     },
     scales: {
       x: {
+        grid: {
+          color: 'rgba(200, 200, 200, 0.2)',
+        },
+        ticks: {
+          color: '#6B7280',
+        },
+      },
+      y: {
         beginAtZero: true,
         grid: {
           color: 'rgba(200, 200, 200, 0.2)',
         },
         ticks: {
-          color: '#6B7280', // Tailwind gray-600
-        },
-      },
-      y: {
-        grid: {
-          color: 'rgba(200, 200, 200, 0.2)',
-        },
-        ticks: {
-          color: '#6B7280', // Tailwind gray-600
+          color: '#6B7280',
         },
       },
     },
     animation: {
       duration: 1500,
-      easing: 'easeOutBounce',
+      easing: 'easeInOutQuad',
     },
   };
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-lg h-96">
-      <Bar data={data} options={options} />
+      <Line data={data} options={options} />
     </div>
   );
 };
 
-export default HorizontalBarChart;
+export default LineChart;

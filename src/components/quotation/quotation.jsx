@@ -96,11 +96,12 @@ function Quotation()
 
     const handleFinish = () => {
         console.log('Final FormData:', formData);
+        
     }
 
     return (
         <div>
-            <div className='flex flex-col bg-blue-300 gap-6 h-auto rounded-lg p-5'>
+            <div className='flex flex-col bg-blue-300 gap-6 min-h-screen rounded-lg p-5'>
                 <div className='flex flex-col border border-black rounded-lg'>
                     <span className="text-2xl font-semibold text-blue-800 px-7 pt-8">MEASUREMENTS</span>
                     <div className="grid grid-cols-5 gap-7 p-7 border-b border-black py-12">
