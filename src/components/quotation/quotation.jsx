@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function Quotation() 
-{
+function Quotation() {
     const apiUrl = import.meta.env.VITE_API_URL;
     const [type, setType] = useState([]);
     const [selectedType, setSelectedType] = useState(null);
@@ -11,22 +10,25 @@ function Quotation()
     const [formData, setFormData] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState('Door');
     const [savedData, setSavedData] = useState([]);
+    const [width, setWidth] = useState("");
+    const [height, setHeight] = useState("");
+    const [price, setPrice] = useState([]);
+    const [quantity, setQuantity] = useState();
+
 
     const [currentData, setCurrentData] = useState({
         brand: 'VEKA', product: '', type: '', varient: '', mesh: 'YES',
-        width: '', height: '', area: '', price: '', glass: '', roller: '', 
-        handleType: '', color: '', additionalcost: '', quantity: '',total: ''
+        width: '', height: '', area: '', price: '', glass: '', roller: '',
+        handleType: '', color: '', additionalcost: '', quantity: '', total: ''
     })
 
-    useEffect(() => 
-    {
-        const fetchType = async () => 
-        {
+    useEffect(() => {
+        const fetchType = async () => {
             try {
                 let response;
                 if (selectedProduct === 'Door') {
                     response = await axios.get(`${apiUrl}/doorTypes`);
-                } 
+                }
                 else if (selectedProduct === 'Window') {
                     response = await axios.get(`${apiUrl}/windowTypes`);
                 }
@@ -34,7 +36,7 @@ function Quotation()
                     response = await axios.get(`${apiUrl}/louverVarients`);
                 }
                 setType(response.data);
-            } 
+            }
             catch (error) {
                 console.error('Error fetching types:', error);
             }
@@ -53,33 +55,81 @@ function Quotation()
                 selected_category: selectedProduct
             })
             setVarient(response.data);
-        } 
+        }
         catch (error) {
             console.error('Error fetching Varient Types :', error);
         }
     }
 
-    const handleInputChange = (e) => {
-
+    const handleInputChange = async (e) => {
         const { name, value } = e.target;
 
-        if (name === 'width' || name === 'height') 
-        {
-            const newValue = value;
-            setCurrentData((prev) => {
-                const updatedData = { ...prev, [name]: newValue };
-                if (updatedData.width && updatedData.height) {
-                    updatedData.area = (parseFloat(updatedData.width) * parseFloat(updatedData.height)).toFixed(2);
-                }
-                return updatedData;
-            })
-        } 
-        else {
-            setCurrentData((prev) => ({
-                ...prev, type: selectedType, varient: selectedVarient, [name]: value,
-            }))
+        if (name === 'width') {
+            setWidth(value);
+        } else if (name === 'height') {
+            setHeight(value);
+        } else if (name === 'price') {
+            setPrice(value);
+        } else if (name === 'quantity') {
+            setQuantity(value);
         }
-    }
+
+        const updatedWidth = name === 'width' ? value : width;
+        const updatedHeight = name === 'height' ? value : height;
+        const updatedQuantity = name === 'quantity' ? value : quantity;
+
+        setCurrentData((prev) => {
+            const validatedWidth = parseFloat(updatedWidth) || 0;
+            const validatedHeight = parseFloat(updatedHeight) || 0;
+            const validatedQuantity = parseInt(updatedQuantity, 10) || 0;
+
+            const updatedData = {
+                ...prev,
+                width: validatedWidth,
+                height: validatedHeight,
+                quantity: validatedQuantity,
+            };
+
+            updatedData.area = (validatedWidth * validatedHeight).toFixed(2);
+            updatedData.totalPrice = (price * validatedQuantity).toFixed(2); // Calculate total price
+
+            return updatedData;
+        });
+
+        if (name === 'width' || name === 'height') {
+            try {
+                const response = await axios.post(`${apiUrl}/pricelist`, {
+                    height: updatedHeight,
+                    width: updatedWidth,
+                    selectedProduct,
+                    selectedType,
+                    selectedVarient,
+                });
+                if (response.data && response.data.data !== undefined) {
+                    setPrice(response.data.data);
+
+                    setCurrentData((prev) => ({
+                        ...prev,
+                        price: response.data.data,
+                        totalPrice: (response.data.data * (quantity || 1)).toFixed(2), // Update total price
+                    }));
+                } else {
+                    console.error('Unexpected response format:', response);
+                }
+            } catch (err) {
+                console.error('Error fetching price list:', err);
+            }
+        }
+
+        if (name === 'quantity') {
+            setCurrentData((prev) => ({
+                ...prev,
+                totalPrice: (price * (parseInt(value, 10) || 1)).toFixed(2), // Update total price
+            }));
+        }
+    };
+
+
 
     const handleSave = () => {
 
@@ -89,14 +139,15 @@ function Quotation()
 
         setCurrentData({
             brand: 'VEKA', product: '', type: '', varient: '', mesh: 'YES',
-            width: '', height: '', area: '', price: '', glass: '', roller: '', 
-            handleType: '', color: '', additionalcost: '', quantity: '',total: ''
+            width: '', height: '', area: '', price: '', glass: '', roller: '',
+            handleType: '', color: '', additionalcost: '', quantity: '', total: ''
         })
     }
 
     const handleFinish = () => {
         console.log('Final FormData:', formData);
-        
+        console.log("Type and product", formData[0].type, selectedProduct, formData[0].varient, formData[0].mesh);
+
     }
 
     return (
@@ -167,7 +218,7 @@ function Quotation()
                                     <select
                                         className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         name="mesh"
-                                        value={currentData.mesh || ''}
+                                        // value={currentData.mesh || ''}
                                         onChange={handleInputChange}
                                     >
                                         <option className='p-2 text-md'>Yes</option>
@@ -183,7 +234,7 @@ function Quotation()
                             <input
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="width"
-                                value={currentData.width || ''}
+                                // value={currentData.width}
                                 onChange={handleInputChange}
                             />
                         </div>
@@ -192,7 +243,7 @@ function Quotation()
                             <input
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="height"
-                                value={currentData.height || ''}
+                                // value={currentData.height || ''}
                                 onChange={handleInputChange}
                             />
                         </div>
@@ -211,7 +262,7 @@ function Quotation()
                             <input
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="price"
-                                value={currentData.price || ''}
+                                value={price || ''}
                                 onChange={handleInputChange}
                             />
                         </div>
@@ -229,7 +280,7 @@ function Quotation()
                             <input
                                 className="w-full p-3 border-2 rounded-md bg-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="total"
-                                value={currentData.total || ''}
+                                value={currentData?.totalPrice || ''}
                                 onChange={handleInputChange}
                                 disabled
                                 readOnly
