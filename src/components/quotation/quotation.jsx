@@ -64,7 +64,7 @@ function Quotation() {
     const handleInputChange = async (e) => {
         const { name, value } = e.target;
 
-        if (name === 'width') {
+        if (name === 'width') {    
             setWidth(value);
         } else if (name === 'height') {
             setHeight(value);
