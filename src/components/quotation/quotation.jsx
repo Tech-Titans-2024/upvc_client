@@ -4,7 +4,7 @@ import axios from 'axios';
 function Quotation() {
     const apiUrl = import.meta.env.VITE_API_URL;
     const [type, setType] = useState([]);
-    const [selectedType, setSelectedType] = useState(null);
+    const [selectedType, setSelectedType] = useState(null)|| "";
     const [varient, setVarient] = useState([]);
     const [selectedVarient, setSelectedVarient] = useState(null);
     const [formData, setFormData] = useState([]);
@@ -14,6 +14,7 @@ function Quotation() {
     const [height, setHeight] = useState("");
     const [price, setPrice] = useState([]);
     const [quantity, setQuantity] = useState();
+    const [brand, setBrand] = useState();
 
 
     const [currentData, setCurrentData] = useState({
@@ -63,8 +64,8 @@ function Quotation() {
 
     const handleInputChange = async (e) => {
         const { name, value } = e.target;
-
-        if (name === 'width') {    
+    
+        if (name === 'width') {
             setWidth(value);
         } else if (name === 'height') {
             setHeight(value);
@@ -72,30 +73,35 @@ function Quotation() {
             setPrice(value);
         } else if (name === 'quantity') {
             setQuantity(value);
+        } else if (name === 'brand') {
+            setBrand(value);
+            // console.log("Selected Brand:", brand);
         }
-
+    
         const updatedWidth = name === 'width' ? value : width;
         const updatedHeight = name === 'height' ? value : height;
         const updatedQuantity = name === 'quantity' ? value : quantity;
-
+        const updatedBrand = name === 'brand' ? value : brand;
+    
         setCurrentData((prev) => {
             const validatedWidth = parseFloat(updatedWidth) || 0;
             const validatedHeight = parseFloat(updatedHeight) || 0;
             const validatedQuantity = parseInt(updatedQuantity, 10) || 0;
-
+    
             const updatedData = {
                 ...prev,
                 width: validatedWidth,
                 height: validatedHeight,
                 quantity: validatedQuantity,
+                brand: updatedBrand,
             };
-
+    
             updatedData.area = (validatedWidth * validatedHeight).toFixed(2);
-            updatedData.totalPrice = (price * validatedQuantity).toFixed(2); // Calculate total price
-
+            updatedData.totalPrice = (price * validatedQuantity).toFixed(2);
+    
             return updatedData;
         });
-
+    
         if (name === 'width' || name === 'height') {
             try {
                 const response = await axios.post(`${apiUrl}/pricelist`, {
@@ -104,14 +110,15 @@ function Quotation() {
                     selectedProduct,
                     selectedType,
                     selectedVarient,
+                    brand: updatedBrand, 
                 });
                 if (response.data && response.data.data !== undefined) {
                     setPrice(response.data.data);
-
+    
                     setCurrentData((prev) => ({
                         ...prev,
                         price: response.data.data,
-                        totalPrice: (response.data.data * (quantity || 1)).toFixed(2), // Update total price
+                        totalPrice: (response.data.data * (quantity || 1)).toFixed(2),
                     }));
                 } else {
                     console.error('Unexpected response format:', response);
@@ -120,14 +127,15 @@ function Quotation() {
                 console.error('Error fetching price list:', err);
             }
         }
-
+    
         if (name === 'quantity') {
             setCurrentData((prev) => ({
                 ...prev,
-                totalPrice: (price * (parseInt(value, 10) || 1)).toFixed(2), // Update total price
+                totalPrice: (price * (parseInt(value, 10) || 1)).toFixed(2),
             }));
         }
     };
+    
 
 
 
@@ -161,9 +169,10 @@ function Quotation() {
                             <select
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="brand"
-                                value={currentData.brand || ''}
+                                // value={currentData.brand || ''}
                                 onChange={handleInputChange}
                             >
+                                <option className='p-2 text-md'>Select</option>
                                 <option className='p-2 text-md'>VEKA</option>
                                 <option className='p-2 text-md'>ELITE</option>
                             </select>
