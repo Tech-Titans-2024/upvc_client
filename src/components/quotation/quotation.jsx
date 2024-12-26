@@ -303,7 +303,7 @@ function Quotation()
                             <select
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="glass"
-                                value={currentData.glass || ''}
+                                // value={currentData.glass || ''}
                                 onChange={handleInputChange}
                             >
                                 <option className='p-2 text-md'>Select</option>
@@ -316,7 +316,7 @@ function Quotation()
                             <input
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="roller"
-                                value={currentData.roller || ''}
+                                // value={currentData.roller || ''}
                                 onChange={handleInputChange}
                             />
                         </div>
@@ -325,7 +325,7 @@ function Quotation()
                             <input
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="handleType"
-                                value={currentData.handleType || ''}
+                                // value={currentData.handleType || ''}
                                 onChange={handleInputChange}
                             />
                         </div>
@@ -334,7 +334,7 @@ function Quotation()
                             <input
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="color"
-                                value={currentData.color || ''}
+                                // value={currentData.color || ''}
                                 onChange={handleInputChange}
                             />
                         </div>
@@ -343,7 +343,7 @@ function Quotation()
                             <input
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="additionalcost"
-                                value={currentData.additionalcost || ''}
+                                // value={currentData.additionalcost || ''}
                                 onChange={handleInputChange}
                             />
                         </div>
