@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function Quotation() 
-{
+function Quotation() {
     const apiUrl = import.meta.env.VITE_API_URL;
     const [type, setType] = useState([]);
     const [selectedType, setSelectedType] = useState(null) || "";
     const [varient, setVarient] = useState([]);
     const [selectedVarient, setSelectedVarient] = useState(null);
     const [formData, setFormData] = useState([]);
-    const [selectedProduct, setSelectedProduct] = useState('Door');
+    const [selectedProduct, setSelectedProduct] = useState('');
     const [savedData, setSavedData] = useState([]);
     const [width, setWidth] = useState("");
     const [height, setHeight] = useState("");
@@ -17,7 +16,7 @@ function Quotation()
     const [quantity, setQuantity] = useState();
     const [brand, setBrand] = useState();
     const [currentData, setCurrentData] = useState({
-        brand: 'VEKA', product: '', type: '', varient: '', mesh: 'YES',
+        brand: '', product: '', type: '', varient: '', mesh: 'YES',
         width: '', height: '', area: '', price: '', glass: '', roller: '',
         handleType: '', color: '', additionalcost: '', quantity: '', total: ''
     })
@@ -145,17 +144,45 @@ function Quotation()
     }
 
     const handleSave = () => {
-
-        setFormData((prev) => [...prev, currentData]);
         setSavedData((prev) => [...prev, currentData]);
-        alert('Data Saved Successfully');
-
+        alert("Data Saved Successfully");
         setCurrentData({
-            brand: 'VEKA', product: '', type: '', varient: '', mesh: 'YES',
-            width: '', height: '', area: '', price: '', glass: '', roller: '',
-            handleType: '', color: '', additionalcost: '', quantity: '', total: ''
-        })
-    }
+            brand: "VEKA",
+            product: "",
+            type: "",
+            varient: "",
+            mesh: "YES",
+            width: "",
+            height: "",
+            area: "",
+            price: "",
+            glass: "",
+            roller: "",
+            handleType: "",
+            color: "",
+            additionalcost: "",
+            quantity: "",
+            total: "",
+        });
+    };
+
+    const handleEditChange = (e, index) => {
+        const { name, value } = e.target;
+        setSavedData((prev) =>
+            prev.map((row, i) =>
+                i === index
+                    ? {
+                        ...row,
+                        [name]: value,
+                    }
+                    : row
+            )
+        );
+    };
+
+    const handleDeleteRow = (index) => {
+        setSavedData((prev) => prev.filter((_, i) => i !== index));
+    };
 
     const handleFinish = () => {
         console.log('Final FormData:', formData);
@@ -165,20 +192,20 @@ function Quotation()
     return (
         <div>
             <div className='flex flex-col bg-blue-300 gap-6 min-h-screen rounded-lg p-5'>
-                <div className='flex flex-col border border-black rounded-lg'>
-                    <span className="text-2xl font-semibold text-blue-800 px-7 pt-8">MEASUREMENTS</span>
-                    <div className="grid grid-cols-5 gap-7 p-7 border-b border-black py-12">
+            <span className="text-2xl font-semibold text-blue-800 px-2 pt-8">MEASUREMENTS</span>
+                <div className='flex flex-col border-2 border-black rounded-lg'>
+                    <div className="grid grid-cols-5 gap-7 p-7 border-b-2 border-black py-12">
                         <div className="flex flex-col gap-4">
                             <label className="font-semibold ml-1 uppercase">Brand : </label>
                             <select
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="brand"
-                                // value={currentData.brand || ''}
+                                value={currentData.brand || ''}
                                 onChange={handleInputChange}
                             >
                                 <option className='p-2 text-md'>Select</option>
                                 <option className='p-2 text-md'>VEKA</option>
-                                <option className='p-2 text-md'>ELITE</option>
+                                <option className='p-2 text-md'>EITI</option>
                             </select>
                         </div>
                         <div className="flex flex-col gap-4">
@@ -230,7 +257,7 @@ function Quotation()
                                     <select
                                         className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         name="mesh"
-                                        // value={currentData.mesh || ''}
+                                        value={currentData.mesh || ''}
                                         onChange={handleInputChange}
                                     >
                                         <option className='p-2 text-md'>Yes</option>
@@ -246,7 +273,7 @@ function Quotation()
                             <input
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="width"
-                                // value={currentData.width}
+                                value={currentData.width || ''}
                                 onChange={handleInputChange}
                             />
                         </div>
@@ -255,7 +282,7 @@ function Quotation()
                             <input
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="height"
-                                // value={currentData.height || ''}
+                                value={currentData.height || ''}
                                 onChange={handleInputChange}
                             />
                         </div>
@@ -303,7 +330,7 @@ function Quotation()
                             <select
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="glass"
-                                // value={currentData.glass || ''}
+                                value={currentData.glass || ''}
                                 onChange={handleInputChange}
                             >
                                 <option className='p-2 text-md'>Select</option>
@@ -349,13 +376,8 @@ function Quotation()
                         </div>
                     </div>
                 </div>
-                <div className="flex justify-between">
-                    <button
-                        className="bg-red-600 w-32 font-bold text-lg text-white py-2.5 px-6 rounded-lg shadow hover:bg-red-700 transition duration-200"
-                        onClick={handleFinish}
-                    >
-                        Finish
-                    </button>
+                <div className="flex justify-end">
+
                     <button
                         className="bg-green-700 w-32 font-bold text-lg text-white py-2.5 px-6 rounded-lg shadow hover:bg-green-600 transition duration-200"
                         onClick={handleSave}
@@ -363,45 +385,118 @@ function Quotation()
                         Save
                     </button>
                 </div>
-                {savedData.length > 0 && (
-                    <div className="mt-10 p-7">
-                        <h2 className="text-xl font-semibold text-blue-800">SUMMARY DATA</h2>
-                        <table className="min-w-full table-auto mt-5 border-collapse border-2 border-black">
-                            <thead>
-                                <tr className=' bg-orange-300'>
-                                    <th className="border-2 border-black px-4 py-2 uppercase font-bold ">Brand</th>
-                                    <th className="border-2 border-black px-4 py-2 uppercase font-bold">Type</th>
-                                    <th className="border-2 border-black px-4 py-2 uppercase font-bold">Variant</th>
-                                    <th className="border-2 border-black px-4 py-2 uppercase font-bold">Mesh</th>
-                                    <th className="border-2 border-black px-4 py-2 uppercase font-bold">Width</th>
-                                    <th className="border-2 border-black px-4 py-2 uppercase font-bold">Height</th>
-                                    <th className="border-2 border-black px-4 py-2 uppercase font-bold">Area (Sq Units)</th>
-                                    <th className="border-2 border-black px-4 py-2 uppercase font-bold">Price</th>
-                                    <th className="border-2 border-black px-4 py-2 uppercase font-bold">Total</th>
-                                    <th className="border-2 border-black px-4 py-2 uppercase font-bold">Additional Cost</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {savedData.map((data, index) => (
-                                    <tr key={index}>
-                                        <td className="border-2 border-black px-4 py-2 font-bold">{data.brand}</td>
-                                        <td className="border-2 border-black px-4 py-2 font-bold">{data.type}</td>
-                                        <td className="border-2 border-black px-4 py-2 font-bold">{data.varient}</td>
-                                        <td className="border-2 border-black px-4 py-2 font-bold">{data.mesh}</td>
-                                        <td className="border-2 border-black px-4 py-2 font-bold">{data.width}</td>
-                                        <td className="border-2 border-black px-4 py-2 font-bold">{data.height}</td>
-                                        <td className="border-2 border-black px-4 py-2 font-bold">{data.area}</td>
-                                        <td className="border-2 border-black px-4 py-2 font-bold">{data.price}</td>
-                                        <td className="border-2 border-black px-4 py-2 font-bold">{data.total}</td>
-                                        <td className="border-2 border-black px-4 py-2 font-bold">{data.additionalcost}</td>
+                <div>
+                    {savedData.length> 0 && (
+                        <div className="mt-5">
+                            <h2 className="text-2xl font-semibold text-blue-800 px-2 pt-8">SUMMARY DATA</h2>
+                            <table className="min-w-full table-auto mt-5 border-collapse border-2 border-black">
+                                <thead>
+                                    <tr className="bg-orange-300">
+                                        <th className="border-2 border-black px-4 py-2 uppercase font-bold">Brand</th>
+                                        <th className="border-2 border-black px-4 py-2 uppercase font-bold">Type</th>
+                                        <th className="border-2 border-black px-4 py-2 uppercase font-bold">Varient</th>
+                                        <th className="border-2 border-black px-4 py-2 uppercase font-bold">Mesh</th>
+                                        <th className="border-2 border-black px-4 py-2 uppercase font-bold">Width</th>
+                                        <th className="border-2 border-black px-4 py-2 uppercase font-bold">Height</th>
+                                        <th className="border-2 border-black px-4 py-2 uppercase font-bold">Area (Sq Units)</th>
+                                        <th className="border-2 border-black px-4 py-2 uppercase font-bold">Price</th>
+                                        <th className="border-2 border-black px-4 py-2 uppercase font-bold">Total</th>
+                                        <th className="border-2 border-black px-4 py-2 uppercase font-bold">Additional Cost</th>
+                                        <th className="border-2 border-black px-4 py-2 uppercase font-bold">Actions</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
+                                </thead>
+                                <tbody>
+                                    {savedData.map((data, index) => (
+                                        <tr key={index}>
+                                            {["brand", "type", "varient", "mesh", "width", "height", "area", "price", "total", "additionalcost"].map(
+                                                (field) => (
+                                                    <td key={field} className="border-2 border-black px-4 py-2 font-bold">
+                                                        <input
+                                                            type="text"
+                                                            name={field}
+                                                            value={data[field] || ""}
+                                                            onChange={(e) => handleEditChange(e, index)}
+                                                            className="w-full p-2 border rounded"
+                                                        />
+                                                    </td>
+                                                )
+                                            )}
+                                            <td className="border-2 border-black px-4 py-2 font-bold">
+                                                <button
+                                                    className="bg-red-500 text-white px-3 py-1 rounded"
+                                                    onClick={() => handleDeleteRow(index)}
+                                                >
+                                                    Delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+
+                            <div className="">
+                                <h2 className='text-2xl font-semibold text-blue-800 px-2 pt-12' >CUSTOMER DETAILS</h2>
+                                <div className='p-5 mt-7 grid grid-cols-5 gap-7 border-2 border-black rounded-lg py-12 '>
+                                    <div className='flex flex-col gap-4'>
+                                        <label className='font-semibold ml-1 uppercase'>Sales Person Id :</label>
+                                        <input
+                                            type="text"
+                                            placeholder=''
+                                            className="w-full p-3 border-2 bg-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            disabled
+                                        />
+                                    </div>
+                                    <div className='flex flex-col gap-4'>
+                                        <label className='font-semibold ml-1 uppercase'>Quotation Id :</label>
+                                        <input
+                                            type="text"
+                                            placeholder=''
+                                            className="w-full p-3 border-2 bg-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            disabled
+                                        />
+                                    </div>
+                                    <div className='flex flex-col gap-4'>
+                                        <label className='font-semibold ml-1 uppercase'>Customer Name :</label>
+                                        <input
+                                            type="text"
+                                            placeholder=''
+                                            className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        />
+                                    </div>
+                                    <div className='flex flex-col gap-4'>
+                                        <label className='font-semibold ml-1 uppercase'>Customer Address :</label>
+                                        <input
+                                            type="text"
+                                            placeholder=''
+                                            className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        />
+                                    </div>
+                                    <div className='flex flex-col gap-4'>
+                                        <label className='font-semibold ml-1 uppercase'>Customer Phone No :</label>
+                                        <input
+                                            type="text"
+                                            placeholder=''
+                                            className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        />
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='mt-7 flex justify-start'>
+                                <button
+                                    className="bg-red-600 w-32 font-bold text-lg text-white py-2.5 px-6 rounded-lg shadow hover:bg-red-700 transition duration-200"
+                                    onClick={handleFinish}
+                                >
+                                    Finish
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+
             </div>
-        </div>
+        </div >
     )
 }
 
