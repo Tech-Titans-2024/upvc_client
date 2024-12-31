@@ -5,20 +5,24 @@ import html2pdf from 'html2pdf.js';
 function Quotation() {
     const apiUrl = import.meta.env.VITE_API_URL;
     const [type, setType] = useState([]);
-    const [selectedType, setSelectedType] = useState(null) || "";
+    // const [selectedType, setSelectedType] = useState(null) || "";
     const [varient, setVarient] = useState([]);
-    const [selectedVarient, setSelectedVarient] = useState(null);
-    const [formData, setFormData] = useState([]);
-    const [selectedProduct, setSelectedProduct] = useState('');
+    // const [selectedVarient, setSelectedVarient] = useState(null);
+    // const [selectedProduct, setSelectedProduct] = useState('');
     const [savedData, setSavedData] = useState([]);
-    const [width, setWidth] = useState("");
-    const [height, setHeight] = useState("");
-    const [price, setPrice] = useState([]);
-    const [quantity, setQuantity] = useState();
-    const [brand, setBrand] = useState();
+    // const [mesh, setMesh] = useState('Yes');
+    // const [width, setWidth] = useState("");
+    // const [height, setHeight] = useState("");
+    // const [roller, setRoller] = useState("");
+    // const [color, setColor] = useState("");
+    // const [handleType, setHandleType] = useState("");
+    // const [additionalCost, setAdditionalCost] = useState("");
+    // const [price, setPrice] = useState([]);
+    // const [quantity, setQuantity] = useState();
+    // const [brand, setBrand] = useState();
     const [img, setImg] = useState();
     const [currentData, setCurrentData] = useState({
-        brand: '', product: '', type: '', varient: '', mesh: 'YES',
+        brand: 'Veka', product: 'Door', type: '', varient: '', mesh: 'Yes',
         width: '', height: '', area: '', price: '', glass: '', roller: '',
         handleType: '', color: '', additionalcost: '', quantity: '', total: ''
     })
@@ -31,167 +35,212 @@ function Quotation() {
         const fetchType = async () => {
             try {
                 let response;
-                if (selectedProduct === 'Door') {
+                if (currentData.product === 'Door') {
                     response = await axios.get(`${apiUrl}/doorTypes`);
                     setType(response.data);
                 }
-                else if (selectedProduct === 'Window') {
+                else if (currentData.product === 'Window') {
                     response = await axios.get(`${apiUrl}/windowTypes`);
                     setType(response.data);
                 }
-                else if (selectedProduct === 'Louver') {
+                else if (currentData.product === 'Louver') {
                     response = await axios.get(`${apiUrl}/louverVarients`);
                     setVarient(response.data)
                 }
-
             }
             catch (error) {
                 console.error('Error fetching types:', error);
             }
         }
         fetchType();
-    }, [apiUrl, selectedProduct]);
+    }, [apiUrl, currentData.product]);
 
-    const handleSelectedType = async (value) => {
+    // const handleSelectedType = async (value) => {
+    //     const selectedValue = value;
+    //     setSelectedType(selectedValue);
+    //     try {
+    //         const response = await axios.post(`${apiUrl}/varientTypes`, {
+    //             selected_type: selectedValue,
+    //             selected_category: currentData.product
+    //         })
+    //         setVarient(response.data);
+    //     }
+    //     catch (error) {
+    //         console.error('Error fetching Varient Types :', error);
+    //     }
+    // }
 
-        const selectedValue = value;
-        setSelectedType(selectedValue);
-        try {
-            const response = await axios.post(`${apiUrl}/varientTypes`, {
-                selected_type: selectedValue,
-                selected_category: selectedProduct
-            })
-            setVarient(response.data);
+    useEffect(() => {
+        console.log("Updated currentData:", currentData);
+    }, [currentData]);
+
+    const handleInputChange = async (name, value) => {
+
+        if (name === 'type') {
+            try {
+                const response = await axios.post(`${apiUrl}/varientTypes`, {
+                    selected_type: value,
+                    selected_category: currentData.product
+                })
+                setVarient(response.data);
+            }
+            catch (error) {
+                console.error('Error fetching Varient Types :', error);
+            }
         }
-        catch (error) {
-            console.error('Error fetching Varient Types :', error);
-        }
-    }
 
-    const handleInputChange = async (e) => {
+        let updatedWidth = currentData.width || 0; // Get current width
+        let updatedHeight = currentData.height || 0; // Get current height
 
-        const { name, value } = e.target;
-
+        // Update width or height as per the current input
         if (name === 'width') {
-            setWidth(value);
-        }
-        else if (name === 'height') {
-            setHeight(value);
-        }
-        else if (name === 'price') {
-            setPrice(value);
-        }
-        else if (name === 'quantity') {
-            setQuantity(value);
-        }
-        else if (name === 'brand') {
-            setBrand(value);
+            updatedWidth = parseFloat(value) || 0; // Update width value
+        } 
+         if (name === 'height') {
+            updatedHeight = parseFloat(value) || 0; // Update height value
         }
 
-        const updatedWidth = name === 'width' ? value : width;
-        const updatedHeight = name === 'height' ? value : height;
-        const updatedQuantity = name === 'quantity' ? value : quantity;
-        const updatedBrand = name === 'brand' ? value : brand;
+        // Calculate the area
+        const updatedArea = updatedWidth * updatedHeight;
+
+        
 
         setCurrentData((prev) => {
-
-            const validatedWidth = parseFloat(updatedWidth) || 0;
-            const validatedHeight = parseFloat(updatedHeight) || 0;
-            const validatedQuantity = parseInt(updatedQuantity, 10) || 0;
-
-            const updatedData = {
+            return {
                 ...prev,
-                width: validatedWidth,
-                height: validatedHeight,
-                quantity: validatedQuantity,
-                brand: updatedBrand,
+                [name]: value,
+                area: updatedArea
             }
-
-            updatedData.area = (validatedWidth * validatedHeight).toFixed(2);
-            updatedData.totalPrice = (price * validatedQuantity).toFixed(2);
-
-            return updatedData;
         })
 
-        if (name === 'width' || name === 'height') {
-            try {
-                const response = await axios.post(`${apiUrl}/pricelist`, {
-                    height: updatedHeight,
-                    width: updatedWidth,
-                    selectedProduct,
-                    selectedType,
-                    selectedVarient,
-                    brand: updatedBrand,
-                })
-                if (response.data && response.data.data !== undefined) {
-                    // console.log("response", response)
-                    setPrice(response.data.data);
-                    setImg(response.data.img);
-                    setCurrentData((prev) => ({
-                        ...prev,
-                        price: response.data.data,
-                        img: img,
-                        totalPrice: (response.data.data * (quantity || 1)).toFixed(2),
-                    }))
-                }
-                else {
-                    console.error('Unexpected response format:', response);
-                }
-            }
-            catch (err) {
-                console.error('Error fetching price list:', err);
-            }
-        }
+        
 
-        if (name === 'quantity') {
-            setCurrentData((prev) => ({
-                ...prev,
-                totalPrice: (price * (parseInt(value, 10) || 1)).toFixed(2),
-            }));
-        }
+
+
+
+        // if (name === 'width') {
+        //     setWidth(value);
+        // }
+        // else if (name === 'height') {
+        //     setHeight(value);
+        // }
+        // else if (name === 'price') {
+        //     setPrice(value);
+        // }
+        // else if (name === 'quantity') {
+        //     setQuantity(value);
+        // }
+        // else if (name === 'brand') {
+        //     setBrand(value);
+        // }
+        // else if (name === 'mesh') {
+        //     setMesh(value);
+        // }
+        // else if (name === 'color') {
+        //     setColor(value);
+        // }
+        // else if (name === 'additionalCost') {
+        //     setAdditionalCost(value);
+        // }
+        // else if (name === 'handleType') {
+        //     setHandleType(value);
+        // }
+        // else if (name === 'roller') {
+        //     setRoller(value);
+        // }
+
+        // const updatedWidth = name === 'width' ? value : width;
+        // const updatedHeight = name === 'height' ? value : height;
+        // const updatedQuantity = name === 'quantity' ? value : quantity;
+        // const updatedBrand = name === 'brand' ? value : brand;
+        // const updateroller = name === 'roller' ? value : roller;
+        // const updatehandleType = name === 'handleType' ? value : handleType;
+        // const updatecolor = name === 'color' ? value : color;
+        // const updateadditionalCost = name === 'additionalCost' ? value : additionalCost;
+
+        // setCurrentData((prev) => {
+
+        //     const validatedWidth = parseFloat(updatedWidth) || 0;
+        //     const validatedHeight = parseFloat(updatedHeight) || 0;
+        //     const validatedQuantity = parseInt(updatedQuantity, 10) || 0;
+
+        //     const updatedData = {
+        //         ...prev,
+        //         width: validatedWidth,
+        //         height: validatedHeight,
+        //         quantity: validatedQuantity,
+        //         brand: updatedBrand,
+        //         roller: updateroller,
+        //         handleType: updatehandleType,
+        //         color: updatecolor,
+        //         additionalCost: updateadditionalCost
+        //     }
+
+        //     updatedData.area = (validatedWidth * validatedHeight).toFixed(2);
+        //     updatedData.totalPrice = (price * validatedQuantity).toFixed(2);
+        //     console.log(updatedData)
+        //     return updatedData;
+        // })
+
+        // if (name === 'width' || name === 'height') {
+        //     try {
+        //         const response = await axios.post(`${apiUrl}/pricelist`, {
+        //             height: updatedHeight,
+        //             width: updatedWidth,
+        //             selectedProduct,
+        //             selectedType,
+        //             selectedVarient,
+        //             brand: updatedBrand,
+        //         })
+        //         if (response.data && response.data.data !== undefined) {
+        //             setPrice(response.data.data);
+        //             setImg(response.data.img);
+        //             setCurrentData((prev) => ({
+        //                 ...prev,
+        //                 price: response.data.data,
+        //                 img: img,
+        //                 totalPrice: (response.data.data * (quantity || 1)).toFixed(2),
+        //             }))
+        //         }
+        //         else {
+        //             console.error('Unexpected response format:', response);
+        //         }
+        //     }
+        //     catch (err) {
+        //         console.error('Error fetching price list:', err);
+        //     }
+        // }
+
+        // if (name === 'quantity') {
+        //     setCurrentData((prev) => ({
+        //         ...prev,
+        //         totalPrice: (price * (parseInt(value, 10) || 1)).toFixed(2),
+        //     }))
+        // }
     }
 
     const handleSave = () => {
         setSavedData((prev) => [...prev, currentData]);
         alert("Data Saved Successfully");
         setCurrentData({
-            brand: "VEKA",
-            product: "",
-            type: "",
-            varient: "",
-            mesh: "YES",
-            width: "",
-            height: "",
-            area: "",
-            price: "",
-            glass: "",
-            roller: "",
-            handleType: "",
-            color: "",
-            additionalcost: "",
-            quantity: "",
-            total: "",
-            img: "",
-        });
-    };
+            brand: "Veka", product: "Door", type: "", varient: "", mesh: "Yes", width: "",
+            height: "", area: "", price: "", glass: "", roller: "", handleType: "",
+            color: "", additionalcost: "", quantity: "", total: "", img: "",
+        })
+    }
 
     const handleEditChange = (e, index) => {
         const { name, value } = e.target;
         setSavedData((prev) =>
             prev.map((row, i) =>
-                i === index
-                    ? {
-                        ...row,
-                        [name]: value,
-                    }
-                    : row
+                i === index ? { ...row, [name]: value, } : row
             )
-        );
-    };
+        )
+    }
 
     const handleDeleteRow = (index) => {
         setSavedData((prev) => prev.filter((_, i) => i !== index));
-    };
+    }
 
     const handlecus = (e) => {
         const { name, value } = e.target;
@@ -202,28 +251,25 @@ function Quotation() {
     }
 
     const handleFinish = async () => {
-        console.log('Final FormData:', savedData);
+
         const printContent = document.getElementById('printDesignContent');
         const images = printContent.querySelectorAll('img');
-        
-        // Wait for all images to load
+
         const imagePromises = Array.from(images).map((img) => {
             return new Promise((resolve, reject) => {
                 if (img.complete) {
-                    // Image is already loaded, resolve immediately
                     resolve();
-                } else {
+                }
+                else {
                     img.onload = resolve;
                     img.onerror = reject;
                 }
-            });
-        });
-    
+            })
+        })
+
         try {
-            // Wait for all images to load before generating the PDF
+
             await Promise.all(imagePromises);
-    
-            // PDF options
             const options = {
                 margin: 1,
                 filename: 'quotation.pdf',
@@ -235,20 +281,22 @@ function Quotation() {
             const data = {
                 customer,
                 savedData,
-            };
-    
+            }
+
             const response = await axios.post(`${apiUrl}/quotation-save`, { data });
-    
+
             if (response.status === 200) {
                 console.log('Data sent successfully!');
-            } else {
+            }
+            else {
                 console.error('Failed to send data to backend:', response.status);
             }
-    
-        } catch (error) {
+        }
+        catch (error) {
             console.error('Error:', error);
         }
-    };
+    }
+
     return (
         <div>
             <div className='flex flex-col bg-blue-300 gap-6 min-h-screen rounded-lg p-5'>
@@ -259,35 +307,35 @@ function Quotation() {
                             <label className="font-semibold ml-1 uppercase">Brand : </label>
                             <select
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                name="brand"
+                                onChange={(e) => handleInputChange('brand', e.target.value)}
                                 value={currentData.brand || ''}
-                                onChange={handleInputChange}
                             >
-                                <option className='p-2 text-md'>Select</option>
-                                <option className='p-2 text-md'>VEKA</option>
-                                <option className='p-2 text-md'>EITI</option>
+                                <option value='Veka' className='p-2 text-md'>VEKA</option>
+                                <option value='Eiti' className='p-2 text-md'>EITI</option>
                             </select>
                         </div>
                         <div className="flex flex-col gap-4">
                             <label className="font-semibold ml-1 uppercase">Product : </label>
                             <select
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                name="product"
-                                value={selectedProduct || ''}
-                                onChange={(e) => setSelectedProduct(e.target.value)}
+                                // name="product"
+                                value={currentData.product || ''}
+                                onChange={(e) => handleInputChange('product', e.target.value)}
                             >
                                 <option className='p-2 text-md'>Door</option>
                                 <option className='p-2 text-md'>Window</option>
                                 <option className='p-2 text-md'>Louver</option>
                             </select>
                         </div>
-                        {(selectedProduct === 'Door' || selectedProduct === 'Window') && (
+                        {(currentData.product === 'Door' || currentData.product === 'Window') && (
                             <div className="flex flex-col gap-4">
                                 <label className="font-semibold ml-1 uppercase">Type : </label>
                                 <select
                                     className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    onChange={(e) => handleSelectedType(e.target.value)}
-                                    value={selectedType || ''}
+                                    // onChange={(e) => handleSelectedType(e.target.value)}
+                                    // value={selectedType || ''}
+                                    value={currentData.type || ''}
+                                    onChange={(e) => handleInputChange('type', e.target.value)}
                                 >
                                     <option className='p-2 text-md'>Select</option>
                                     {type.map((typeItem, index) => (
@@ -296,13 +344,12 @@ function Quotation() {
                                 </select>
                             </div>
                         )}
-
                         <div className="flex flex-col gap-4">
                             <label className="font-semibold ml-1 uppercase">Varient : </label>
                             <select
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                onChange={(e) => setSelectedVarient(e.target.value)}
-                                value={selectedVarient || ''}
+                                value={currentData.varient || ''}
+                                onChange={(e) => handleInputChange('varient', e.target.value)}
                             >
                                 <option className='p-2 text-md'>Select</option>
                                 {varient.map((varientItem, index) => (
@@ -310,7 +357,7 @@ function Quotation() {
                                 ))}
                             </select>
                         </div>
-                        {(selectedProduct === 'Window' || selectedProduct === 'Louver') && (
+                        {(currentData.product === 'Window' || currentData.product === 'Louver') && (
                             <>
                                 <div className="flex flex-col gap-4">
                                     <label className="font-semibold ml-1 uppercase">Mesh : </label>
@@ -318,10 +365,10 @@ function Quotation() {
                                         className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         name="mesh"
                                         value={currentData.mesh || ''}
-                                        onChange={handleInputChange}
+                                        onChange={(e) => handleInputChange('mesh', e.target.value)}
                                     >
-                                        <option className='p-2 text-md'>Yes</option>
-                                        <option className='p-2 text-md'>No</option>
+                                        <option value='Yes' className='p-2 text-md'>Yes</option>
+                                        <option value='No' className='p-2 text-md'>No</option>
                                     </select>
                                 </div>
                             </>
@@ -334,8 +381,7 @@ function Quotation() {
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="width"
                                 value={currentData.width || ''}
-                                onChange={handleInputChange}
-                            />
+                                onChange={(e) => handleInputChange('width', e.target.value)} />
                         </div>
                         <div className="flex flex-col gap-4">
                             <label className="font-semibold ml-1 uppercase">Height : </label>
@@ -343,8 +389,7 @@ function Quotation() {
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="height"
                                 value={currentData.height || ''}
-                                onChange={handleInputChange}
-                            />
+                                onChange={(e) => handleInputChange('height', e.target.value)} />
                         </div>
                         <div className="flex flex-col gap-4">
                             <label className="font-semibold ml-1 uppercase">Sq Feet : </label>
@@ -361,8 +406,8 @@ function Quotation() {
                             <input
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="price"
-                                value={price || ''}
-                                onChange={handleInputChange}
+                                value={currentData.price || ''}
+                                onChange={(e) => handleInputChange('price', e.target.value)}
                             />
                         </div>
                         <div className="flex flex-col gap-4">
@@ -371,7 +416,7 @@ function Quotation() {
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="quantity"
                                 value={currentData.quantity || ''}
-                                onChange={handleInputChange}
+                                onChange={(e) => handleInputChange('quantity', e.target.value)}
                             />
                         </div>
                         <div className="flex flex-col gap-4">
@@ -379,10 +424,9 @@ function Quotation() {
                             <input
                                 className="w-full p-3 border-2 rounded-md bg-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="total"
-                                value={currentData?.totalPrice || ''}
-                                onChange={handleInputChange}
-                                disabled
-                                readOnly
+                                value={currentData.totalPrice || ''}
+                                onChange={(e) => handleInputChange('totalPrice', e.target.value)}
+                               
                             />
                         </div>
                         <div className="flex flex-col gap-4">
@@ -391,7 +435,7 @@ function Quotation() {
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="glass"
                                 value={currentData.glass || ''}
-                                onChange={handleInputChange}
+                                onChange={(e) => handleInputChange('glass', e.target.value)}
                             >
                                 <option className='p-2 text-md'>Select</option>
                                 <option className='p-2 text-md'>Normal Glass</option>
@@ -403,8 +447,8 @@ function Quotation() {
                             <input
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="roller"
-                                // value={currentData.roller || ''}
-                                onChange={handleInputChange}
+                                value={currentData.roller || ''}
+                                onChange={(e) => handleInputChange('roller', e.target.value)}
                             />
                         </div>
                         <div className="flex flex-col gap-4">
@@ -412,8 +456,8 @@ function Quotation() {
                             <input
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="handleType"
-                                // value={currentData.handleType || ''}
-                                onChange={handleInputChange}
+                                value={currentData.handleType || ''}
+                                onChange={(e) => handleInputChange('handleType', e.target.value)}
                             />
                         </div>
                         <div className="flex flex-col gap-4">
@@ -421,23 +465,29 @@ function Quotation() {
                             <input
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="color"
-                                // value={currentData.color || ''}
-                                onChange={handleInputChange}
+                                value={currentData.color || ''}
+                                onChange={(e) => handleInputChange('color', e.target.value)}
                             />
                         </div>
                         <div className="flex flex-col gap-4">
                             <label className="font-semibold ml-1 uppercase">Additional Cost : </label>
                             <input
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                name="additionalcost"
-                                // value={currentData.additionalcost || ''}
-                                onChange={handleInputChange}
+                                value={currentData.additionalcost || ''}
+                                onChange={(e) => handleInputChange('additionalcost', e.target.value)}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-4">
+                            <label className="font-semibold ml-1 uppercase">Total Cost: </label>
+                            <input
+                                className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                value={currentData.total || ''}
+                                onChange={(e) => handleInputChange('total', e.target.value)}
                             />
                         </div>
                     </div>
                 </div>
                 <div className="flex justify-end">
-
                     <button
                         className="bg-green-700 w-32 font-bold text-lg text-white py-2.5 px-6 rounded-lg shadow hover:bg-green-600 transition duration-200"
                         onClick={handleSave}
@@ -445,7 +495,6 @@ function Quotation() {
                         Save
                     </button>
                 </div>
-
                 {savedData.length > 0 && (
                     <div className="mt-5">
                         <h2 className="text-2xl font-semibold text-blue-800 px-2 pt-8">SUMMARY DATA</h2>
@@ -493,7 +542,6 @@ function Quotation() {
                                 ))}
                             </tbody>
                         </table>
-
                         <div className="">
                             <h2 className='text-2xl font-semibold text-blue-800 px-2 pt-12' >CUSTOMER DETAILS</h2>
                             <div className='p-5 mt-7 grid grid-cols-5 gap-7 border-2 border-black rounded-lg py-12 '>
@@ -551,7 +599,6 @@ function Quotation() {
                                         value={customer.cus_con}
                                         onChange={handlecus}
                                     />
-
                                 </div>
                             </div>
                         </div>
@@ -563,7 +610,6 @@ function Quotation() {
                                 Finish
                             </button>
                         </div>
-                        {/* print design */}
                         <div id="printDesignContent" className=''>
                             <div className='grid grid-cols-2'>
                                 <div className='bg-slate-400 text-white font-bold text-xl p-2'>To</div>
@@ -592,7 +638,7 @@ function Quotation() {
                                     </div>
                                     {savedData.map((data, index) => (
                                         <div key={index} className='grid grid-cols-5'>
-                    
+
                                             <div className='border border-black p-2'> <img src={`${apiUrl}${img}`} alt="Product" className="max-w-full h-auto" /></div>
                                             <div className='border border-black p-2'>
                                                 Size : W = {data.width}; H = {data.height} <br />
@@ -601,6 +647,7 @@ function Quotation() {
                                                 Color : {data.color} <br />
                                                 Handle Type : {data.handleType} <br />
                                                 Roller : {data.roller} <br />
+                                                Roller : {data.type} <br />
                                             </div>
                                             <div className='border border-black p-2 text-center'>
                                                 {data.quantity}
@@ -616,12 +663,8 @@ function Quotation() {
                                 </div>
                             )}
                         </div>
-
                     </div>
                 )}
-
-
-
             </div>
         </div >
     )
