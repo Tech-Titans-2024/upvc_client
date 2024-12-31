@@ -20,14 +20,14 @@ function Quotation() {
     // const [price, setPrice] = useState([]);
     // const [quantity, setQuantity] = useState();
     // const [brand, setBrand] = useState();
-    const [img, setImg] = useState();
+    // const [img, setImg] = useState();
     const [currentData, setCurrentData] = useState({
         brand: 'Veka', product: 'Door', type: '', varient: '', mesh: 'Yes',
-        width: '', height: '', area: '', price: '', glass: '', roller: '',
-        handleType: '', color: '', additionalcost: '', quantity: '', total: ''
+        width: '', height: '', area: '', price: '', glass: '', roller: '', totalPrice: '',
+        handleType: '', color: '', additionalcost: '', quantity: '', total: '', img: ''
     })
     const [customer, setCustomer] = useState({
-        salesper: '', quotation: '', cus_name: '', cus_add: '', cus_con: ''
+        salesper: '', quotation: '', cus_name: '', cus_add: '', cus_con: '', date: '', netTotal: '', gst: '', gTotal: ''
     })
 
     useEffect(() => {
@@ -70,9 +70,9 @@ function Quotation() {
     //     }
     // }
 
-    useEffect(() => {
-        console.log("Updated currentData:", currentData);
-    }, [currentData]);
+    // useEffect(() => {
+    //     console.log("Updated currentData:", currentData);
+    // }, [currentData]);
 
     const handleInputChange = async (name, value) => {
 
@@ -95,15 +95,47 @@ function Quotation() {
         // Update width or height as per the current input
         if (name === 'width') {
             updatedWidth = parseFloat(value) || 0; // Update width value
-        } 
-         if (name === 'height') {
+        }
+        if (name === 'height') {
             updatedHeight = parseFloat(value) || 0; // Update height value
         }
 
         // Calculate the area
         const updatedArea = updatedWidth * updatedHeight;
+        const product = currentData.product;
+        const type = currentData.type;
+        const varient = currentData.varient;
+        const updatedBrand = currentData.brand;
+        if (name === 'width' || name === 'height') {
+            try {
 
-        
+                const response = await axios.post(`${apiUrl}/pricelist`, {
+                    height: updatedHeight,
+                    width: updatedWidth,
+                    selectedProduct: product,
+                    selectedType: type,
+                    selectedVarient: varient,
+                    brand: updatedBrand,
+                })
+                if (response.data && response.data.data !== undefined) {
+                    // setPrice(response.data.data);
+                    // setImg(response.data.img);
+                    setCurrentData((prev) => ({
+                        ...prev,
+                        price: response.data.data,
+                        img: response.data.img,
+                        // totalPrice: (response.data.data * (quantity || 1)).toFixed(2),
+                    }))
+                    console.log("worked the trycsession", currentData)
+                }
+                else {
+                    console.error('Unexpected response format:', response);
+                }
+            }
+            catch (err) {
+                console.error('Error fetching price list:', err);
+            }
+        }
 
         setCurrentData((prev) => {
             return {
@@ -112,11 +144,6 @@ function Quotation() {
                 area: updatedArea
             }
         })
-
-        
-
-
-
 
         // if (name === 'width') {
         //     setWidth(value);
@@ -248,6 +275,13 @@ function Quotation() {
             ...prevState,
             [name]: value,
         }));
+        setCustomer((prev) => ({
+            ...prev,
+            date: formattedDate,
+            netTotal: netTotal,
+            gst: gst,
+            gTotal: gTotal
+        }))
     }
 
     const handleFinish = async () => {
@@ -287,6 +321,7 @@ function Quotation() {
 
             if (response.status === 200) {
                 console.log('Data sent successfully!');
+                alert("The Quotation Save and Download Successfully...")
             }
             else {
                 console.error('Failed to send data to backend:', response.status);
@@ -296,7 +331,15 @@ function Quotation() {
             console.error('Error:', error);
         }
     }
-
+    const currentDate = new Date();
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // getMonth is 0-indexed, so add 1
+    const year = currentDate.getFullYear();
+    const formattedDate = `${day}-${month}-${year}`;
+    // net total cal
+    const netTotal = savedData.reduce((total, data) => total +  parseFloat(data.totalPrice), 0);
+    const gst = parseFloat(netTotal * 18) / 100;
+    const gTotal = parseFloat(netTotal) + parseFloat(gst); 
     return (
         <div>
             <div className='flex flex-col bg-blue-300 gap-6 min-h-screen rounded-lg p-5'>
@@ -426,7 +469,7 @@ function Quotation() {
                                 name="total"
                                 value={currentData.totalPrice || ''}
                                 onChange={(e) => handleInputChange('totalPrice', e.target.value)}
-                               
+
                             />
                         </div>
                         <div className="flex flex-col gap-4">
@@ -610,7 +653,7 @@ function Quotation() {
                                 Finish
                             </button>
                         </div>
-                        <div id="printDesignContent" className=''>
+                        <div id="printDesignContent" className=' hidden'>
                             <div className='grid grid-cols-2'>
                                 <div className='bg-slate-400 text-white font-bold text-xl p-2'>To</div>
                                 <div className='bg-slate-400 text-white font-bold text-xl p-2'>Deliver To</div>
@@ -626,6 +669,7 @@ function Quotation() {
                                 <div className='bg-slate-400 text-white font-bold text-xl p-2'>Date</div>
                                 <div className='font-semibold p-2'>{customer.quotation}</div>
                                 <div className='font-semibold p-2'>{customer.salesper}</div>
+                                <div className='font-semibold p-2'>{formattedDate}</div>
                             </div>
                             {savedData.length > 0 && (
                                 <div>
@@ -639,7 +683,7 @@ function Quotation() {
                                     {savedData.map((data, index) => (
                                         <div key={index} className='grid grid-cols-5'>
 
-                                            <div className='border border-black p-2'> <img src={`${apiUrl}${img}`} alt="Product" className="max-w-full h-auto" /></div>
+                                            <div className='border border-black p-2'> <img src={`${apiUrl}${data.img}`} alt="Product" className="max-w-full h-auto" /></div>
                                             <div className='border border-black p-2'>
                                                 Size : W = {data.width}; H = {data.height} <br />
                                                 Area : {data.area}<br />
@@ -660,6 +704,14 @@ function Quotation() {
                                             </div>
                                         </div>
                                     ))}
+                                    <div className='grid grid-cols-5'>
+                                    <div className='col-span-4 border border-black p-2 font-bold text-right'>Net Total</div>
+                                    <div className='border border-black p-2 text-center font-bold'> {netTotal.toFixed(2)} </div>
+                                    <div className='col-span-4 border border-black p-2 font-bold text-right'>GST</div>
+                                    <div className='border border-black p-2 text-center font-bold'> {gst.toFixed(2)} </div>
+                                    <div className='col-span-4 border border-black p-2 font-bold text-right'>Grand Total</div>
+                                    <div className='border border-black p-2 text-center font-bold'> {gTotal.toFixed(2)} </div>
+                                    </div>
                                 </div>
                             )}
                         </div>
