@@ -653,7 +653,7 @@ function Quotation() {
                                 Finish
                             </button>
                         </div>
-                        <div id="printDesignContent" className=' hidden'>
+                        <div id="printDesignContent" className='mt-5'>
                             <div className='grid grid-cols-2'>
                                 <div className='bg-slate-400 text-white font-bold text-xl p-2'>To</div>
                                 <div className='bg-slate-400 text-white font-bold text-xl p-2'>Deliver To</div>

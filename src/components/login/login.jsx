@@ -1,39 +1,38 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../assets/logo.jpeg';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-function Login() 
-{
+function Login() {
+    const apiUrl = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
-    const passwordInputRef = useRef(null);
-    const [id, setId] = useState('');
-    const [password, setPassword] = useState('');
 
-    const handleLogin = () => 
-    {
-        if (id === 'ADMIN' && password === 'ADMIN') {
-            navigate('/upvc');
-        } 
-        else {
-            alert('Wrong Username or Password');
+    const [userName, setUserName] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+
+    const handleLogin = async () => {
+        if (!userName || !password) {
+            setError("Please enter both username and password.");
+            return;
+        }
+    
+        try {
+            const response = await axios.post(`${apiUrl}/login`, { username: userName, password });
+    
+            if (response.data.success) {
+                navigate('/upvc/dashboard'); 
+            } else {
+                setError(response.data.message);
+            }
+        } catch (err) {
+            setError("An error occurred during login. Please try again.");
+            console.error(err);
         }
     };
-
-    const handleKeyPress = (e, field) => 
-    {
-        if (e.key === 'Enter') 
-        {
-            if (field === 'id') {
-                passwordInputRef.current.focus();
-            } 
-            else if (field === 'password') {
-                handleLogin();
-            }
-        }
-    }
-
+    
     return (
         <div className="w-screen h-screen flex">
             <div className="hidden md:flex w-1/2 bg-gradient-to-b from-blue-600 to-blue-800 justify-center items-center">
@@ -51,22 +50,18 @@ function Login()
                     <p className="text-sm text-gray-500 mb-8 text-center">
                         Enter your Credentials to Access the Platform.
                     </p>
+                    {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
                     <input
                         className="w-full h-[50px] px-4 mb-10 text-lg border border-gray-900 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-700"
                         type="text"
                         placeholder="Enter Username"
-                        value={id}
-                        onChange={(e) => setId(e.target.value)}
-                        onKeyPress={(e) => handleKeyPress(e, 'id')}
+                        onChange={(e) => setUserName(e.target.value)}
                     />
                     <input
                         className="w-full h-[50px] px-4 mb-10 text-lg border border-gray-900 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-700"
                         type="password"
                         placeholder="Enter Password"
-                        value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        onKeyPress={(e) => handleKeyPress(e, 'password')}
-                        ref={passwordInputRef}
                     />
                     <div className="flex justify-end mb-10">
                         <span className="text-sm text-blue-800 cursor-pointer hover:underline">
@@ -83,7 +78,7 @@ function Login()
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default Login;
