@@ -504,7 +504,7 @@ function Quotation() {
                             />
                         </div> */}
                         <div className="flex flex-col gap-4">
-                            <label className="font-semibold ml-1 uppercase">Glass : </label>
+                            <label className="font-semibold ml-1 uppercase">COLOUR : </label>
                             <select
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="glass"
