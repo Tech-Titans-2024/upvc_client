@@ -337,9 +337,9 @@ function Quotation() {
     const year = currentDate.getFullYear();
     const formattedDate = `${day}-${month}-${year}`;
     // net total cal
-    const netTotal = savedData.reduce((total, data) => total +  parseFloat(data.totalPrice), 0);
+    const netTotal = savedData.reduce((total, data) => total + parseFloat(data.totalPrice), 0);
     const gst = parseFloat(netTotal * 18) / 100;
-    const gTotal = parseFloat(netTotal) + parseFloat(gst); 
+    const gTotal = parseFloat(netTotal) + parseFloat(gst);
     return (
         <div>
             <div className='flex flex-col bg-blue-300 gap-6 min-h-screen rounded-lg p-5'>
@@ -388,7 +388,7 @@ function Quotation() {
                             </div>
                         )}
                         <div className="flex flex-col gap-4">
-                            <label className="font-semibold ml-1 uppercase">Varient : </label>
+                            <label className="font-semibold ml-1 uppercase">Variant : </label>
                             <select
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 value={currentData.varient || ''}
@@ -435,9 +435,9 @@ function Quotation() {
                                 onChange={(e) => handleInputChange('height', e.target.value)} />
                         </div>
                         <div className="flex flex-col gap-4">
-                            <label className="font-semibold ml-1 uppercase">Sq Feet : </label>
+                            <label className="font-semibold ml-1 uppercase">Sq Ft : </label>
                             <input
-                                className="w-full bg-slate-200 p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full bg-white p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="area"
                                 value={currentData.area || ''}
                                 disabled
@@ -465,7 +465,7 @@ function Quotation() {
                         <div className="flex flex-col gap-4">
                             <label className="font-semibold ml-1 uppercase">Total Qty Price : </label>
                             <input
-                                className="w-full p-3 border-2 rounded-md bg-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full p-3 border-2 rounded-md  focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 name="total"
                                 value={currentData.totalPrice || ''}
                                 onChange={(e) => handleInputChange('totalPrice', e.target.value)}
@@ -540,17 +540,17 @@ function Quotation() {
                 </div>
                 {savedData.length > 0 && (
                     <div className="mt-5">
-                        <h2 className="text-2xl font-semibold text-blue-800 px-2 pt-8">SUMMARY DATA</h2>
+                        <h2 className="text-2xl font-semibold text-blue-800 px-2 pt-8">ORDER DETAILS</h2>
                         <table className="min-w-full table-auto mt-5 border-collapse border-2 border-black">
                             <thead>
                                 <tr className="bg-orange-300">
                                     <th className="border-2 border-black px-4 py-2 uppercase font-bold">Brand</th>
                                     <th className="border-2 border-black px-4 py-2 uppercase font-bold">Type</th>
-                                    <th className="border-2 border-black px-4 py-2 uppercase font-bold">Varient</th>
+                                    <th className="border-2 border-black px-4 py-2 uppercase font-bold">Variant</th>
                                     <th className="border-2 border-black px-4 py-2 uppercase font-bold">Mesh</th>
                                     <th className="border-2 border-black px-4 py-2 uppercase font-bold">Width</th>
                                     <th className="border-2 border-black px-4 py-2 uppercase font-bold">Height</th>
-                                    <th className="border-2 border-black px-4 py-2 uppercase font-bold">Area (Sq Units)</th>
+                                    <th className="border-2 border-black px-4 py-2 uppercase font-bold">Area</th>
                                     <th className="border-2 border-black px-4 py-2 uppercase font-bold">Price</th>
                                     <th className="border-2 border-black px-4 py-2 uppercase font-bold">Total</th>
                                     <th className="border-2 border-black px-4 py-2 uppercase font-bold">Additional Cost</th>
@@ -593,7 +593,7 @@ function Quotation() {
                                     <input
                                         type="text"
                                         placeholder=''
-                                        className="w-full p-3 border-2 bg-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         name='salesper'
                                         value={customer.salesper}
                                         onChange={handlecus}
@@ -604,7 +604,7 @@ function Quotation() {
                                     <input
                                         type="text"
                                         placeholder=''
-                                        className="w-full p-3 border-2 bg-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         name='quotation'
                                         value={customer.quotation}
                                         onChange={handlecus}
@@ -654,9 +654,9 @@ function Quotation() {
                             </button>
                         </div>
                         <div id="printDesignContent" className='mt-5'>
-                            <div className='grid grid-cols-2'>
-                                <div className='bg-slate-400 text-white font-bold text-xl p-2'>To</div>
-                                <div className='bg-slate-400 text-white font-bold text-xl p-2'>Deliver To</div>
+                            <div className=''>
+                                <div className='bg-blue-600 text-white font-bold text-xl p-2'>To</div>
+                                {/* <div className='bg-slate-400 text-white font-bold text-xl p-2'>Deliver To</div> */}
                                 <div className='font-semibold uppercase p-2'>
                                     {customer.cus_name} <br />
                                     {customer.cus_add} <br />
@@ -664,9 +664,9 @@ function Quotation() {
                                 </div>
                             </div>
                             <div className='grid grid-cols-3'>
-                                <div className='bg-slate-400 text-white font-bold text-xl p-2'>Quotation No</div>
-                                <div className='bg-slate-400 text-white font-bold text-xl p-2'>Sales Person</div>
-                                <div className='bg-slate-400 text-white font-bold text-xl p-2'>Date</div>
+                                <div className='bg-blue-600 text-white font-bold text-xl p-2'>Quotation No</div>
+                                <div className='bg-blue-600 text-white font-bold text-xl p-2'>Products</div>
+                                <div className='bg-blue-600 text-white font-bold text-xl p-2'>Date</div>
                                 <div className='font-semibold p-2'>{customer.quotation}</div>
                                 <div className='font-semibold p-2'>{customer.salesper}</div>
                                 <div className='font-semibold p-2'>{formattedDate}</div>
@@ -674,14 +674,14 @@ function Quotation() {
                             {savedData.length > 0 && (
                                 <div>
                                     <div className='grid grid-cols-5 w-auto'>
-                                        <div className='bg-slate-400 text-white font-bold text-xl p-2'>Sales Line</div>
-                                        <div className='bg-slate-400 text-white font-bold text-xl p-2'>Details</div>
-                                        <div className='bg-slate-400 text-white font-bold text-xl p-2'>Qty</div>
-                                        <div className='bg-slate-400 text-white font-bold text-xl p-2'>Rate (Rs.)</div>
-                                        <div className='bg-slate-400 text-white font-bold text-xl p-2'>Amount (Rs.)</div>
+                                        <div className='bg-blue-600 text-white font-bold text-xl p-2'>Sales Line</div>
+                                        <div className='bg-blue-600 text-white font-bold text-xl p-2'>Details</div>
+                                        <div className='bg-blue-600 text-white font-bold text-xl p-2'>Qty</div>
+                                        <div className='bg-blue-600 text-white font-bold text-xl p-2'>Rate (Rs.)</div>
+                                        <div className='bg-blue-600 text-white font-bold text-xl p-2'>Amount (Rs.)</div>
                                     </div>
                                     {savedData.map((data, index) => (
-                                        <div key={index} className='grid grid-cols-5'>
+                                        <div key={index} className='grid grid-cols-5 mt-5 '>
 
                                             <div className='border border-black p-2'> <img src={`${apiUrl}${data.img}`} alt="Product" className="max-w-full h-auto" /></div>
                                             <div className='border border-black p-2'>
@@ -705,12 +705,12 @@ function Quotation() {
                                         </div>
                                     ))}
                                     <div className='grid grid-cols-5'>
-                                    <div className='col-span-4 border border-black p-2 font-bold text-right'>Net Total</div>
-                                    <div className='border border-black p-2 text-center font-bold'> {netTotal.toFixed(2)} </div>
-                                    <div className='col-span-4 border border-black p-2 font-bold text-right'>GST</div>
-                                    <div className='border border-black p-2 text-center font-bold'> {gst.toFixed(2)} </div>
-                                    <div className='col-span-4 border border-black p-2 font-bold text-right'>Grand Total</div>
-                                    <div className='border border-black p-2 text-center font-bold'> {gTotal.toFixed(2)} </div>
+                                        <div className='col-span-4 border border-black p-2 font-bold text-right'>Net Total</div>
+                                        <div className='border border-black p-2 text-center font-bold'> {netTotal.toFixed(2)} </div>
+                                        <div className='col-span-4 border border-black p-2 font-bold text-right'>GST</div>
+                                        <div className='border border-black p-2 text-center font-bold'> {gst.toFixed(2)} </div>
+                                        <div className='col-span-4 border border-black p-2 font-bold text-right'>Grand Total</div>
+                                        <div className='border border-black p-2 text-center font-bold'> {gTotal.toFixed(2)} </div>
                                     </div>
                                 </div>
                             )}
