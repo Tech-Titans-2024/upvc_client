@@ -485,7 +485,7 @@ function Quotation() {
                                 <option className='p-2 text-md'>Toughened Glass</option>
                             </select>
                         </div>
-                        <div className="flex flex-col gap-4">
+                        {/* <div className="flex flex-col gap-4">
                             <label className="font-semibold ml-1 uppercase">Roller : </label>
                             <input
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -502,15 +502,23 @@ function Quotation() {
                                 value={currentData.handleType || ''}
                                 onChange={(e) => handleInputChange('handleType', e.target.value)}
                             />
-                        </div>
+                        </div> */}
                         <div className="flex flex-col gap-4">
-                            <label className="font-semibold ml-1 uppercase">Color : </label>
-                            <input
+                            <label className="font-semibold ml-1 uppercase">Glass : </label>
+                            <select
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                name="color"
+                                name="glass"
                                 value={currentData.color || ''}
                                 onChange={(e) => handleInputChange('color', e.target.value)}
-                            />
+                                >
+                                <option className='p-2 text-md'>Select</option>
+                                <option className='p-2 text-md'>Mahogany</option>
+                                <option className='p-2 text-md'>Rustic Oak</option>
+                                <option className='p-2 text-md'>Golden Oak</option>
+                                <option className='p-2 text-md'>Black</option>
+                                <option className='p-2 text-md'>Anthracite Grey</option>
+                                <option className='p-2 text-md'>Walnut</option>
+                            </select>
                         </div>
                         <div className="flex flex-col gap-4">
                             <label className="font-semibold ml-1 uppercase">Additional Cost : </label>
@@ -521,7 +529,7 @@ function Quotation() {
                             />
                         </div>
                         <div className="flex flex-col gap-4">
-                            <label className="font-semibold ml-1 uppercase">Total Cost: </label>
+                            <label className="font-semibold ml-1 uppercase ">Total Cost : </label>
                             <input
                                 className="w-full p-3 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 value={currentData.total || ''}
@@ -689,9 +697,9 @@ function Quotation() {
                                                 Area : {data.area}<br />
                                                 Glass : {data.glass} <br />
                                                 Color : {data.color} <br />
-                                                Handle Type : {data.handleType} <br />
+                                                {/* Handle Type : {data.handleType} <br />
                                                 Roller : {data.roller} <br />
-                                                Roller : {data.type} <br />
+                                                Roller : {data.type} <br /> */}
                                             </div>
                                             <div className='border border-black p-2 text-center'>
                                                 {data.quantity}
