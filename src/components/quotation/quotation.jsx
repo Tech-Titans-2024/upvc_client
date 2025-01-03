@@ -75,176 +75,81 @@ function Quotation() {
     // }, [currentData]);
 
     const handleInputChange = async (name, value) => {
-
+        const numericValue = isNaN(parseFloat(value)) ? 0 : parseFloat(value);
+    
+        let updatedWidth = parseFloat(currentData.width) || 0;
+        let updatedHeight = parseFloat(currentData.height) || 0;
+        let updatedQuantity = parseInt(currentData.quantity, 10) || 1;
+        let additionalCost = parseFloat(currentData.additionalcost) || 0;
+    
+        if (name === 'width') updatedWidth = numericValue;
+        if (name === 'height') updatedHeight = numericValue;
+        if (name === 'quantity') updatedQuantity = numericValue;
+        if (name === 'additionalcost') additionalCost = numericValue;
+    
+        const updatedArea = updatedWidth * updatedHeight;
+    
         if (name === 'type') {
             try {
                 const response = await axios.post(`${apiUrl}/varientTypes`, {
                     selected_type: value,
-                    selected_category: currentData.product
-                })
+                    selected_category: currentData.product,
+                });
                 setVarient(response.data);
+            } catch (error) {
+                console.error('Error fetching Variant Types:', error);
             }
-            catch (error) {
-                console.error('Error fetching Varient Types :', error);
-            }
         }
-
-        let updatedWidth = currentData.width || 0; // Get current width
-        let updatedHeight = currentData.height || 0; // Get current height
-
-        // Update width or height as per the current input
-        if (name === 'width') {
-            updatedWidth = parseFloat(value) || 0; // Update width value
-        }
-        if (name === 'height') {
-            updatedHeight = parseFloat(value) || 0; // Update height value
-        }
-
-        // Calculate the area
-        const updatedArea = updatedWidth * updatedHeight;
-        const product = currentData.product;
-        const type = currentData.type;
-        const varient = currentData.varient;
-        const updatedBrand = currentData.brand;
+    
         if (name === 'width' || name === 'height') {
+            setCurrentData((prev) => ({
+                ...prev,
+                [name]: value,
+                area: updatedArea,
+            }));
+    
             try {
-
                 const response = await axios.post(`${apiUrl}/pricelist`, {
                     height: updatedHeight,
                     width: updatedWidth,
-                    selectedProduct: product,
-                    selectedType: type,
-                    selectedVarient: varient,
-                    brand: updatedBrand,
-                })
-                if (response.data && response.data.data !== undefined) {
-                    // setPrice(response.data.data);
-                    // setImg(response.data.img);
+                    selectedProduct: currentData.product,
+                    selectedType: currentData.type,
+                    selectedVarient: currentData.varient,
+                    brand: currentData.brand,
+                });
+    
+                if (response.data?.data !== undefined) {
+                    const fetchedPrice = response.data.data;
                     setCurrentData((prev) => ({
                         ...prev,
-                        price: response.data.data,
+                        price: fetchedPrice,
+                        totalPrice: fetchedPrice * updatedQuantity,
+                        total: fetchedPrice * updatedQuantity + additionalCost,
                         img: response.data.img,
-                        // totalPrice: (response.data.data * (quantity || 1)).toFixed(2),
-                    }))
-                    console.log("worked the trycsession", currentData)
-                }
-                else {
+                    }));
+                } else {
                     console.error('Unexpected response format:', response);
                 }
+            } catch (error) {
+                console.error('Error fetching price list:', error);
             }
-            catch (err) {
-                console.error('Error fetching price list:', err);
-            }
-        }
-
-        setCurrentData((prev) => {
-            return {
+        } else if (name === 'quantity' || name === 'additionalcost') {
+            setCurrentData((prev) => ({
                 ...prev,
                 [name]: value,
-                area: updatedArea
-            }
-        })
+                totalPrice: (prev.price || 0) * updatedQuantity, // Ensure totalPrice updates
+                total: ((prev.price || 0) * updatedQuantity) + additionalCost, // Ensure total updates
+            }));
+        } else {
+            setCurrentData((prev) => ({
+                ...prev,
+                [name]: value,
+            }));
+        }
+    };
+    
+    
 
-        // if (name === 'width') {
-        //     setWidth(value);
-        // }
-        // else if (name === 'height') {
-        //     setHeight(value);
-        // }
-        // else if (name === 'price') {
-        //     setPrice(value);
-        // }
-        // else if (name === 'quantity') {
-        //     setQuantity(value);
-        // }
-        // else if (name === 'brand') {
-        //     setBrand(value);
-        // }
-        // else if (name === 'mesh') {
-        //     setMesh(value);
-        // }
-        // else if (name === 'color') {
-        //     setColor(value);
-        // }
-        // else if (name === 'additionalCost') {
-        //     setAdditionalCost(value);
-        // }
-        // else if (name === 'handleType') {
-        //     setHandleType(value);
-        // }
-        // else if (name === 'roller') {
-        //     setRoller(value);
-        // }
-
-        // const updatedWidth = name === 'width' ? value : width;
-        // const updatedHeight = name === 'height' ? value : height;
-        // const updatedQuantity = name === 'quantity' ? value : quantity;
-        // const updatedBrand = name === 'brand' ? value : brand;
-        // const updateroller = name === 'roller' ? value : roller;
-        // const updatehandleType = name === 'handleType' ? value : handleType;
-        // const updatecolor = name === 'color' ? value : color;
-        // const updateadditionalCost = name === 'additionalCost' ? value : additionalCost;
-
-        // setCurrentData((prev) => {
-
-        //     const validatedWidth = parseFloat(updatedWidth) || 0;
-        //     const validatedHeight = parseFloat(updatedHeight) || 0;
-        //     const validatedQuantity = parseInt(updatedQuantity, 10) || 0;
-
-        //     const updatedData = {
-        //         ...prev,
-        //         width: validatedWidth,
-        //         height: validatedHeight,
-        //         quantity: validatedQuantity,
-        //         brand: updatedBrand,
-        //         roller: updateroller,
-        //         handleType: updatehandleType,
-        //         color: updatecolor,
-        //         additionalCost: updateadditionalCost
-        //     }
-
-        //     updatedData.area = (validatedWidth * validatedHeight).toFixed(2);
-        //     updatedData.totalPrice = (price * validatedQuantity).toFixed(2);
-        //     console.log(updatedData)
-        //     return updatedData;
-        // })
-
-        // if (name === 'width' || name === 'height') {
-        //     try {
-        //         const response = await axios.post(`${apiUrl}/pricelist`, {
-        //             height: updatedHeight,
-        //             width: updatedWidth,
-        //             selectedProduct,
-        //             selectedType,
-        //             selectedVarient,
-        //             brand: updatedBrand,
-        //         })
-        //         if (response.data && response.data.data !== undefined) {
-        //             setPrice(response.data.data);
-        //             setImg(response.data.img);
-        //             setCurrentData((prev) => ({
-        //                 ...prev,
-        //                 price: response.data.data,
-        //                 img: img,
-        //                 totalPrice: (response.data.data * (quantity || 1)).toFixed(2),
-        //             }))
-        //         }
-        //         else {
-        //             console.error('Unexpected response format:', response);
-        //         }
-        //     }
-        //     catch (err) {
-        //         console.error('Error fetching price list:', err);
-        //     }
-        // }
-
-        // if (name === 'quantity') {
-        //     setCurrentData((prev) => ({
-        //         ...prev,
-        //         totalPrice: (price * (parseInt(value, 10) || 1)).toFixed(2),
-        //     }))
-        // }
-    }
 
     const handleSave = () => {
         setSavedData((prev) => [...prev, currentData]);
@@ -333,10 +238,9 @@ function Quotation() {
     }
     const currentDate = new Date();
     const day = String(currentDate.getDate()).padStart(2, '0');
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // getMonth is 0-indexed, so add 1
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const year = currentDate.getFullYear();
     const formattedDate = `${day}-${month}-${year}`;
-    // net total cal
     const netTotal = savedData.reduce((total, data) => total + parseFloat(data.totalPrice), 0);
     const gst = parseFloat(netTotal * 18) / 100;
     const gTotal = parseFloat(netTotal) + parseFloat(gst);
@@ -510,7 +414,7 @@ function Quotation() {
                                 name="glass"
                                 value={currentData.color || ''}
                                 onChange={(e) => handleInputChange('color', e.target.value)}
-                                >
+                            >
                                 <option className='p-2 text-md'>Select</option>
                                 <option className='p-2 text-md'>Mahogany</option>
                                 <option className='p-2 text-md'>Rustic Oak</option>
