@@ -5,7 +5,8 @@ import Logo from '../../assets/logo.jpeg';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-function Login() {
+function Login() 
+{
     const apiUrl = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
 
@@ -14,24 +15,31 @@ function Login() {
     const [error, setError] = useState("");
 
     const handleLogin = async () => {
+
         if (!userName || !password) {
-            setError("Please enter both username and password.");
+            setError("Please enter both Username and Password.");
             return;
         }
     
         try {
-            const response = await axios.post(`${apiUrl}/login`, { username: userName, password });
+
+            const response = await axios.post(`${apiUrl}/login`, { 
+                username: userName, 
+                password 
+            })
     
             if (response.data.success) {
                 navigate('/upvc/dashboard'); 
-            } else {
+            } 
+            else {
                 setError(response.data.message);
             }
-        } catch (err) {
-            setError("An error occurred during login. Please try again.");
+        } 
+        catch (err) {
+            setError("An error occurred during Login. Please try again.");
             console.error(err);
         }
-    };
+    }
     
     return (
         <div className="w-screen h-screen flex">

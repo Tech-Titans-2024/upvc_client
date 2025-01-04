@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/login/login';
 import Layout from './components/layout/layout';
-import Quotation from './components/quotation/quotation';
+import Quotation from './components/quotation/main';
 import Dashboard from './components/dashboard/dashboard';
 import SalesExecutive from './components/salesexecutive/salesexecutive';
 import PriceList from './components/pricelist/pricelist';
