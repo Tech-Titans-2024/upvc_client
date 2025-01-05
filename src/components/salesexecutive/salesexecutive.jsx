@@ -2,12 +2,12 @@ import React from 'react'
 
 const StaffManage = () => {
     return (
-        <div className='w-full h-screen  '>
+        <div className='w-full h-screen'>
             <h1 className='text-black text-3xl font-bold text-center'>Sales Executive</h1>
             <div className='w-full h-fit  flex justify-between items-center
              gap-5 py-2 '>
                 <div className='flex flex-row justify-start'>
-                    <h1 className='font-bold text-md'>No Of Staff:4</h1>
+                    <h1 className='font-bold text-md'>No of Staff : 4</h1>
 
                 </div>
                 <div className=' flex flex-row justify-end'>

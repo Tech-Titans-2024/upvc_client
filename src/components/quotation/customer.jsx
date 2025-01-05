@@ -5,9 +5,9 @@ function Customer(props) {
     return (
         <div className='p-5 grid grid-cols-5 gap-7 border-2 border-black rounded-lg py-12 '>
             <div className='flex flex-col gap-4'>
-                <label className='font-semibold ml-1 uppercase'>Sales Person Id :</label>
-                <select name='salesper' onChange={props.handleCustomer}>
-                    <option>Select..</option>
+                <label className='font-semibold ml-1 uppercase '>Sales Person Id :</label>
+                <select name='salesper' className='w-full p-3 border-2 border-black rounded-md ' onChange={props.handleCustomer}>
+                    <option >Select..</option>
                     {props.salesmanId.map((value, index) => {
                        return <option key={index} value={value.username} >{value.username}</option>
                     })

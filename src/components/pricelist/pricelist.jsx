@@ -8,9 +8,9 @@ const PriceList = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/price`);
-                console.log(response.data); // Check the structure of the response
-                setProducts(response.data); // Set the fetched products data to state
+                const response = await axios.get(`${apiUrl}/pricelist`);
+                console.log(response.data);
+                setProducts(response.data); 
             } catch (error) {
                 console.error("Error fetching products:", error);
             }
@@ -23,7 +23,7 @@ const PriceList = () => {
             <h1 className="text-black text-3xl font-bold text-center">Price List</h1>
             <div className='w-full h-fit  flex justify-between items-center
              gap-5 py-2'>
-                <h1 className='font-bold text-md'>No Of Products:22</h1>
+                <h1 className='font-bold text-md'>No of Products :</h1>
                 <input
                     type="text"
                     placeholder="Search by product name"

@@ -1,73 +1,121 @@
 import React, { useState } from 'react';
 
 const App = () => {
-  const [squareMm, setSquareMm] = useState('');
+  const [unit, setUnit] = useState('m2');
+  const [inputValue, setInputValue] = useState('');
   const [squareFeet, setSquareFeet] = useState('');
 
-  const conversionFactorMmToFt = 10.764 / 1e6; // Square Millimeters to Square Feet
-  const conversionFactorFtToMm = 1e6 / 10.764; // Square Feet to Square Millimeters
+  const conversionFactorM2ToFt = 10.764;
+  const conversionFactorCm2ToFt = 1e-4 * 10.764;
 
-  // Handle square millimeters to square feet conversion
-  const handleSquareMmChange = (e) => {
+  const handleUnitChange = (e) => {
+    setUnit(e.target.value);
+    setInputValue('');
+    setSquareFeet('');
+  };
+
+  const handleInputChange = (e) => {
     const value = e.target.value;
-    setSquareMm(value);
-    if (value) {
-      setSquareFeet((value * conversionFactorMmToFt).toFixed(6)); // Convert to ft²
-    } else {
-      setSquareFeet('');
+    setInputValue(value);
+
+    if (unit === 'm2') {
+      if (value) {
+        setSquareFeet((value * conversionFactorM2ToFt).toFixed(6));
+      } else {
+        setSquareFeet('');  // Clears squareFeet when inputValue is cleared
+      }
+    } else if (unit === 'cm2') {
+      if (value) {
+        setSquareFeet((value * conversionFactorCm2ToFt).toFixed(6));
+      } else {
+        setSquareFeet('');  // Clears squareFeet when inputValue is cleared
+      }
     }
   };
 
-  // Handle square feet to square millimeters conversion
   const handleSquareFeetChange = (e) => {
     const value = e.target.value;
     setSquareFeet(value);
-    if (value) {
-      setSquareMm((value * conversionFactorFtToMm).toFixed(0)); // Convert to mm²
+
+    if (value === '') {
+      // Clear both inputs when squareFeet is cleared
+      setInputValue('');
     } else {
-      setSquareMm('');
+      if (unit === 'm2') {
+        setInputValue((value / conversionFactorM2ToFt).toFixed(6));
+      } else if (unit === 'cm2') {
+        setInputValue((value / conversionFactorCm2ToFt).toFixed(6));
+      }
     }
   };
 
-  return (
-    <div className="flex items-center justify-center min-h-screen rounded-lg bg-blue-300">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96 h-80">
-        <h1 className="text-2xl font-bold mb-4 text-center">Area Converter</h1>
+  const handleClear = () => {
+    setInputValue('');
+    setSquareFeet('');
+    setUnit('m2');
+  };
 
-        {/* Square Millimeter Input */}
-        <div className="mb-4">
-          <label
-            htmlFor="squareMm"
-            className="block  text-gray-700 text-xl font-medium mb-2"
+  return (
+    <div className="w-full h-full flex items-center justify-center rounded-md bg-blue-300">
+      <div className="bg-white p-8 rounded-xl shadow-xl w-full max-w-md space-y-6">
+        <h3 className="text-2xl font-extrabold text-center  text-gray-800 mb-6">
+          Area Converter
+        </h3>
+
+        {/* Unit Selection Dropdown */}
+        <div>
+          <label htmlFor="unit" className="block text-lg font-medium text-gray-700 mb-2">
+            Select Unit:
+          </label>
+          <select
+            id="unit"
+            value={unit}
+            onChange={handleUnitChange}
+            className="w-full px-4 py-3 text-lg border border-black rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
           >
-            Square Millimeters:
+            <option value="m2">Square Meter (m²)</option>
+            <option value="cm2">Square Centimeter (cm²)</option>
+          </select>
+        </div>
+
+        {/* Input Box (Value in Selected Unit) */}
+        <div>
+          <label htmlFor="inputValue" className="block text-lg font-medium text-gray-700 mb-2">
+            {unit === 'm2' ? 'Square Meters' : 'Square Centimeters'}:
           </label>
           <input
             type="number"
-            id="squareMm"
-            value={squareMm}
-            onChange={handleSquareMmChange}
-            placeholder="Enter value"
-            className="w-full px-4 py-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            id="inputValue"
+            value={inputValue}
+            onChange={handleInputChange}
+            placeholder={`Enter value in ${unit === 'm2' ? 'm²' : 'cm²'}`}
+            className="w-full px-4 py-3 text-lg border border-black rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
           />
         </div>
 
-        {/* Square Feet Input */}
-        <div className="mb-4">
-          <label
-            htmlFor="squareFeet"
-            className="block text-gray-700 text-xl font-medium mb-2"
-          >
-            Square Feet:
+        {/* Output Box (Square Feet Result) */}
+        <div>
+          <label htmlFor="squareFeet" className="block text-lg font-medium text-gray-700 mb-2">
+            Square Feet (ft²):
           </label>
           <input
             type="number"
             id="squareFeet"
             value={squareFeet}
             onChange={handleSquareFeetChange}
-            placeholder="Enter value"
-            className="w-full px-4 py-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter value in ft²"
+            className="w-full px-4 py-3 text-lg border border-black rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
           />
+        </div>
+
+        {/* Reset Button */}
+        <div className="flex justify-center">
+          <button
+            onClick={handleClear}
+            className="mt-4 px-6 py-3 w-40 text-white bg-indigo-600 hover:bg-indigo-700 rounded-full shadow-md transition duration-300 transform hover:scale-105"
+          >
+            Reset
+          </button>
         </div>
       </div>
     </div>

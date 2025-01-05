@@ -20,9 +20,9 @@ const HorizontalBarChart = () => {
         label: 'Sales',
         data: [65, 95, 80],
         backgroundColor: [
-          'rgba(255, 99, 132, 0.8)', // Solid colors
-          'rgba(54, 162, 235, 0.8)',
-          'rgba(255, 206, 86, 0.8)',
+          'rgba(255, 99, 132, 1)', // Solid red
+          'rgba(54, 162, 235, 1)', // Solid blue
+          'rgba(255, 206, 86, 1)', // Solid yellow
         ],
         hoverBackgroundColor: [
           'rgba(255, 99, 132, 1)', // Brighter on hover

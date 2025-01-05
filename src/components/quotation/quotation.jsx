@@ -1,7 +1,6 @@
 import React from 'react';
 
-function Quotation(props) 
-{
+function Quotation(props) {
     const apiUrl = import.meta.env.VITE_API_URL;
     const currentDate = new Date();
     const day = String(currentDate.getDate()).padStart(2, '0');
@@ -35,7 +34,7 @@ function Quotation(props)
                     {props.savedData.length > 0 && (
                         <div>
                             <div className='grid grid-cols-5 text-center bg-blue-600 text-white font-bold text-lg p-3 rounded-t-md'>
-                                <div>Sales Line</div>
+                                <div>Product</div>
                                 <div>Details</div>
                                 <div>Quantity</div>
                                 <div>Rate (Rs.)</div>
@@ -47,6 +46,9 @@ function Quotation(props)
                                         <img src={`${apiUrl}${data.img}`} alt="Product" className="max-w-full h-auto rounded" />
                                     </div>
                                     <div className='p-3 text-left border-t border-l border-r border-black'>
+                                        <span className=''><b>Product : </b></span> <span>{data.product}</span><br></br>
+                                        <span className=''><b>Type : </b></span> <span>{data.type}</span><br></br>
+                                        <span className=''><b>Variant : </b></span> <span>{data.varient}</span><br></br>
                                         <span className=''><b>Size  : </b></span> <span>W = {data.width} ; H = {data.height}</span><br></br>
                                         <span className=''><b>Area  : </b></span> <span>{data.area}</span><br></br>
                                         <span className=''><b>Glass : </b></span> <span>{data.glass}</span><br></br>
