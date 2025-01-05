@@ -8,13 +8,13 @@ import Summary from './summary';
 import Customer from './customer';
 import Quotation from './quotation';
 
-function Main() 
-{
+function Main() {
     const apiUrl = import.meta.env.VITE_API_URL;
     const [type, setType] = useState([]);
     const [varient, setVarient] = useState([]);
     const [savedData, setSavedData] = useState([]);
     const [quotation, setQuotation] = useState(false)
+    const [salesPersons, setSalesPersons] = useState([]);
     const [currentData, setCurrentData] = useState({
         brand: 'Veka', product: 'Door', type: '', varient: '',
         mesh: 'Yes', width: '', height: '', area: '', price: '', glass: '', roller: '', totalPrice: '',
@@ -46,7 +46,48 @@ function Main()
                 console.error('Error fetching Types :', error);
             }
         }
+
+
+        //-----------------------------------------------------------------------------------------------------
+
+        const fetchSalesman = async () => {
+            try {
+                const salesmanId = await axios.get(`${apiUrl}/salesmans`);
+                if (salesmanId.data) {
+                    setSalesPersons(salesmanId.data)
+                }
+                else {
+                    console.log("sales man id Not availabe");
+                }
+            } catch (err) {
+                console.log("ERROR", err)
+            }
+        }
+
+        //-----------------------------------------------------------------------------------------------------
+
+        const quatationNo = async () => {
+            try {
+                const QResponse= await axios.get(`${apiUrl}/quotationNo`);
+                if(QResponse.data){
+                    let Split_no = QResponse.data.match(/(\D+)(\d+)/)
+                    let increament=Number(Split_no[2])+1;
+                    let New_Q=Split_no[1]+increament.toString();
+                    setCustomer((prevCustomer) => ({
+                        ...prevCustomer,
+                        quotation: New_Q
+                    }));
+                }
+
+            } catch (err) {
+                console.log("NO NA");
+            }
+        }
+        
+        quatationNo();
+        fetchSalesman();
         fetchType();
+
     }, [apiUrl, currentData.product]);
 
     // ---------------------------------------------------------------------------------------------------------
@@ -150,7 +191,9 @@ function Main()
         setCurrentData((prev) => ({
             ...prev, width: "", height: "", area: "", price: "", glass: "",
             color: "", additionalcost: "", quantity: "", total: "", img: "",
-        }))
+        }));
+        console.log(customer.quotation,"QNO")
+
     }
 
     // ---------------------------------------------------------------------------------------------------------
@@ -264,7 +307,7 @@ function Main()
                     <h2 className="text-2xl font-semibold text-white bg-slate-500 py-3 px-5">ORDER SUMMARY</h2>
                     <Summary savedData={savedData} handleDeleteRow={handleDeleteRow} setSavedData={setSavedData} />
                     <h2 className="text-2xl font-semibold text-white bg-slate-500 py-3 px-5">CUSTOMER DETAILS</h2>
-                    <Customer customer={customer} handleCustomer={handleCustomer} />
+                    <Customer customer={customer} handleCustomer={handleCustomer} salesmanId={salesPersons} />
                     <div className=' flex justify-end'>
                         <button
                             className="bg-orange-500 font-bold text-lg text-white py-2.5 px-6 rounded-lg shadow hover:bg-orange-600 transition duration-200"
