@@ -31,7 +31,7 @@ function Customer(props) {
                     name='quotation'
                     value={props.customer.quotation}
                     onChange={props.handleCustomer}
-                    disabled
+                    // disabled
                     
                 />
             </div>

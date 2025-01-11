@@ -20,23 +20,18 @@ const BarChart = () => {
     ],
     datasets: [
       {
-        label: 'Sales',
-        data: [12, 19, 3, 5, 2, 3, 8, 6, 4, 7, 9, 10], // 12 data points
-        backgroundColor: [
-          'rgba(255, 99, 132, 1)', // Solid red
-          'rgba(54, 162, 235, 1)', // Solid blue
-          'rgba(255, 206, 86, 1)', // Solid yellow
-          'rgba(75, 192, 192, 1)', // Solid teal
-          'rgba(153, 102, 255, 1)', // Solid purple
-          'rgba(255, 159, 64, 1)', // Solid orange
-          'rgba(255, 0, 0, 1)', // Solid dark red
-          'rgba(0, 128, 0, 1)', // Solid green
-          'rgba(0, 0, 255, 1)', // Solid navy
-          'rgba(255, 215, 0, 1)', // Solid gold
-          'rgba(128, 0, 128, 1)', // Solid dark purple
-          'rgba(0, 255, 255, 1)', // Solid cyan
-        ],
-        borderWidth: 0, // Remove borders for solid look
+        label: 'Target Sales',
+        data: [15, 20, 10, 12, 18, 15, 25, 20, 22, 24, 23, 25], // Target values for each month
+        backgroundColor: 'rgba(54, 162, 235, 1)', // Medium blue
+        borderColor: 'rgba(54, 162, 235, 1)', // Border for the target bars
+        borderWidth: 1,
+      },
+      {
+        label: 'Actual Sales',
+        data: [12, 19, 8, 10, 16, 12, 22, 18, 20, 23, 21, 23], // Actual sales for each month
+        backgroundColor: 'rgba(255, 159, 64, 1)', // Medium orange
+        borderColor: 'rgba(255, 159, 64, 1)', // Border for the actual sales bars
+        borderWidth: 1,
       },
     ],
   };
@@ -51,12 +46,19 @@ const BarChart = () => {
       },
       title: {
         display: true,
-        text: 'Sales Data (12 Months, Solid Colors)',
+        text: 'Target vs Actual Sales Data (12 Months)',
       },
     },
     scales: {
+      x: {
+        stacked: false, // Bars are not stacked
+      },
       y: {
         beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Sales Count',
+        },
       },
     },
   };

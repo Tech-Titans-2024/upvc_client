@@ -17,14 +17,14 @@ const PieChart = () => {
         label: 'Types of Window',
         data: [50, 30, 20], // Percentage data for the doors
         backgroundColor: [
-          'rgba(0, 0, 255, 1)', // Solid navy
-          'rgba(255, 215, 0, 1)', // Solid gold
-          'rgba(128, 0, 128, 1)', // Solid dark purple
+          '#FF6384', // Vibrant pink
+          '#36A2EB', // Vibrant blue
+          '#FFCE56', // Vibrant yellow
         ],
         hoverBackgroundColor: [
-          'rgba(0, 0, 255, 1)', // Solid navy
-          'rgba(255, 215, 0, 1)', // Solid gold
-          'rgba(128, 0, 128, 1)', // Solid dark purple
+          '#FF6384', // Vibrant pink
+          '#36A2EB', // Vibrant blue
+          '#FFCE56', // Vibrant yellow
         ],
         borderWidth: 1,
       },
