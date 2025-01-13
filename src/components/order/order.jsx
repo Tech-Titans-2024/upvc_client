@@ -51,7 +51,9 @@ function Order() {
     const saveEditedProduct = async () => {
         try {
             const updatedQuotation = { ...selectedQuotation, product: editedProducts };
-            await axios.put(`${apiUrl}/quotation/${selectedQuotation._id}`, updatedQuotation);
+            console.log(updatedQuotation);
+            
+           const response =  await axios.put(`${apiUrl}/quotation/${selectedQuotation._id}`, updatedQuotation);
             setQuotations((prev) =>
                 prev.map((item) =>
                     item._id === selectedQuotation._id ? updatedQuotation : item
