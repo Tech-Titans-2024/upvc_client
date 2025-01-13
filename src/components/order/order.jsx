@@ -3,14 +3,13 @@ import axios from 'axios';
 
 function Order() {
     const [quotations, setQuotations] = useState([]);
-    const [isModalOpen, setIsModelOpen] = useState(false);
-    const [selectedQuotation, setSelectedQuotation] = useState(null); // New state for selected quotation
-    const [editedProduct, setEditedProduct] = useState({}); // New state for editing product details
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedQuotation, setSelectedQuotation] = useState(null);
+    const [editedProducts, setEditedProducts] = useState([]); // For editing multiple products
 
     const apiUrl = import.meta.env.VITE_API_URL;
 
-    // -------------------------------------------------------------------
-    // fetch quotation details
+    // Fetch quotation details
     useEffect(() => {
         const fetchQuotationDetails = async () => {
             try {
@@ -23,9 +22,7 @@ function Order() {
         fetchQuotationDetails();
     }, [apiUrl]);
 
-    // -------------------------------------------------------------------
-
-    // confirm order
+    // Confirm order
     const confirmOrder = async (order) => {
         try {
             await axios.post(`${apiUrl}/orderconfirm`, order);
@@ -35,58 +32,42 @@ function Order() {
         }
     };
 
-    // -------------------------------------------------------------------
-
-    // edit quotation
+    // Edit quotation and open modal
     const editQuotation = (quotation) => {
-
         setSelectedQuotation(quotation);
-        setEditedProduct(quotation.product[0]); // Assuming the product details are in the first item of the array
-        setIsModelOpen(true);
+        setEditedProducts(quotation.product); // Initialize edited products with the current products in the quotation
+        setIsModalOpen(true);
     };
 
-    // -------------------------------------------------------------------
-
-
-    // handle modal input change
-    const handleInputChange = (e) => {
+    // Handle input change for each product
+    const handleInputChange = (index, e) => {
         const { name, value } = e.target;
-        setEditedProduct((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+        const updatedProducts = [...editedProducts];
+        updatedProducts[index] = { ...updatedProducts[index], [name]: value };
+        setEditedProducts(updatedProducts);
     };
 
-    // -------------------------------------------------------------------
-
-
-    // save edited product
+    // Save edited products
     const saveEditedProduct = async () => {
         try {
-            console.log(editedProduct);
-            
-            // const updatedQuotation = {
-            //     ...selectedQuotation,
-            //     product: [editedProduct], // Replace the product array with the edited product
-            // };
-            // await axios.put(`${apiUrl}/quotation/${selectedQuotation._id}`, updatedQuotation);
-            // setQuotations((prev) =>
-            //     prev.map((item) =>
-            //         item._id === selectedQuotation._id ? updatedQuotation : item
-            //     )
-            // );
-            // setIsModelOpen(false);
-            // alert('Product updated successfully!');
+            const updatedQuotation = { ...selectedQuotation, product: editedProducts };
+            await axios.put(`${apiUrl}/quotation/${selectedQuotation._id}`, updatedQuotation);
+            setQuotations((prev) =>
+                prev.map((item) =>
+                    item._id === selectedQuotation._id ? updatedQuotation : item
+                )
+            );
+            setIsModalOpen(false);
+            alert('Product updated successfully!');
         } catch (error) {
             console.error(error);
         }
     };
 
-    // close the modal
-
+    // Close modal
     const closeModal = () => {
-        setIsModelOpen(false)
-    }
+        setIsModalOpen(false);
+    };
 
     return (
         <div className="w-full h-full bg-white">
@@ -146,259 +127,48 @@ function Order() {
             {/* Modal */}
             {isModalOpen && (
                 <div className="modal-overlay fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
-                    <div className="modal-content bg-white p-6 rounded-md shadow-lg w-11/12 max-w-4xl">
-                        <h2 className="text-lg font-bold mb-4">Edit Product Details</h2>
-                        <div className="grid grid-cols-3 gap-4"> {/* Grid layout */}
-                            {/* Product */}
-                            <div className="flex flex-col">
-                                <label htmlFor="product" className="mb-1 font-semibold text-sm">Product</label>
-                                <input
-                                    type="text"
-                                    id="product"
-                                    name="product"
-                                    value={editedProduct.product}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    placeholder="Product"
-                                    disabled
-                                />
-                            </div>
+                    <div className="modal-content bg-white p-6 rounded-lg shadow-2xl w-11/12 max-w-4xl">
+                        <h2 className="text-lg font-bold mb-4 text-center">Edit Product Details</h2>
 
-                            {/* Brand */}
-                            <div className="flex flex-col">
-                                <label htmlFor="brand" className="mb-1 font-semibold text-sm">Brand</label>
-                                <input
-                                    type="text"
-                                    id="brand"
-                                    name="brand"
-                                    value={editedProduct.brand}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    placeholder="Brand"
-                                />
-                            </div>
+                        {/* Scrollable product list with fixed height */}
+                        <div className="max-h-96 overflow-y-auto mb-6">
+                            {editedProducts.map((product, index) => (
+                                <div key={index} className="product-section mb-8 p-4 rounded-lg shadow-lg bg-gray-100">
+                                    <h3 className="text-xl font-semibold mb-3 text-blue-600">Product {index + 1}</h3>
 
-                            {/* Color */}
-                            <div className="flex flex-col">
-                                <label htmlFor="color" className="mb-1 font-semibold text-sm">Color</label>
-                                <input
-                                    type="text"
-                                    id="color"
-                                    name="color"
-                                    value={editedProduct.color}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    placeholder="Color"
-                                />
-                            </div>
-
-                            {/* Price */}
-                            <div className="flex flex-col">
-                                <label htmlFor="price" className="mb-1 font-semibold text-sm">Price</label>
-                                <input
-                                    type="number"
-                                    id="price"
-                                    name="price"
-                                    value={editedProduct.price}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    placeholder="Price"
-                                />
-                            </div>
-
-                            {/* Quantity */}
-                            <div className="flex flex-col">
-                                <label htmlFor="quantity" className="mb-1 font-semibold text-sm">Quantity</label>
-                                <input
-                                    type="number"
-                                    id="quantity"
-                                    name="quantity"
-                                    value={editedProduct.quantity}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    placeholder="Quantity"
-                                />
-                            </div>
-
-                            {/* Total */}
-                            <div className="flex flex-col">
-                                <label htmlFor="total" className="mb-1 font-semibold text-sm">Total</label>
-                                <input
-                                    type="number"
-                                    id="total"
-                                    name="total"
-                                    value={editedProduct.total}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    placeholder="Total"
-                                />
-                            </div>
-
-                            {/* Total Price */}
-                            <div className="flex flex-col">
-                                <label htmlFor="totalPrice" className="mb-1 font-semibold text-sm">Total Price</label>
-                                <input
-                                    type="number"
-                                    id="totalPrice"
-                                    name="totalPrice"
-                                    value={editedProduct.totalPrice}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    placeholder="Total Price"
-                                />
-                            </div>
-
-                            {/* Height */}
-                            <div className="flex flex-col">
-                                <label htmlFor="height" className="mb-1 font-semibold text-sm">Height</label>
-                                <input
-                                    type="number"
-                                    id="height"
-                                    name="height"
-                                    value={editedProduct.height}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    placeholder="Height"
-                                />
-                            </div>
-
-                            {/* Width */}
-                            <div className="flex flex-col">
-                                <label htmlFor="width" className="mb-1 font-semibold text-sm">Width</label>
-                                <input
-                                    type="number"
-                                    id="width"
-                                    name="width"
-                                    value={editedProduct.width}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    placeholder="Width"
-                                />
-                            </div>
-
-                            {/* Mesh */}
-                            <div className="flex flex-col">
-                                <label htmlFor="mesh" className="mb-1 font-semibold text-sm">Mesh</label>
-                                <input
-                                    type="text"
-                                    id="mesh"
-                                    name="mesh"
-                                    value={editedProduct.mesh}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    placeholder="Mesh"
-                                />
-                            </div>
-
-                            {/* Roller */}
-                            <div className="flex flex-col">
-                                <label htmlFor="roller" className="mb-1 font-semibold text-sm">Roller</label>
-                                <input
-                                    type="text"
-                                    id="roller"
-                                    name="roller"
-                                    value={editedProduct.roller}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    placeholder="Roller"
-                                />
-                            </div>
-
-                            {/* Glass */}
-                            <div className="flex flex-col">
-                                <label htmlFor="glass" className="mb-1 font-semibold text-sm">Glass</label>
-                                <input
-                                    type="text"
-                                    id="glass"
-                                    name="glass"
-                                    value={editedProduct.glass}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    placeholder="Glass"
-                                />
-                            </div>
-
-                            {/* Handle Type */}
-                            <div className="flex flex-col">
-                                <label htmlFor="handleType" className="mb-1 font-semibold text-sm">Handle Type</label>
-                                <input
-                                    type="text"
-                                    id="handleType"
-                                    name="handleType"
-                                    value={editedProduct.handleType}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    placeholder="Handle Type"
-                                />
-                            </div>
-
-                            {/* Additional Cost */}
-                            <div className="flex flex-col">
-                                <label htmlFor="additionalcost" className="mb-1 font-semibold text-sm">Additional Cost</label>
-                                <input
-                                    type="number"
-                                    id="additionalcost"
-                                    name="additionalcost"
-                                    value={editedProduct.additionalcost}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    placeholder="Additional Cost"
-                                />
-                            </div>
-
-                            {/* Variant */}
-                            <div className="flex flex-col">
-                                <label htmlFor="varient" className="mb-1 font-semibold text-sm">Variant</label>
-                                <input
-                                    type="text"
-                                    id="varient"
-                                    name="varient"
-                                    value={editedProduct.varient}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    placeholder="Variant"
-                                />
-                            </div>
-
-                            {/* Type */}
-                            <div className="flex flex-col">
-                                <label htmlFor="type" className="mb-1 font-semibold text-sm">Type</label>
-                                <input
-                                    type="text"
-                                    id="type"
-                                    name="type"
-                                    value={editedProduct.type}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    placeholder="Type"
-                                />
-                            </div>
-
-                            {/* Area */}
-                            <div className="flex flex-col">
-                                <label htmlFor="area" className="mb-1 font-semibold text-sm">Area</label>
-                                <input
-                                    type="number"
-                                    id="area"
-                                    name="area"
-                                    value={editedProduct.area}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    placeholder="Area"
-                                />
-                            </div>
+                                    <div className="grid grid-cols-3 gap-4">
+                                        {/* Product Details */}
+                                        {Object.keys(product).map((key) => (
+                                            <div className="flex flex-col mb-4" key={key}>
+                                                <label htmlFor={key} className="mb-1 font-semibold text-sm text-gray-700">
+                                                    {key.replace(/([A-Z])/g, ' $1').toUpperCase()} {/* Format key to readable text */}
+                                                </label>
+                                                <input
+                                                    type={typeof product[key] === 'number' ? 'number' : 'text'}
+                                                    id={key}
+                                                    name={key}
+                                                    value={product[key]}
+                                                    onChange={(e) => handleInputChange(index, e)}
+                                                    className="w-full px-3 py-2 border rounded-md bg-gray-50 focus:ring-2 focus:ring-blue-500"
+                                                    placeholder={key}
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
                         </div>
 
                         {/* Modal Buttons */}
                         <div className="flex justify-end gap-2 mt-4">
                             <button
-                                className="px-3 py-1 font-bold text-md bg-gray-300 text-black rounded-md hover:bg-gray-400"
+                                className="px-4 py-2 font-bold text-md bg-gray-300 text-black rounded-md hover:bg-gray-400"
                                 onClick={closeModal}
                             >
                                 Cancel
                             </button>
                             <button
-                                className="px-3 py-1 font-bold text-md bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                                className="px-4 py-2 font-bold text-md bg-blue-500 text-white rounded-md hover:bg-blue-600"
                                 onClick={saveEditedProduct}
                             >
                                 Save
@@ -407,9 +177,6 @@ function Order() {
                     </div>
                 </div>
             )}
-
-
-
         </div>
     );
 }
