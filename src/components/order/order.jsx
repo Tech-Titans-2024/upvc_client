@@ -71,6 +71,24 @@ function Order() {
         setIsModalOpen(false);
     };
 
+    //delete quotation
+
+    const deleteQuotation = async(quotation) =>{
+        try{
+            const resoponse = await axios.delete(`${apiUrl}/quotation/${quotation._id}`);
+            setQuotations(quotations.filter((item) => item._id !== quotation._id));
+            alert('Quotation deleted successfully!');
+            
+
+        }
+        catch(error){
+            console.log(error);
+            
+        }
+
+    }
+
+
     return (
         <div className="w-full h-full bg-white">
             <h1 className="font-bold text-center text-2xl">Order Confirmation Details</h1>
@@ -84,6 +102,7 @@ function Order() {
                         <th className="border border-gray-300 py-6">Contact No</th>
                         <th className="border border-gray-300 py-6">Confirm</th>
                         <th className="border border-gray-300 py-6">Edit</th>
+                        <th className="border border-gray-300 py-6">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -109,6 +128,14 @@ function Order() {
                                         onClick={() => editQuotation(quotation)}
                                     >
                                         Edit
+                                    </button>
+                                </td>
+                                <td className="px-4 py-2 border border-gray-300">
+                                    <button
+                                        className="px-3 py-1 w-32 h-10 font-bold text-md bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none"
+                                        onClick={() => deleteQuotation(quotation)}
+                                    >
+                                        Delete
                                     </button>
                                 </td>
                             </tr>
