@@ -13,14 +13,6 @@ function Customer(props) {
                     })
                     }
                 </select>
-                {/* <input
-                    type="text"
-                    placeholder=''
-                    className="w-full p-3 border-2 border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    name='salesper'
-                    value={props.customer.salesper}
-                    onChange={props.handleCustomer}
-                /> */}
             </div>
             <div className='flex flex-col gap-4'>
                 <label className='font-semibold ml-1 uppercase'>Quotation Id :</label>
@@ -31,8 +23,6 @@ function Customer(props) {
                     name='quotation'
                     value={props.customer.quotation}
                     onChange={props.handleCustomer}
-                    // disabled
-                    
                 />
             </div>
             <div className='flex flex-col gap-4'>
@@ -44,6 +34,7 @@ function Customer(props) {
                     name='cus_name'
                     value={props.customer.cus_name}
                     onChange={props.handleCustomer}
+                    autoComplete='off'
                 />
             </div>
             <div className='flex flex-col gap-4'>
@@ -55,6 +46,7 @@ function Customer(props) {
                     name='cus_add'
                     value={props.customer.cus_add}
                     onChange={props.handleCustomer}
+                    autoComplete='off'
                 />
             </div>
             <div className='flex flex-col gap-4'>
@@ -65,7 +57,8 @@ function Customer(props) {
                     className="w-full p-3 border-2 border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     name='cus_con'
                     value={props.customer.cus_con}
-                    onChange={props.handleCustomer}
+                    onChange={props.handleCustomer}                   
+                    autoComplete='off'
                 />
             </div>
         </div>

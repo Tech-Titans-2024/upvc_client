@@ -25,7 +25,8 @@ export default
 		},
 	},
 	colors: {
-		'bharath-blue': '#0073e6',
+		'#076ad4' : '#076ad4',
+		'#3498db' : '#3498db',
 	},
 	plugins: [],
 };

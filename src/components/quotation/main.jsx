@@ -8,7 +8,8 @@ import Summary from './summary';
 import Customer from './customer';
 import Quotation from './quotation';
 
-function Main() {
+function Main() 
+{
     const apiUrl = import.meta.env.VITE_API_URL;
     const [type, setType] = useState([]);
     const [varient, setVarient] = useState([]);
@@ -17,8 +18,8 @@ function Main() {
     const [salesPersons, setSalesPersons] = useState([]);
     const [currentData, setCurrentData] = useState({
         brand: 'Veka', product: 'Door', type: '', varient: '',
-        mesh: 'Yes', width: '', height: '', area: '', price: '', glass: '', roller: '', totalPrice: '',
-        handleType: '', color: '', additionalcost: '', quantity: '', total: '', img: ''
+        mesh: 'Yes', width: '', height: '', area: '', price: '', glass: '', totalPrice: '',
+        color: '', additionalcost: '', quantity: '', total: '', img: ''
     })
     const [customer, setCustomer] = useState({
         salesper: '', quotation: '',
@@ -26,6 +27,7 @@ function Main() {
     })
 
     useEffect(() => {
+
         const fetchType = async () => {
             try {
                 let response;
@@ -47,9 +49,6 @@ function Main() {
             }
         }
 
-
-        //-----------------------------------------------------------------------------------------------------
-
         const fetchSalesman = async () => {
             try {
                 const salesmanId = await axios.get(`${apiUrl}/salesmans`);
@@ -64,8 +63,6 @@ function Main() {
             }
         }
 
-        //-----------------------------------------------------------------------------------------------------
-
         const quatationNo = async () => {
             try {
                 const QResponse= await axios.get(`${apiUrl}/quotationNo`);
@@ -79,25 +76,18 @@ function Main() {
                     }));
                 }
 
-            } catch (err) {
-                console.log("NO NA");
-            }
+            } catch (err) { console.log("Not Applicable"); }
         }
-        
+
         quatationNo();
         fetchSalesman();
         fetchType();
-
+        
     }, [apiUrl, currentData.product]);
-
-    // ---------------------------------------------------------------------------------------------------------
-
-    // Component 1
 
     const handleInputChange = async (name, value) => {
 
         const numericValue = isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-
         if (name === 'type') {
             try {
                 const response = await axios.post(`${apiUrl}/varientTypes`, {
@@ -123,7 +113,7 @@ function Main() {
 
         const updatedArea = updatedWidth * updatedHeight;
 
-        if (name === 'width' || name === 'height') {
+        if (currentData.width !== '' || currentData.height !== '') {
             setCurrentData((prev) => ({
                 ...prev,
                 [name]: value,
@@ -145,8 +135,8 @@ function Main() {
                     setCurrentData((prev) => ({
                         ...prev,
                         price: fetchedPrice,
-                        totalPrice: fetchedPrice * updatedQuantity,
-                        total: fetchedPrice * updatedQuantity + additionalCost,
+                        totalPrice: fetchedPrice * updatedQuantity * updatedHeight * updatedWidth,
+                        total: fetchedPrice * updatedQuantity * updatedHeight * updatedWidth + additionalCost,
                         img: response.data.img,
                     }));
                 }
@@ -182,23 +172,14 @@ function Main() {
         }
     }
 
-    // ---------------------------------------------------------------------------------------------------------
-
     const handleSave = () => {
-
         setSavedData((prev) => [...prev, currentData]);
-        alert("Data Saved Successfully");
+        alert("Data saved successfully");
         setCurrentData((prev) => ({
             ...prev, width: "", height: "", area: "", price: "", glass: "",
             color: "", additionalcost: "", quantity: "", total: "", img: "",
         }));
-        console.log(customer.quotation,"QNO")
-
     }
-
-    // ---------------------------------------------------------------------------------------------------------
-
-    // Component 2
 
     const handleDeleteRow = (index) => {
         setSavedData((prev) => prev.filter((_, i) => i !== index));
@@ -206,64 +187,50 @@ function Main() {
 
     const handleGetQuotation = () => { setQuotation(true) }
 
-    // ---------------------------------------------------------------------------------------------------------
-
-
     const handleCustomer = (e) => {
         const { name, value } = e.target;
-        setCustomer((prevState) => ({
-            ...prevState,
-            [name]: value,
-        }))
-
-        setCustomer((prev) => ({
-            ...prev,
-            date: formattedDate,
-            netTotal: netTotal,
-            gst: gst,
-            gTotal: gTotal
+        setCustomer((prevState) => ({ ...prevState, [name]: value, }))
+        setCustomer((prev) => ({ ...prev, date: formattedDate, 
+            netTotal: netTotal, gst: gst, gTotal: gTotal
         }))
     }
 
-    // ---------------------------------------------------------------------------------------------------------
-
     const handleFinish = async () => {
-
         const printContent = document.getElementById('printDesignContent');
         const images = printContent.querySelectorAll('img');
-
         const imagePromises = Array.from(images).map((img) => {
             return new Promise((resolve, reject) => {
-                if (img.complete) {
-                    resolve();
-                }
-                else {
-                    img.onload = resolve;
-                    img.onerror = reject;
-                }
+                if (img.complete) { resolve() }
+                else { img.onload = resolve; img.onerror = reject }
             })
         })
-
         try {
             await Promise.all(imagePromises);
             const options = {
-                margin: 1,
+                margin: 0.2, 
                 filename: 'Quotation.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 4, useCORS: true },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+                html2canvas: { 
+                    scale: 4, 
+                    useCORS: true, 
+                    logging: true,
+                    letterRendering: true
+                },
+                jsPDF: { 
+                    unit: 'in', 
+                    format: 'letter', 
+                    orientation: 'portrait',
+                    compress: true 
+                },
             }
-
-            html2pdf().from(printContent).set(options).save();
-            const data = {
+            
+            html2pdf().from(document.getElementById('printDesignContent')).set(options).save();            const data = {
                 customer,
                 savedData,
             }
-
             const response = await axios.post(`${apiUrl}/quotation-save`, { data });
-
             if (response.status === 200) {
-                alert("The Quotation Saved and Downloaded Successfully...")
+                alert("The Quotation has been Downloaded Successfully...")
             }
             else {
                 console.error('Failed to send Data to Backend:', response.status);
@@ -274,8 +241,6 @@ function Main() {
         }
     }
 
-    // ---------------------------------------------------------------------------------------------------------
-
     const currentDate = new Date();
     const day = String(currentDate.getDate()).padStart(2, '0');
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
@@ -285,17 +250,13 @@ function Main() {
     const gst = parseFloat(netTotal * 18) / 100;
     const gTotal = parseFloat(netTotal) + parseFloat(gst);
 
-    // ---------------------------------------------------------------------------------------------------------
-
-
     return (
-
         <div className='flex flex-col gap-7 p-3'>
             <span className="text-2xl font-semibold text-white bg-slate-500 py-3 px-5">MEASUREMENTS</span>
             <Product handleInputChange={handleInputChange} currentData={currentData} type={type} varient={varient} />
             <div className="flex justify-end">
                 <button
-                    className="bg-green-700 w-32 font-bold text-lg text-white py-2.5 px-6 rounded-lg shadow hover:bg-green-600 transition duration-200"
+                    className="bg-green-600 w-32 font-bold text-lg text-white py-2.5 px-6 rounded-lg shadow hover:bg-green-700 transition duration-200"
                     onClick={handleSave}
                 >
                     <FontAwesomeIcon icon={faSave} className="text-md mr-2" />

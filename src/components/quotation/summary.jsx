@@ -74,7 +74,6 @@ function Summary(props)
             {isPopupOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-6 rounded-lg shadow-2xl w-4/5 max-w-5xl">
-                        {/* Popup Header */}
                         <div className="flex justify-between items-center mb-6 border-b border-black py-4">
                             <h2 className="text-2xl font-bold text-gray-900 uppercase">Edit Quotation Details</h2>
                             <button
@@ -85,8 +84,6 @@ function Summary(props)
                                 <FontAwesomeIcon icon={faTimes} size="lg" />
                             </button>
                         </div>
-
-                        {/* Form Fields */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {[
                                 "Brand",
@@ -136,10 +133,6 @@ function Summary(props)
                     </div>
                 </div>
             )}
-
-
-
-
         </>
     )
 }

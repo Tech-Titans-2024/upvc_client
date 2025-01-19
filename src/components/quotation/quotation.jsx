@@ -1,6 +1,7 @@
 import React from 'react';
 
-function Quotation(props) {
+function Quotation(props) 
+{
     const apiUrl = import.meta.env.VITE_API_URL;
     const currentDate = new Date();
     const day = String(currentDate.getDate()).padStart(2, '0');
@@ -23,7 +24,7 @@ function Quotation(props) {
                             <p>{props.customer.cus_con}</p>
                         </div>
                     </div>
-                    <div className='grid grid-cols-3 gap-4 mb-6'>
+                    <div className='grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6'>
                         <div className='bg-blue-600 text-white font-bold text-lg p-3 rounded-t-md'>Quotation No</div>
                         <div className='bg-blue-600 text-white font-bold text-lg p-3 rounded-t-md'>Salesman Id</div>
                         <div className='bg-blue-600 text-white font-bold text-lg p-3 rounded-t-md'>Date</div>
@@ -33,39 +34,85 @@ function Quotation(props) {
                     </div>
                     {props.savedData.length > 0 && (
                         <div>
-                            <div className='grid grid-cols-5 text-center bg-blue-600 text-white font-bold text-lg p-3 rounded-t-md'>
-                                <div>Product</div>
-                                <div>Details</div>
-                                <div>Quantity</div>
-                                <div>Rate (Rs.)</div>
-                                <div>Amount (Rs.)</div>
-                            </div>
-                            {props.savedData.map((data, index) => (
-                                <div key={index} className='grid grid-cols-5 mt-2 text-center bg-white border-t border-l border-r border-black'>
-                                    <div className='p-3 border-t border-l border-r border-black'>
-                                        <img src={`${apiUrl}${data.img}`} alt="Product" className="max-w-full h-auto rounded" />
-                                    </div>
-                                    <div className='p-3 text-left border-t border-l border-r border-black'>
-                                        <span className=''><b>Product : </b></span> <span>{data.product}</span><br></br>
-                                        <span className=''><b>Type : </b></span> <span>{data.type}</span><br></br>
-                                        <span className=''><b>Variant : </b></span> <span>{data.varient}</span><br></br>
-                                        <span className=''><b>Size  : </b></span> <span>W = {data.width} ; H = {data.height}</span><br></br>
-                                        <span className=''><b>Area  : </b></span> <span>{data.area}</span><br></br>
-                                        <span className=''><b>Glass : </b></span> <span>{data.glass}</span><br></br>
-                                        <span className=''><b>Color : </b></span> <span>{data.color}</span>
-                                    </div>
-                                    <div className='p-3 border-t border-l border-r border-black'>{data.quantity}</div>
-                                    <div className='p-3 border-t border-l border-r border-black'>{data.price}</div>
-                                    <div className='p-3 border-t border-l border-r border-black'>{data.totalPrice}</div>
-                                </div>
-                            ))}
-                            <div className='grid grid-cols-5 border border-black'>
-                                <div className='col-span-4 border border-black p-2 font-bold text-right'>Net Total (Rs.)</div>
-                                <div className='border border-black p-2 text-center font-bold'>₹ {netTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} </div>
-                                <div className='col-span-4 border border-black p-2 font-bold text-right'>GST (18%)</div>
-                                <div className='border border-black p-2 text-center font-bold'>₹ {gst.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} </div>
-                                <div className='col-span-4 border border-black p-2 font-bold text-right'>Grand Total (Rs.)</div>
-                                <div className='border border-black p-2 text-center font-bold'>₹ {gTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} </div>
+                            <div className="overflow-x-auto">
+                                <table className="table-auto w-full border border-black shadow-md rounded-md">
+                                    <thead className="bg-blue-600 text-white font-bold text-lg">
+                                        <tr>
+                                            <th className="p-3 border border-black w-[23%]">Product</th>
+                                            <th className="p-3 border border-black w-[27%]">Details</th>
+                                            <th className="p-3 border border-black w-[15%]">Quantity</th>
+                                            <th className="p-3 border border-black w-[15%]">Rate (Rs.)</th>
+                                            <th className="p-3 border border-black w-[20%]">Amount (Rs.)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {props.savedData.map((data, index) => (
+                                            <tr key={index} className={`bg-white ${index % 2 === 0 ? 'bg-gray-100' : ''}`}>
+                                                <td className="border border-black">
+                                                    <img
+                                                        src={`${apiUrl}${data.img}`}
+                                                        alt="Product"
+                                                        className="w-44 h-32 object-cover mx-auto rounded"
+                                                    />
+                                                </td>
+                                                <td className="p-4 text-left border border-black">
+                                                    <div>
+                                                        <div className="flex">
+                                                            <span className="w-[25%] font-bold">Product</span>
+                                                            <span className="w-[5%] text-center">:</span>
+                                                            <span className="w-[70%] ml-1">{data.product}</span>
+                                                        </div>
+                                                        <div className="flex">
+                                                            <span className="w-[25%] font-bold">Type</span>
+                                                            <span className="w-[5%] text-center">:</span>
+                                                            <span className="w-[70%] ml-1">{data.type}</span>
+                                                        </div>
+                                                        <div className="flex">
+                                                            <span className="w-[25%] font-bold">Variant</span>
+                                                            <span className="w-[5%] text-center">:</span>
+                                                            <span className="w-[70%] ml-1">{data.varient}</span>
+                                                        </div>
+                                                        <div className="flex">
+                                                            <span className="w-[25%] font-bold">Size</span>
+                                                            <span className="w-[5%] text-center">:</span>
+                                                            <span className="w-[70%] ml-1">W = {data.width}, H = {data.height}</span>
+                                                        </div>
+                                                        <div className="flex">
+                                                            <span className="w-[25%] font-bold">Area</span>
+                                                            <span className="w-[5%] text-center">:</span>
+                                                            <span className="w-[70%] ml-1">{data.area}</span>
+                                                        </div>
+                                                        <div className="flex">
+                                                            <span className="w-[25%] font-bold">Glass</span>
+                                                            <span className="w-[5%] text-center">:</span>
+                                                            <span className="w-[70%] ml-1">{data.glass}</span>
+                                                        </div>
+                                                        <div className="flex">
+                                                            <span className="w-[25%] font-bold">Color</span>
+                                                            <span className="w-[5%] text-center">:</span>
+                                                            <span className="w-[70%] ml-1">{data.color}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="p-3 border border-black text-center">{data.quantity}</td>
+                                                <td className="p-3 border border-black text-center">{data.price}</td>
+                                                <td className="p-3 border border-black text-center">{data.totalPrice}</td>
+                                            </tr>
+                                        ))}
+                                        <tr>
+                                            <td colSpan="4" className="p-2 border border-black text-right font-bold">Net Total (Rs.)</td>
+                                            <td className="p-2 border border-black text-center font-bold">₹ {netTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan="4" className="p-2 border border-black text-right font-bold">GST (18%)</td>
+                                            <td className="p-2 border border-black text-center font-bold">₹ {gst.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan="4" className="p-2 border border-black text-right font-bold">Grand Total (Rs.)</td>
+                                            <td className="p-2 border border-black text-center font-bold">₹ {gTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     )}

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function App() {
+function App()
+{
     const [selectedFile, setSelectedFile] = useState(null);
     const [typeId, setTypeId] = useState('');
     const [isValidTypeId, setIsValidTypeId] = useState(true);
@@ -10,26 +11,28 @@ function App() {
 
     const handleFileChange = (e) => {
         setSelectedFile(e.target.files[0]);
-    };
+    }
 
     const handleTypeIdChange = (e) => {
         setTypeId(e.target.value);
-    };
+    }
 
     const checkTypeIdExists = async () => {
         try {
             const response = await axios.get(`${apiUrl}/check-typeid/${typeId}`);
             if (response.data.exists) {
                 setIsValidTypeId(true);
-            } else {
+            } 
+            else {
                 setIsValidTypeId(false);
                 alert('Type ID does not exist in the database!');
             }
-        } catch (error) {
+        } 
+        catch (error) {
             console.error('Error checking Type ID:', error);
             setIsValidTypeId(false);
         }
-    };
+    }
 
     const handleUpload = async () => {
         if (!selectedFile) {
@@ -54,32 +57,42 @@ function App() {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             alert(response.data.message);
-        } catch (error) {
+        } 
+        catch (error) {
             console.error('Upload error:', error);
             alert('Failed to upload file.');
         }
-    };
+    }
 
     return (
-        <div className="bg-blue-300 h-full rounded-lg">
-            <h1 className="text-black text-3xl font-bold text-center">Upload Product Image</h1>
-            <div className="p-5">
-                <div className="flex justify-center items-center gap-5 mt-10 border-2 border-black h-60 rounded-lg">
-                    <label className="font-bold text-lg">Type ID:</label>
-                    <input
-                        type="number"
-                        className="w-40 h-12 p-3 border-2 border-black rounded-lg placeholder-gray-400"
-                        value={typeId}
-                        onChange={handleTypeIdChange}
-                        onBlur={checkTypeIdExists}
-                        placeholder="Enter Type ID"
-                    />
-                    <div className="flex gap-5">
-                        <div className="border-2 border-black rounded-lg bg-white h-12 p-2 w-80">
+        <div className="w-full h-full flex items-center justify-center rounded-md bg-gradient-to-r from-green-500 to-blue-500">
+            <div className="bg-white p-16 rounded-lg shadow-lg w-full max-w-4xl">
+                <h1 className="text-3xl font-bold text-center text-gray-800 mb-12 font-cambria">UPLOAD PRODUCT IMAGE</h1>
+                <div className="space-y-12">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+                        <div className='w-28 flex justify-between'>
+                            <label className="font-medium text-lg text-gray-700">Type ID</label>
+                            <span><b>:</b></span>
+                        </div>
+                        <input
+                            type="number"
+                            className="w-full sm:w-64 h-12 px-4 py-2 border-2 border-black rounded-lg focus:outline-none focus:ring-1 focus:ring-black"
+                            value={typeId}
+                            onChange={handleTypeIdChange}
+                            onBlur={checkTypeIdExists}
+                            placeholder="Enter Type ID"
+                        />
+                    </div>
+                    <div className="flex items-center">
+                        <div className='w-28 flex justify-between'>
+                            <label className="font-medium text-lg text-gray-700">Select File </label>
+                            <span><b>:</b></span>
+                        </div>
+                        <div className="border-2 border-black rounded-lg bg-white h-12 p-2 w-80 ml-4">
                             <input type="file" onChange={handleFileChange} />
                         </div>
                         <button
-                            className="bg-blue-700 w-32 h-12 font-bold text-lg text-white py-2.5 px-6 rounded-lg shadow hover:bg-blue-800 transition duration-200"
+                            className="bg-blue-700 w-32 h-12 font-bold text-lg text-white py-2.5 px-6 rounded-lg shadow hover:bg-blue-800 transition duration-200 ml-4"
                             onClick={handleUpload}
                         >
                             Upload
@@ -88,7 +101,7 @@ function App() {
                 </div>
             </div>
         </div>
-    );
+    )
 }
 
 export default App;
