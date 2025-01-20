@@ -1,7 +1,5 @@
-import axios, { spread } from 'axios';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-// import Edit from '../Edit/Edit';
-// import Edit from '../Edit/edit';
 
 const PriceList = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -10,6 +8,7 @@ const PriceList = () => {
     const [editData, setEditData] = useState({});
     const [deletePrice, setDeletePrice] = useState(false);
     const [deleteData, setDeleteData] = useState({});
+    const [searchQuery, setSearchQuery] = useState(""); // Search Query State
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -24,9 +23,6 @@ const PriceList = () => {
         fetchProducts();
     }, [apiUrl]);
 
-    // console.log(products)
-
-    //---------------------------------------
     const handlePriceEdit = (value) => {
         setEdit(true);
         setEditData(value);
@@ -38,48 +34,54 @@ const PriceList = () => {
             ...prevData,
             [name]: value,
         }));
-        // console.log(editData.pro_price_id)
     };
 
     const handlePriceDelete = (value) => {
         setDeleteData(value);
         setDeletePrice(true);
-        // Your delete logic here
     };
+
     const handleSaveData = async () => {
         try {
             const response = await axios.post(`${apiUrl}/editprice`, { editData });
             if (response.data) {
-                alert(response.data.Message)
+                alert(response.data.Message);
             }
-
         } catch (err) {
-            alert("Something Went wrong in Update price")
-
+            alert("Something Went wrong in Update price");
         }
-        setEdit(false)
-    }
-    const handledelete = async () => {
+        setEdit(false);
+    };
+
+    const handleDelete = async () => {
         try {
             const response = await axios.post(`${apiUrl}/deleteprice`, { deleteData });
             if (response.data) {
-                alert("DATA DELETED")
+                alert("DATA DELETED");
             }
-        } catch (ess) {
-            alert("ERROR")
+        } catch (err) {
+            alert("ERROR");
         }
         setDeletePrice(false);
-    }
+    };
+
+    // Filter products based on the search query
+    const filteredProducts = products.filter((product) =>
+        product.variant.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.type.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
         <div className="w-full h-screen">
             <h1 className="text-black text-3xl font-bold text-center">Price List</h1>
-            <div className="w-full h-fit  flex justify-between items-center gap-5 py-2 ">
-                <h1 className="font-bold text-lg">No of Products: {products.length}</h1>
-                <div className=' flex gap-5'>
+            <div className="w-full h-fit flex justify-between items-center gap-5 py-2">
+                <h1 className="font-bold text-lg">No of Products: {filteredProducts.length}</h1>
+                <div className="flex gap-5">
                     <input
                         type="text"
                         placeholder="Search by product name"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-80 p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                     />
                     <button className="h-12 w-24 px-6 py-2 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1 transition duration-300">
@@ -101,8 +103,8 @@ const PriceList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.length > 0 ? (
-                            products.map((product, index) => (
+                        {filteredProducts.length > 0 ? (
+                            filteredProducts.map((product, index) => (
                                 <tr key={index} className="hover:bg-gray-100">
                                     <td className="px-4 py-2 border border-gray-300 text-center">{index + 1}</td>
                                     <td className="px-4 py-2 border border-gray-300 text-center">{product.type}</td>
@@ -121,7 +123,6 @@ const PriceList = () => {
                                         <button
                                             onClick={() => handlePriceDelete(product)}
                                             className="px-3 py-1 w-32 h-10 font-bold text-md ml-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none"
-
                                         >
                                             Delete
                                         </button>
@@ -136,6 +137,7 @@ const PriceList = () => {
                     </tbody>
                 </table>
             </div>
+            {/* Edit Modal */}
             {edit && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white w-96 p-6 rounded-lg shadow-lg">
@@ -207,7 +209,7 @@ const PriceList = () => {
                     </div>
                 </div>
             )}
-
+            {/* Delete Confirmation Modal */}
             {deletePrice && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white w-80 p-6 rounded-lg shadow-lg text-center">
@@ -221,7 +223,7 @@ const PriceList = () => {
                         </div>
                         <div className="flex justify-between gap-4 mt-6">
                             <button
-                                onClick={handledelete}
+                                onClick={handleDelete}
                                 className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 shadow-md"
                             >
                                 Delete
@@ -236,7 +238,6 @@ const PriceList = () => {
                     </div>
                 </div>
             )}
-
         </div>
     );
 };
