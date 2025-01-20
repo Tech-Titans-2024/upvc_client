@@ -11,6 +11,7 @@ import Quotation from './quotation';
 function Main() 
 {
     const apiUrl = import.meta.env.VITE_API_URL;
+    const [pdfDesign, setPdfDesign] = useState(false)
     const [type, setType] = useState([]);
     const [varient, setVarient] = useState([]);
     const [savedData, setSavedData] = useState([]);
@@ -86,7 +87,6 @@ function Main()
     }, [apiUrl, currentData.product]);
 
     const handleInputChange = async (name, value) => {
-
         const numericValue = isNaN(parseFloat(value)) ? 0 : parseFloat(value);
         if (name === 'type') {
             try {
@@ -100,7 +100,6 @@ function Main()
                 console.error('Error fetching Variant Types:', error);
             }
         }
-
         let updatedWidth = parseFloat(currentData.width) || 0;
         let updatedHeight = parseFloat(currentData.height) || 0;
         let updatedQuantity = parseInt(currentData.quantity, 10) || 1;
@@ -119,7 +118,6 @@ function Main()
                 [name]: value,
                 area: updatedArea,
             }));
-
             try {
                 const response = await axios.post(`${apiUrl}/pricelist`, {
                     height: updatedHeight,
@@ -200,42 +198,40 @@ function Main()
         const images = printContent.querySelectorAll('img');
         const imagePromises = Array.from(images).map((img) => {
             return new Promise((resolve, reject) => {
-                if (img.complete) { resolve() }
+                if (img.complete) { resolve() } 
                 else { img.onload = resolve; img.onerror = reject }
             })
         })
         try {
             await Promise.all(imagePromises);
             const options = {
-                margin: 0.2, 
+                margin: 0.1,
+                padding: 0.2,
                 filename: 'Quotation.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { 
-                    scale: 4, 
+                    scale: 3, 
                     useCORS: true, 
-                    logging: true,
-                    letterRendering: true
+                    logging: true, 
+                    letterRendering: true 
                 },
                 jsPDF: { 
                     unit: 'in', 
                     format: 'letter', 
-                    orientation: 'portrait',
+                    orientation: 'portrait', 
                     compress: true 
                 },
-            }
-            
-            html2pdf().from(document.getElementById('printDesignContent')).set(options).save();            const data = {
-                customer,
-                savedData,
-            }
+            };
+            html2pdf().from(document.getElementById('printDesignContent')).set(options).save();
+            const data = { customer, savedData };
             const response = await axios.post(`${apiUrl}/quotation-save`, { data });
             if (response.status === 200) {
-                alert("The Quotation has been Downloaded Successfully...")
-            }
+                alert("The Quotation has been Downloaded Successfully...");
+            } 
             else {
                 console.error('Failed to send Data to Backend:', response.status);
             }
-        }
+        } 
         catch (error) {
             console.error('Error:', error);
         }
@@ -277,7 +273,7 @@ function Main()
                             Get Quotation
                         </button>
                     </div>
-                    <Quotation quotation={quotation} customer={customer} savedData={savedData} handleFinish={handleFinish} />
+                    <Quotation quotation={quotation} customer={customer} savedData={savedData} handleFinish={handleFinish} pdfDesign={pdfDesign} />
                     {quotation && (
                         <div className='flex justify-end'>
                             <button

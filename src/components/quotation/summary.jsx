@@ -29,8 +29,8 @@ function Summary(props)
     return (
         <>
             <table className="table-auto border-collapse border-2 border-black">
-                <thead>
-                    <tr className="bg-orange-300">
+                <thead className=''>
+                    <tr className="bg-orange-300 h-14">
                         <th className="border-2 border-black px-4 py-2 uppercase font-bold">Brand</th>
                         <th className="border-2 border-black px-4 py-2 uppercase font-bold">Type</th>
                         <th className="border-2 border-black px-4 py-2 uppercase font-bold">Variant</th>
@@ -70,7 +70,6 @@ function Summary(props)
                     ))}
                 </tbody>
             </table>
-
             {isPopupOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-6 rounded-lg shadow-2xl w-4/5 max-w-5xl">
