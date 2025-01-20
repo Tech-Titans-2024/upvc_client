@@ -52,8 +52,8 @@ function Order() {
         try {
             const updatedQuotation = { ...selectedQuotation, product: editedProducts };
             console.log(updatedQuotation);
-            
-           const response =  await axios.put(`${apiUrl}/quotation/${selectedQuotation._id}`, updatedQuotation);
+
+            const response = await axios.put(`${apiUrl}/quotation/${selectedQuotation._id}`, updatedQuotation);
             setQuotations((prev) =>
                 prev.map((item) =>
                     item._id === selectedQuotation._id ? updatedQuotation : item
@@ -73,17 +73,17 @@ function Order() {
 
     //delete quotation
 
-    const deleteQuotation = async(quotation) =>{
-        try{
+    const deleteQuotation = async (quotation) => {
+        try {
             const resoponse = await axios.delete(`${apiUrl}/quotation/${quotation._id}`);
             setQuotations(quotations.filter((item) => item._id !== quotation._id));
             alert('Quotation deleted successfully!');
-            
+
 
         }
-        catch(error){
+        catch (error) {
             console.log(error);
-            
+
         }
 
     }
@@ -92,7 +92,17 @@ function Order() {
     return (
         <div className="w-full h-full bg-white">
             <h1 className="font-bold text-center text-2xl">Order Confirmation Details</h1>
-            <table className="w-full bg-white shadow-md rounded-lg border-collapse mt-5">
+            <div className=' flex justify-between items-center'>
+
+                <h1 className='font-bold text-lg'>No of Quotations : {quotations.length}</h1>
+                <input
+                    type="text"
+                    placeholder="Search by product name"
+                    className="w-80 p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+                />
+            </div>
+
+            <table className="w-full bg-white shadow-md rounded-lg border-collapse mt-2">
                 <thead>
                     <tr className="h-20 bg-blue-500 text-white text-lg">
                         <th className="border border-gray-300 py-6">Quotation No</th>

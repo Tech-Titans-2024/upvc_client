@@ -3,7 +3,7 @@ import React from 'react';
 function Product(props) 
 {
     return (
-        <div className='flex flex-col border-2 border-black rounded-lg bg-[#3498db75]'>
+        <div className='flex flex-col border-2 border-black rounded-lg bg-blue-300'>
             <div className="grid grid-cols-5 gap-7 p-7 border-b-2 border-black py-12">
                 <div className="flex flex-col gap-4">
                     <label className="font-semibold ml-1 uppercase">Brand : </label>
