@@ -137,59 +137,106 @@ const PriceList = () => {
                 </table>
             </div>
             {edit && (
-                <div className="bg-green-400 w-2/5 h-4/5 absolute inset-0 top-10 m-auto flex flex-col justify-center gap-3 p-4 shadow-lg rounded-lg">
-                    <button
-                        onClick={() => setEdit(false)}
-                        className="self-end px-3 py-1 bg-red-500 text-white rounded-full hover:bg-red-600"
-                    >
-                        X
-                    </button>
-                    <label>Category</label>
-                    <input
-                        type="text"
-                        name="variant"
-                        value={editData.variant || ""}
-                        onChange={handleInputChange}
-                        className="border p-2 rounded"
-                    />
-                    <label>Type</label>
-                    <input
-                        type="text"
-                        name="type"
-                        value={editData.type || ""}
-                        onChange={handleInputChange}
-                        className="border p-2 rounded"
-                    />
-                    <label>Price</label>
-                    <input
-                        type="text"
-                        name="price"
-                        value={editData.price || ""}
-                        onChange={handleInputChange}
-                        className="border p-2 rounded"
-                    />
-                    <label>Square Footage</label>
-                    <input
-                        type="text"
-                        name="sqft"
-                        value={`${editData.width || ""}x${editData.height || ""}`}
-                        readOnly
-                        className="border p-2 rounded bg-gray-100"
-                    />
-                    <button onClick={handleSaveData}>Save</button>
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white w-96 p-6 rounded-lg shadow-lg">
+                        <button
+                            onClick={() => setEdit(false)}
+                            className="absolute top-4 right-4 px-3 py-1 bg-red-500 text-white rounded-full hover:bg-red-600 shadow-md"
+                        >
+                            ✕
+                        </button>
+                        <h2 className="text-xl font-bold mb-4">Edit Details</h2>
+                        <form>
+                            <div className="mb-4">
+                                <label className="block font-medium mb-2">Category</label>
+                                <input
+                                    type="text"
+                                    name="variant"
+                                    value={editData.variant || ""}
+                                    onChange={handleInputChange}
+                                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block font-medium mb-2">Type</label>
+                                <input
+                                    type="text"
+                                    name="type"
+                                    value={editData.type || ""}
+                                    onChange={handleInputChange}
+                                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block font-medium mb-2">Price</label>
+                                <input
+                                    type="text"
+                                    name="price"
+                                    value={editData.price || ""}
+                                    onChange={handleInputChange}
+                                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block font-medium mb-2">Square Footage</label>
+                                <input
+                                    type="text"
+                                    name="sqft"
+                                    value={`${editData.width || ""}x${editData.height || ""}`}
+                                    readOnly
+                                    className="w-full p-3 border rounded-lg bg-gray-100 text-gray-500"
+                                />
+                            </div>
+                            <div className="flex justify-end gap-4">
+                                <button
+                                    type="button"
+                                    onClick={handleSaveData}
+                                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 shadow-md"
+                                >
+                                    Save
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setEdit(false)}
+                                    className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 shadow-md"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             )}
+
             {deletePrice && (
-                <div className='w-60 h-60 bg-red-400 inset-0 m-auto absolute flex flex-col gap-4 justify-center items-center '>
-                    <span>{deleteData.variant}</span>
-                    <span>{deleteData.category}</span>
-                    <span>{deleteData.variety}</span>
-                    <span>{deleteData.price}</span>
-                    <span>{deleteData.width}X{deleteData.height}</span>
-                    <button onClick={handledelete}>Delete</button>
-                    <button onClick={() => setDeletePrice(false)}>Close</button>
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white w-80 p-6 rounded-lg shadow-lg text-center">
+                        <h2 className="text-xl font-bold text-red-500 mb-4">Delete Confirmation</h2>
+                        <div className="flex flex-col gap-2 text-gray-700">
+                            <p><strong>Variant:</strong> {deleteData.variant}</p>
+                            <p><strong>Category:</strong> {deleteData.category}</p>
+                            <p><strong>Variety:</strong> {deleteData.variety}</p>
+                            <p><strong>Price:</strong> {deleteData.price}</p>
+                            <p><strong>Dimensions:</strong> {deleteData.width} x {deleteData.height}</p>
+                        </div>
+                        <div className="flex justify-between gap-4 mt-6">
+                            <button
+                                onClick={handledelete}
+                                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 shadow-md"
+                            >
+                                Delete
+                            </button>
+                            <button
+                                onClick={() => setDeletePrice(false)}
+                                className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 shadow-md"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
+
         </div>
     );
 };
