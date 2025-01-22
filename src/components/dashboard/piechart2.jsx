@@ -1,64 +1,96 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
-const PieChart = () => {
-  const data = {
-    labels: ['Fixed Window', 'Sliding Window', 'Open Window'],
-    datasets: [
-      {
-        label: 'Window',
-        data: [50, 30, 20], // Percentage data for the doors
-        backgroundColor: [
-          '#FF6384', // Vibrant pink
-          '#36A2EB', // Vibrant blue
-          '#FFCE56', // Vibrant yellow
-        ],
-        hoverBackgroundColor: [
-          '#FF6384', // Vibrant pink
-          '#36A2EB', // Vibrant blue
-          '#FFCE56', // Vibrant yellow
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
+const PieChart = () => 
+{
+	const chartData = {
+		labels: ['Fixed Window - 50', 'Sliding Window - 30', 'Open Window - 20'],
+		datasets: [
+			{
+				data: [50, 30, 20],
+				backgroundColor: [
+					'#4CAF50', // Green
+					'#FFC107', // Amber
+					'#2196F3', // Blue
+				],
+				hoverBackgroundColor: [
+					'#388E3C', // Darker Green
+					'#FFB300', // Darker Amber
+					'#1976D2', // Darker Blue
+				],
+				borderColor: '#ffffff',
+				borderWidth: 2,
+			},
+		],
+	}
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: true,
-        position: 'top',
-        labels: {
-          color: '#000000', // Black text for legend (to match the white background)
-        },
-      },
-      title: {
-        display: true,
-        text: 'Window', // Chart title
-        font: {
-          size: 20,
-          weight: 'bold',
-          family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-        },
-        color: '#000000', // Black title text
-      },
-    },
-  };
+	const options = {
+		plugins: {
+			legend: {
+				display: true,
+				position: 'bottom',
+				labels: {
+					color: '#333',
+					font: {
+						size: 16,
+					},
+					padding: 25,
+					boxWidth: 35,
+					boxHeight: 20,
+				},
+			},
+			tooltip: {
+				callbacks: {
+					label: function (context) {
+						const label = context.label || '';
+						const value = context.raw || 0;
+						return `${label}: ${value}`;
+					},
+				},
+			},
+			datalabels: {
+				color: '#fff',
+				font: {
+					size: 14,
+					weight: 'bold',
+				},
+				formatter: (value, context) => {
+					const total = context.dataset.data.reduce((acc, curr) => acc + curr, 0);
+					const percentage = ((value / total) * 100).toFixed(1);
+					return `${percentage}%`;
+				},
+			},
+		},
+		responsive: true,
+		maintainAspectRatio: false,
+	}
 
-  return (
-    <div className="p-6 bg-white text-black rounded-lg shadow-lg h-96">
-      <Pie data={data} options={options} />
-    </div>
-  );
-};
+	const containerStyle = {
+		width: '100%',
+		height: '450px',
+		margin: '20px auto',
+		paddingBottom: '60px',
+		paddingTop: '20px',
+		background: '#fff',
+		borderRadius: '15px',
+		boxShadow: '0px 5px 10px rgba(0, 0, 0, 0.1)',
+	}
+
+	return (
+		<div style={containerStyle}>
+			<h3
+				className="pie-heading font-bold mb-2"
+				style={{ textAlign: 'center', fontSize: '20px', marginBottom: '15px' }}
+			>
+				WINDOW CHART
+			</h3>
+			<Pie data={chartData} options={options} />
+		</div>
+	)
+}
 
 export default PieChart;
