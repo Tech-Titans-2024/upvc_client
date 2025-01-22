@@ -5,8 +5,9 @@ function Order() {
     const [quotations, setQuotations] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedQuotation, setSelectedQuotation] = useState(null);
-    const [confirmedOrders, setConfirmedOrders] = useState([]);
     const [editedProducts, setEditedProducts] = useState([]); // For editing multiple products
+    const [confirmedOrders, setConfirmedOrders] = useState(new Set()); // Track confirmed orders
+
 
     const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -16,6 +17,10 @@ function Order() {
             try {
                 const response = await axios.get(`${apiUrl}/quotation`);
                 setQuotations(response.data);
+
+                // Load confirmed orders from localStorage
+                const savedConfirmedOrders = JSON.parse(localStorage.getItem('confirmedOrders')) || [];
+                setConfirmedOrders(new Set(savedConfirmedOrders));
             } catch (error) {
                 console.error(error);
             }
@@ -23,12 +28,21 @@ function Order() {
         fetchQuotationDetails();
     }, [apiUrl]);
 
-    // Confirm order
+    // Confirm order and disable button
     const confirmOrder = async (order) => {
         try {
             await axios.post(`${apiUrl}/orderconfirm`, order);
-            setConfirmedOrders([...confirmedOrders, order._id]); // Store confirmed order ID
             alert('Order Confirmed successfully!');
+
+            // Update confirmed orders state
+            setConfirmedOrders((prevConfirmed) => {
+                const updatedConfirmed = new Set(prevConfirmed);
+                updatedConfirmed.add(order._id);
+
+                // Store confirmed order IDs in localStorage
+                localStorage.setItem('confirmedOrders', JSON.stringify([...updatedConfirmed]));
+                return updatedConfirmed;
+            });
         } catch (error) {
             console.error(error);
         }
@@ -128,12 +142,14 @@ function Order() {
                                 <td className="px-4 py-2 border border-gray-300">{quotation.cus_con}</td>
                                 <td className="px-4 py-2 border border-gray-300">
                                     <button
-                                        className={`px-3 py-1 w-32 h-10 font-bold text-md rounded-md focus:outline-none 
-            ${confirmedOrders.includes(quotation._id) ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600 text-white'}`}
+                                        className={`px-3 py-1 w-32 h-10 font-bold text-md rounded-md ${confirmedOrders.has(quotation._id)
+                                                ? 'bg-gray-400 cursor-not-allowed'
+                                                : 'bg-green-500 hover:bg-green-600 text-white'
+                                            }`}
                                         onClick={() => confirmOrder(quotation)}
-                                        disabled={confirmedOrders.includes(quotation._id)}
+                                        disabled={confirmedOrders.has(quotation._id)}
                                     >
-                                        {confirmedOrders.includes(quotation._id) ? 'Confirmed' : 'Confirm'}
+                                        {confirmedOrders.has(quotation._id) ? 'Confirmed' : 'Confirm'}
                                     </button>
                                 </td>
                                 <td className="px-4 py-2 border border-gray-300">
