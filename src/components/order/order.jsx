@@ -5,6 +5,7 @@ function Order() {
     const [quotations, setQuotations] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedQuotation, setSelectedQuotation] = useState(null);
+    const [confirmedOrders, setConfirmedOrders] = useState([]);
     const [editedProducts, setEditedProducts] = useState([]); // For editing multiple products
 
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -26,6 +27,7 @@ function Order() {
     const confirmOrder = async (order) => {
         try {
             await axios.post(`${apiUrl}/orderconfirm`, order);
+            setConfirmedOrders([...confirmedOrders, order._id]); // Store confirmed order ID
             alert('Order Confirmed successfully!');
         } catch (error) {
             console.error(error);
@@ -126,10 +128,12 @@ function Order() {
                                 <td className="px-4 py-2 border border-gray-300">{quotation.cus_con}</td>
                                 <td className="px-4 py-2 border border-gray-300">
                                     <button
-                                        className="px-3 py-1 w-32 h-10 font-bold text-md bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none"
+                                        className={`px-3 py-1 w-32 h-10 font-bold text-md rounded-md focus:outline-none 
+            ${confirmedOrders.includes(quotation._id) ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600 text-white'}`}
                                         onClick={() => confirmOrder(quotation)}
+                                        disabled={confirmedOrders.includes(quotation._id)}
                                     >
-                                        Confirm
+                                        {confirmedOrders.includes(quotation._id) ? 'Confirmed' : 'Confirm'}
                                     </button>
                                 </td>
                                 <td className="px-4 py-2 border border-gray-300">
