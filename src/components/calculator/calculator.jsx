@@ -59,7 +59,7 @@ const App = () =>
 	}
 
 	return (
-		<div className="w-full h-full flex items-center justify-center rounded-md bg-gradient-to-r from-green-500 to-blue-500">
+		<div className="w-full h-full flex items-center justify-center rounded-md bg-gradient-to-r from-green-400 to-blue-400">
 			<div className="bg-white p-12 rounded-lg shadow-lg w-full max-w-4xl">
 				<h1 className="text-3xl font-bold text-center text-gray-800 mb-8 font-cambria">AREA CONVERTER</h1>
 				<div className="mb-10">
