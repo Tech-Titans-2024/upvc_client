@@ -1,94 +1,221 @@
-import axios, { spread } from 'axios';
-import React, { useEffect, useState } from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
 const CustomerManage = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const [customers, setCustomers] = useState([]);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedCustomer, setSelectedCustomer] = useState(null);
+    const [formData, setFormData] = useState({
+        name: "",
+        phone: "",
+        address: "",
+    });
 
     useEffect(() => {
-        const fetchSalesPersons = async () => {
+        const fetchCustomers = async () => {
             try {
                 const response = await axios.get(`${apiUrl}/customers`);
                 if (response.data.Message) {
-                    return null;
+                    alert("No customers found.");
                 } else {
                     setCustomers(response.data);
                 }
             } catch (err) {
-                alert("ERROR");
+                alert("Error fetching customers!");
             }
         };
 
-        fetchSalesPersons();
+        fetchCustomers();
     }, []);
-    return (
-        <div className='w-full h-screen  '>
-            <h1 className='text-black text-3xl font-bold text-center'>Customer Profile</h1>
 
-            <div className='w-full h-fit  flex justify-between items-center gap-5 py-2 '>
-                <h1 className='font-bold text-lg'>No of Customers : {customers.length}</h1>
+    const toggleEditModal = (customer) => {
+        setSelectedCustomer(customer);
+        setFormData({
+            name: customer.cus_name,
+            phone: customer.cus_con,
+            address: customer.cus_add,
+        });
+        setIsEditModalOpen(true);
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+
+    const handleUpdateCustomer = async () => {
+        try {
+            console.log(selectedCustomer);  // Log the selected customer object
+
+            const payload = {
+                cus_name: formData.name,
+                cus_con: formData.phone,
+                cus_add: formData.address,
+            };
+
+            if (!selectedCustomer || !selectedCustomer._id) {
+                console.error("Customer ID (_id) is missing");
+                return;
+            }
+
+            // Make PUT request to backend using _id (not cus_id)
+            const response = await axios.put(
+                `${apiUrl}/customers/${selectedCustomer._id}`,  // Use _id here
+                payload
+            );
+
+            if (response.status === 200) {
+                alert("Customer updated successfully!");
+
+                // Update the local state with the new data
+                const updatedCustomers = customers.map((customer) =>
+                    customer._id === selectedCustomer._id
+                        ? { ...customer, ...payload }
+                        : customer
+                );
+                setCustomers(updatedCustomers);
+
+                // Close the modal
+                setIsEditModalOpen(false);
+            }
+        } catch (error) {
+            alert("Error updating customer!");
+            console.error(error);
+        }
+    };
+
+
+    const handleDeleteCustomer = async (id) => {
+        try {
+            const response = await axios.delete(`${apiUrl}/customers/${id}`);
+            if (response.status === 200) {
+                alert("Customer deleted successfully!");
+
+                // Update state to reflect the deletion
+                setCustomers(customers.filter(customer => customer._id !== id));
+            }
+        } catch (error) {
+            alert("Error deleting customer!");
+            console.error(error);
+        }
+    };
+
+    return (
+        <div className="w-full h-screen">
+            <h1 className="text-black text-3xl font-bold text-center">Customer Profile</h1>
+
+            <div className="w-full h-fit flex justify-between items-center gap-5 py-2">
+                <h1 className="font-bold text-lg">No of Customers: {customers.length}</h1>
 
                 <input
                     type="text"
                     placeholder="Search by product name"
-                    class="w-80 p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+                    className="w-80 p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                 />
-                {/* <button
-                    class="h-12 w-24 px-6 py-2 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1 transition duration-300"
-                >
-                    Add
-                </button> */}
-
             </div>
 
-            <div class="overflow-x-auto">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full bg-white border border-gray-300 shadow-md rounded-lg border-collapse">
-                        <thead>
-                            <tr class="bg-blue-500 text-white">
-                                <th class="px-4 py-2 border border-gray-300">S.No</th>
-                                <th class="px-4 py-2 border border-gray-300">Customer Name</th>
-                                <th class="px-4 py-2 border border-gray-300">Phone No</th>
-                                <th class="px-4 py-2 border border-gray-300">Address</th>
-                                <th class="px-4 py-2 border border-gray-300">Edit</th>
-                                <th class="px-4 py-2 border border-gray-300">Delete</th>
-
+            <div className="overflow-x-auto">
+                <table className="min-w-full bg-white border border-gray-300 shadow-md rounded-lg border-collapse">
+                    <thead>
+                        <tr className="bg-blue-500 text-white">
+                            <th className="px-4 py-2 border border-gray-300">S.No</th>
+                            <th className="px-4 py-2 border border-gray-300">Customer Name</th>
+                            <th className="px-4 py-2 border border-gray-300">Phone No</th>
+                            <th className="px-4 py-2 border border-gray-300">Address</th>
+                            <th className="px-4 py-2 border border-gray-300">Edit</th>
+                            <th className="px-4 py-2 border border-gray-300">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {customers.map((customer, index) => (
+                            <tr key={index} className="hover:bg-gray-100"> {/* Use _id */}
+                                <td className="px-4 py-2 border border-gray-300 text-center">{index + 1}</td>
+                                <td className="px-4 py-2 border border-gray-300">{customer.cus_name}</td>
+                                <td className="px-4 py-2 border border-gray-300">{customer.cus_con}</td>
+                                <td className="px-4 py-2 border border-gray-300">{customer.cus_add}</td>
+                                <td className="px-4 py-2 border border-gray-300 text-center">
+                                    <button
+                                        className="px-3 py-1 w-32 h-10 font-bold text-md bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none"
+                                        onClick={() => toggleEditModal(customer)}
+                                    >
+                                        Edit
+                                    </button>
+                                </td>
+                                <td className="px-4 py-2 border border-gray-300 text-center">
+                                    <button
+                                        className="px-3 py-1 w-32 h-10 font-bold text-md ml-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none"
+                                        onClick={() => handleDeleteCustomer(customer._id)} // Make sure _id is passed here
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {customers && (
-                                customers.map((value, index) => {
-                                    return <tr class="hover:bg-gray-100">
-                                        <td class="px-4 font-bold py-2 border border-gray-300 text-center">{index + 1}</td>
-                                        <td class="px-4 font-bold py-2 border border-gray-300">{value.cus_name}</td>
-                                        <td class="px-4 font-bold py-2 border border-gray-300">{value.cus_con}</td>
-                                        <td class="px-4 font-bold py-2 border border-gray-300">{value.cus_add}</td>
-                                        <td className="px-4 py-2 border border-gray-300 text-center">
-                                            <button className="px-3 py-1 w-32 h-10 font-bold text-md bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none">
-                                                Edit
-                                            </button>
-
-                                        </td>
-                                        <td className="px-4 py-2 border border-gray-300 text-center">
-                                            <button className="px-3 py-1  w-32 h-10  font-bold text-md ml-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none">
-                                                Delete
-                                            </button>
-                                        </td>
-
-                                    </tr>
-                                })
-                            )}
-
-                        </tbody>
-                    </table>
-                </div>
-
+                        ))}
+                    </tbody>
+                </table>
             </div>
 
+            {isEditModalOpen && selectedCustomer && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white w-96 p-6 rounded-lg shadow-lg">
+                        <h2 className="text-xl font-bold mb-4">Edit Customer Profile</h2>
 
+                        <form>
+                            <div className="mb-4">
+                                <label className="block font-medium mb-2">Customer Name:</label>
+                                <input
+                                    type="text"
+                                    className="w-full p-3 border rounded-lg focus:outline-none"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block font-medium mb-2">Phone No:</label>
+                                <input
+                                    type="text"
+                                    className="w-full p-3 border rounded-lg focus:outline-none"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block font-medium mb-2">Address:</label>
+                                <input
+                                    type="text"
+                                    className="w-full p-3 border rounded-lg focus:outline-none"
+                                    name="address"
+                                    value={formData.address}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                        </form>
 
+                        <div className="flex justify-between mt-4">
+                            <button
+                                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+                                onClick={() => setIsEditModalOpen(false)}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                                onClick={handleUpdateCustomer}
+                            >
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
-    )
-}
+    );
+};
 
 export default CustomerManage;
