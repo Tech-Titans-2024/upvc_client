@@ -45,8 +45,8 @@ function Sidebar()
 		},
 		{
 			icon: faTools,
-			name: 'Settings',
-			path: '/upvc/settings'
+			name: 'Reports',
+			path: '/upvc/reports'
 		},
 		{
 			icon: faShoppingCart,
@@ -55,8 +55,8 @@ function Sidebar()
 		},
 		{
 			icon: faBookmark,
-			name: 'Guidelines',
-			path: '/upvc/guidelines'
+			name: 'Profile',
+			path: '/upvc/profile'
 		},
 		{
 			icon: faSignOutAlt,

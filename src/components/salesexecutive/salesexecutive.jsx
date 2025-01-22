@@ -8,6 +8,7 @@ const StaffManage = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [formData, setFormData] = useState({
         staffId: "",
+        staffPassword:"",
         name: "",
         phone: "",
         address: "",
@@ -83,6 +84,7 @@ const StaffManage = () => {
         setSelectedPerson(person);
         setFormData({
             staffId: person.username,
+            staffPassword: person.password,
             name: person.name,
             phone: person.number,
             address: person.address,
@@ -94,6 +96,7 @@ const StaffManage = () => {
         try {
             const payload = {
                 username: formData.staffId,
+                password: formData.staffPassword,
                 name: formData.name,
                 number: formData.phone,  // Ensure the field name matches the backend model
                 address: formData.address
@@ -157,6 +160,7 @@ const StaffManage = () => {
                         <tr className="bg-blue-500 text-white">
                             <th className="px-4 py-2 border border-gray-300">S.No</th>
                             <th className="px-4 py-2 border border-gray-300">Staff ID</th>
+                            <th className="px-4 py-2 border border-gray-300">Staff Password</th>
                             <th className="px-4 py-2 border border-gray-300">Staff Name</th>
                             <th className="px-4 py-2 border border-gray-300">Phone No</th>
                             <th className="px-4 py-2 border border-gray-300">Address</th>
@@ -169,6 +173,7 @@ const StaffManage = () => {
                             <tr className="hover:bg-gray-100" key={index}>
                                 <td className="px-4 py-2 border border-gray-300 text-center">{index + 1}</td>
                                 <td className="px-4 py-2 border border-gray-300 text-center">{value.username}</td>
+                                <td className="px-4 py-2 border border-gray-300 text-center">{value.password}</td>
                                 <td className="px-4 py-2 border border-gray-300">{value.name}</td>
                                 <td className="px-4 py-2 border border-gray-300">{value.number}</td>
                                 <td className="px-4 py-2 border border-gray-300">{value.address}</td>
@@ -283,6 +288,16 @@ const StaffManage = () => {
                                     type="text"
                                     name="staffId"
                                     value={formData.staffId}
+                                    onChange={handleInputChange}
+                                    className="w-full p-3 border rounded-lg focus:outline-none"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block font-medium mb-2">Staff Password</label>
+                                <input
+                                    type="text"
+                                    name="staffPassword"
+                                    value={formData.staffPassword}
                                     onChange={handleInputChange}
                                     className="w-full p-3 border rounded-lg focus:outline-none"
                                 />

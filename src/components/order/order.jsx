@@ -118,7 +118,7 @@ function Order() {
                 <tbody>
                     {quotations.length > 0 ? (
                         quotations.map((quotation, index) => (
-                            <tr key={index} className="font-bold uppercase text-center">
+                            <tr key={index} className="uppercase text-center">
                                 <td className="px-4 py-2 border border-gray-300">{quotation.quotation_no}</td>
                                 <td className="px-4 py-2 border border-gray-300">{quotation.salesper}</td>
                                 <td className="px-4 py-2 border border-gray-300">{quotation.cus_name}</td>

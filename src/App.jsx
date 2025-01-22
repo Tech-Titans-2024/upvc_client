@@ -9,9 +9,9 @@ import PriceList from './components/pricelist/pricelist';
 import Calculator from './components/calculator/calculator';
 import Manage from './components/manage/manage';
 import Order from './components/order/order';
-import Settings from './components/settings/setttings';
-import CustomerManage from './components/customerManage/customer';
-import Guidelines from './components/guidelines/guidelines';
+import Reports from './components/reports/report';
+import CustomerManage from './components/customermanage/customer';
+import Profile from './components/profile/profile';
 
 function App() 
 {
@@ -21,9 +21,9 @@ function App()
 				<Route path='/' element={<Login />} />
 				<Route path='/upvc' element={<Layout />} >
 					<Route path='/upvc/dashboard' element={<Dashboard />} />
-					<Route path='/upvc/settings' element={<Settings />} />
+					<Route path='/upvc/reports' element={<Reports />} />
 					<Route path='/upvc/order' element={<Order />} />
-					<Route path='/upvc/guidelines' element={<Guidelines />} />
+					<Route path='/upvc/profile' element={<Profile />} />
 					<Route path='/upvc/quotation' element={<Quotation />} />
 					<Route path="/upvc/salesexecutive" element={<SalesExecutive />} />
 					<Route path="/upvc/pricelist" element={<PriceList />} />

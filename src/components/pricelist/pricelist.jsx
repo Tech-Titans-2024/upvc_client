@@ -84,9 +84,9 @@ const PriceList = () => {
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-80 p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                     />
-                    <button className="h-12 w-24 px-6 py-2 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1 transition duration-300">
+                    {/* <button className="h-12 w-24 px-6 py-2 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1 transition duration-300">
                         Add
-                    </button>
+                    </button> */}
                 </div>
             </div>
             <div className="overflow-x-auto">

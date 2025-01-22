@@ -123,6 +123,7 @@ const CustomerManage = () => {
                     <thead>
                         <tr className="bg-blue-500 text-white">
                             <th className="px-4 py-2 border border-gray-300">S.No</th>
+                            <th className="px-4 py-2 border border-gray-300">Q.Id</th>
                             <th className="px-4 py-2 border border-gray-300">Customer Name</th>
                             <th className="px-4 py-2 border border-gray-300">Phone No</th>
                             <th className="px-4 py-2 border border-gray-300">Address</th>
@@ -134,6 +135,7 @@ const CustomerManage = () => {
                         {customers.map((customer, index) => (
                             <tr key={index} className="hover:bg-gray-100"> {/* Use _id */}
                                 <td className="px-4 py-2 border border-gray-300 text-center">{index + 1}</td>
+                                <td className="px-4 py-2 border border-gray-300 text-center">{customer.quotation_no}</td>
                                 <td className="px-4 py-2 border border-gray-300">{customer.cus_name}</td>
                                 <td className="px-4 py-2 border border-gray-300">{customer.cus_con}</td>
                                 <td className="px-4 py-2 border border-gray-300">{customer.cus_add}</td>
