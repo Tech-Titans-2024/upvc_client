@@ -14,7 +14,7 @@ const PieChart = () => {
     labels: ['Fixed Window', 'Sliding Window', 'Open Window'],
     datasets: [
       {
-        label: 'Types of Window',
+        label: 'Window',
         data: [50, 30, 20], // Percentage data for the doors
         backgroundColor: [
           '#FF6384', // Vibrant pink
@@ -43,7 +43,7 @@ const PieChart = () => {
       },
       title: {
         display: true,
-        text: 'Types of Window', // Chart title
+        text: 'Window', // Chart title
         font: {
           size: 20,
           weight: 'bold',

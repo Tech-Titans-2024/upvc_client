@@ -14,7 +14,7 @@ const PieChart = () => {
     labels: ['Louvers with Fan', 'Louvers without Fan'], // Labels for the two parts
     datasets: [
       {
-        label: 'Types of Louvers',
+        label: 'Louvers',
         data: [60, 40], // Percentage data for Louvers with and without Fan
         backgroundColor: [
           '#FF6384', // Vibrant pink
@@ -43,7 +43,7 @@ const PieChart = () => {
       },
       title: {
         display: true,
-        text: 'Types of Louvers', // Chart title
+        text: 'Louvers', // Chart title
         font: {
           size: 20,
           weight: 'bold',

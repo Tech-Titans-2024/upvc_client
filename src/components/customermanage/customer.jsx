@@ -59,10 +59,10 @@ const CustomerManage = () => {
                             {customers && (
                                 customers.map((value, index) => {
                                     return <tr class="hover:bg-gray-100">
-                                        <td class="px-4 py-2 border border-gray-300 text-center">{index + 1}</td>
-                                        <td class="px-4 py-2 border border-gray-300">{value.cus_name}</td>
-                                        <td class="px-4 py-2 border border-gray-300">{value.cus_con}</td>
-                                        <td class="px-4 py-2 border border-gray-300">{value.cus_add}</td>
+                                        <td class="px-4 font-bold py-2 border border-gray-300 text-center">{index + 1}</td>
+                                        <td class="px-4 font-bold py-2 border border-gray-300">{value.cus_name}</td>
+                                        <td class="px-4 font-bold py-2 border border-gray-300">{value.cus_con}</td>
+                                        <td class="px-4 font-bold py-2 border border-gray-300">{value.cus_add}</td>
                                         <td className="px-4 py-2 border border-gray-300 text-center">
                                             <button className="px-3 py-1 w-32 h-10 font-bold text-md bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none">
                                                 Edit

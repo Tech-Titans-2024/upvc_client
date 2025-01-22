@@ -156,7 +156,7 @@ function Quotation(props)
                             </div>
                             <div className="text-right">
                                 <p className="text-sm font-medium text-gray-700">
-                                    <span className="text-sm font-semibold text-blue-600">DATE :</span> 11.09.2024
+                                    <span className="text-sm font-semibold text-blue-600">DATE : {formattedDate}</span> 
                                 </p>
                             </div>
                         </div>

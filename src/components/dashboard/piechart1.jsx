@@ -14,7 +14,7 @@ const PieChart = () => {
     labels: ['Main Door', 'Rest Room Door', 'Bedroom Door'],
     datasets: [
       {
-        label: 'Types of Door',
+        label: 'Door',
         data: [20, 30, 20], // Percentage data for the doors
         backgroundColor: [
           '#FF6384', // Vibrant pink
@@ -43,7 +43,7 @@ const PieChart = () => {
       },
       title: {
         display: true,
-        text: 'Types of Door', // Chart title
+        text: 'Door', // Chart title
         font: {
           size: 20,
           weight: 'bold',

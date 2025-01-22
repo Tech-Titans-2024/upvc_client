@@ -139,7 +139,7 @@ const StaffManage = () => {
             <h1 className="text-black text-3xl font-bold text-center">Sales Executive</h1>
             <div className="w-full h-fit flex justify-between items-center gap-5 py-2">
                 <div className="flex flex-row justify-start">
-                    <h1 className="font-bold text-lg">No of Staff : {salesPersons.length}</h1>
+                    <h1 className="font-bold text-lg">No of Staffs : {salesPersons.length}</h1>
                 </div>
                 <div className="flex gap-5">
                     <button
