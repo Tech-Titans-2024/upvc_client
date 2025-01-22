@@ -265,10 +265,10 @@ function Quotation(props)
                                                     <span>{data.quantity}</span>
                                                 </td>
                                                 <td className="border-b border-r border-black text-center align-middle m-0">
-                                                    <span>{data.rate}</span>
+                                                    <span>{data.price}</span>
                                                 </td>
                                                 <td className="border-b border-r border-black text-center align-middle m-0">
-                                                    <span>{data.amount}</span>
+                                                    <span>{data.totalPrice}</span>
                                                 </td>
                                             </tr>
                                         ))}
