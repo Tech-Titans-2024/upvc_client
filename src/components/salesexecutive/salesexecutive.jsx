@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const StaffManage = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -8,7 +10,7 @@ const StaffManage = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [formData, setFormData] = useState({
         staffId: "",
-        staffPassword:"",
+        staffPassword: "",
         name: "",
         phone: "",
         address: "",
@@ -146,9 +148,10 @@ const StaffManage = () => {
                 </div>
                 <div className="flex gap-5">
                     <button
-                        className="h-12 w-24 px-6 py-2 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1 transition duration-300"
+                        className="p-2 w-32 h-10 font-bold text-md bg-blue-500 text-white rounded-md hover:bg-orange-600 focus:outline-none"
                         onClick={toggleAddModal}
                     >
+                        <FontAwesomeIcon icon={faPlus} className="mr-2" />
                         Add
                     </button>
                 </div>
@@ -157,7 +160,7 @@ const StaffManage = () => {
             <div className="overflow-x-auto">
                 <table className="min-w-full bg-white border border-gray-300 shadow-md rounded-lg border-collapse">
                     <thead>
-                        <tr className="bg-blue-500 text-white">
+                        <tr className="bg-blue-500 text-white h-16">
                             <th className="px-4 py-2 border border-gray-300">S.No</th>
                             <th className="px-4 py-2 border border-gray-300">Staff ID</th>
                             <th className="px-4 py-2 border border-gray-300">Staff Password</th>
@@ -177,19 +180,21 @@ const StaffManage = () => {
                                 <td className="px-4 py-2 border border-gray-300">{value.name}</td>
                                 <td className="px-4 py-2 border border-gray-300">{value.number}</td>
                                 <td className="px-4 py-2 border border-gray-300">{value.address}</td>
+
                                 <td className="px-4 py-2 border border-gray-300 text-center">
                                     <button
-                                        className="px-3 py-1 w-32 h-10 font-bold text-md bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none"
-                                        onClick={() => handleEdit(value)}
-                                    >
+                                        className="p-2 w-32 h-10 font-bold text-md bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none"
+                                        onClick={() => handleEdit(value)}                                                                           >
+                                        <FontAwesomeIcon icon={faEdit} className="mr-2" />
                                         Edit
                                     </button>
                                 </td>
                                 <td className="px-4 py-2 border border-gray-300 text-center">
                                     <button
-                                        className="px-3 py-1 w-32 h-10 font-bold text-md ml-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none"
+                                        className="p-2 w-32 h-10 font-bold text-md bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none"
                                         onClick={() => handleDelete(value._id)} // Pass the salesperson's ID
                                     >
+                                        <FontAwesomeIcon icon={faTrash} className="mr-2" />
                                         Delete
                                     </button>
                                 </td>

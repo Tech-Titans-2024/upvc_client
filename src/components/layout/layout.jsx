@@ -19,14 +19,24 @@ function Sidebar()
 			path: '/upvc/quotation'
 		},
 		{
-			icon:  faPeopleGroup ,
-			name: 'Sales Executive',
-			path: '/upvc/salesexecutive'
+			icon: faShoppingCart,
+			name: 'Order Processing',
+			path: '/upvc/order'
+		},
+		{
+			icon: faTools,
+			name: 'Reports',
+			path: '/upvc/reports'
 		},
 		{
 			icon: faListAlt,
 			name: 'Price List',
 			path: '/upvc/pricelist'
+		},
+		{
+			icon:  faPeopleGroup ,
+			name: 'Sales Executive',
+			path: '/upvc/salesexecutive'
 		},
 		{
 			icon: faUserAlt,
@@ -42,16 +52,6 @@ function Sidebar()
 			icon: faCogs,
 			name: 'Manage',
 			path: '/upvc/manage'
-		},
-		{
-			icon: faTools,
-			name: 'Reports',
-			path: '/upvc/reports'
-		},
-		{
-			icon: faShoppingCart,
-			name: 'Order Processing',
-			path: '/upvc/order'
 		},
 		{
 			icon: faBookmark,

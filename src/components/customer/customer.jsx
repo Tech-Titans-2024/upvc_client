@@ -1,5 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrash, faTimes, faSave } from "@fortawesome/free-solid-svg-icons";
 
 const CustomerManage = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -104,27 +106,25 @@ const CustomerManage = () => {
         }
     };
 
+
     return (
-        <div className="w-full h-screen">
+        <div className="w-full h-screen text-md">
             <h1 className="text-black text-3xl font-bold text-center">Customer Profile</h1>
-
             <div className="w-full h-fit flex justify-between items-center gap-5 py-2">
-                <h1 className="font-bold text-lg">No of Customers: {customers.length}</h1>
-
+                <h1 className="font-bold text-lg">No of Customers : {customers.length}</h1>
                 <input
                     type="text"
-                    placeholder="Search by product name"
+                    placeholder="Search..."
                     className="w-80 p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                 />
             </div>
-
             <div className="overflow-x-auto">
-                <table className="min-w-full bg-white border border-gray-300 shadow-md rounded-lg border-collapse">
+                <table className="min-w-full bg-white border border-gray-300 shadow-md rounded-lg border-collapse text-center">
                     <thead>
-                        <tr className="bg-blue-500 text-white">
-                            <th className="px-4 py-2 border border-gray-300">S.No</th>
-                            <th className="px-4 py-2 border border-gray-300">Q.Id</th>
-                            <th className="px-4 py-2 border border-gray-300">Customer Name</th>
+                        <tr className="bg-blue-500 text-white h-16">
+                            <th className="px-4 py-2 border border-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">S No</th>
+                            <th className="px-4 py-2 border border-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">Qtn Id</th>
+                            <th className="px-4 py-2 border border-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">Cus Name</th>
                             <th className="px-4 py-2 border border-gray-300">Phone No</th>
                             <th className="px-4 py-2 border border-gray-300">Address</th>
                             <th className="px-4 py-2 border border-gray-300">Edit</th>
@@ -134,24 +134,26 @@ const CustomerManage = () => {
                     <tbody>
                         {customers.map((customer, index) => (
                             <tr key={index} className="hover:bg-gray-100"> {/* Use _id */}
-                                <td className="px-4 py-2 border border-gray-300 text-center">{index + 1}</td>
-                                <td className="px-4 py-2 border border-gray-300 text-center">{customer.quotation_no}</td>
-                                <td className="px-4 py-2 border border-gray-300">{customer.cus_name}</td>
+                                <td className="px-4 py-2 border border-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">{index + 1}</td>
+                                <td className="px-4 py-2 border border-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">{customer.quotation_no}</td>
+                                <td className="px-4 py-2 border border-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">{customer.cus_name}</td>
                                 <td className="px-4 py-2 border border-gray-300">{customer.cus_con}</td>
                                 <td className="px-4 py-2 border border-gray-300">{customer.cus_add}</td>
-                                <td className="px-4 py-2 border border-gray-300 text-center">
+                                <td className="px-4 py-2 border border-gray-300">
                                     <button
-                                        className="px-3 py-1 w-32 h-10 font-bold text-md bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none"
+                                        className="px-3 py-1 w-32 h-10 font-bold text-md bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none"
                                         onClick={() => toggleEditModal(customer)}
                                     >
+                                        <FontAwesomeIcon icon={faEdit} className="mr-2" />
                                         Edit
                                     </button>
                                 </td>
-                                <td className="px-4 py-2 border border-gray-300 text-center">
+                                <td className="px-4 py-2 border border-gray-300">
                                     <button
                                         className="px-3 py-1 w-32 h-10 font-bold text-md ml-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none"
-                                        onClick={() => handleDeleteCustomer(customer._id)} // Make sure _id is passed here
+                                        onClick={() => handleDeleteCustomer(customer._id)}
                                     >
+                                        <FontAwesomeIcon icon={faTrash} className="mr-2" />
                                         Delete
                                     </button>
                                 </td>
@@ -160,7 +162,6 @@ const CustomerManage = () => {
                     </tbody>
                 </table>
             </div>
-
             {isEditModalOpen && selectedCustomer && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white w-96 p-6 rounded-lg shadow-lg">
@@ -218,6 +219,8 @@ const CustomerManage = () => {
             )}
         </div>
     );
+
+
 };
 
 export default CustomerManage;

@@ -10,7 +10,7 @@ import Calculator from './components/calculator/calculator';
 import Manage from './components/manage/manage';
 import Order from './components/order/order';
 import Reports from './components/reports/report';
-import CustomerManage from './components/customermanage/customer';
+import CustomerManage from './components/customer/customer';
 import Profile from './components/profile/profile';
 
 function App() 

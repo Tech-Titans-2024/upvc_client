@@ -1,204 +1,213 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-function Order() {
+function Order() 
+{
     const [quotations, setQuotations] = useState([]);
+    const [selectedStatus, setSelectedStatus] = useState('Unconfirmed');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedQuotation, setSelectedQuotation] = useState(null);
-    const [editedProducts, setEditedProducts] = useState([]); // For editing multiple products
-    const [confirmedOrders, setConfirmedOrders] = useState(new Set()); // Track confirmed orders
-
-
+    const [editedProducts, setEditedProducts] = useState([]);
     const apiUrl = import.meta.env.VITE_API_URL;
 
     // Fetch quotation details
+
     useEffect(() => {
         const fetchQuotationDetails = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/quotation`);
+                const response = await axios.post(`${apiUrl}/quotation`, { selectedStatus });
                 setQuotations(response.data);
-
-                // Load confirmed orders from localStorage
-                const savedConfirmedOrders = JSON.parse(localStorage.getItem('confirmedOrders')) || [];
-                setConfirmedOrders(new Set(savedConfirmedOrders));
             } catch (error) {
                 console.error(error);
             }
-        };
-        fetchQuotationDetails();
-    }, [apiUrl]);
+        }
+        fetchQuotationDetails()
+    }, [apiUrl, selectedStatus])
 
-    // Confirm order and disable button
+    const handleChange = (event) => { setSelectedStatus(event.target.value) }
+
+    // Confirm order and Disable button
+
     const confirmOrder = async (order) => {
         try {
             await axios.post(`${apiUrl}/orderconfirm`, order);
             alert('Order Confirmed successfully!');
-
-            // Update confirmed orders state
-            setConfirmedOrders((prevConfirmed) => {
-                const updatedConfirmed = new Set(prevConfirmed);
-                updatedConfirmed.add(order._id);
-
-                // Store confirmed order IDs in localStorage
-                localStorage.setItem('confirmedOrders', JSON.stringify([...updatedConfirmed]));
-                return updatedConfirmed;
-            });
-        } catch (error) {
+            window.location.reload()
+        }
+        catch (error) {
             console.error(error);
         }
-    };
+    }
 
-    // Edit quotation and open modal
+    // Edit Quotation and open Modal
+
     const editQuotation = (quotation) => {
         setSelectedQuotation(quotation);
-        setEditedProducts(quotation.product); // Initialize edited products with the current products in the quotation
+        setEditedProducts(quotation.product);
         setIsModalOpen(true);
-    };
+    }
 
-    // Handle input change for each product
+    // Handle input change for each Product
+
     const handleInputChange = (index, e) => {
         const { name, value } = e.target;
         const updatedProducts = [...editedProducts];
         updatedProducts[index] = { ...updatedProducts[index], [name]: value };
         setEditedProducts(updatedProducts);
-    };
+    }
 
-    // Save edited products
+    // Save Edited Products
+
     const saveEditedProduct = async () => {
         try {
             const updatedQuotation = { ...selectedQuotation, product: editedProducts };
-            console.log(updatedQuotation);
-
             const response = await axios.put(`${apiUrl}/quotation/${selectedQuotation._id}`, updatedQuotation);
             setQuotations((prev) =>
                 prev.map((item) =>
                     item._id === selectedQuotation._id ? updatedQuotation : item
                 )
-            );
+            )
             setIsModalOpen(false);
             alert('Product updated successfully!');
-        } catch (error) {
+        }
+        catch (error) {
             console.error(error);
         }
-    };
+    }
 
-    // Close modal
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
+    // Close Modal
 
-    //delete quotation
+    const closeModal = () => { setIsModalOpen(false) }
+
+    // Delete Quotation
 
     const deleteQuotation = async (quotation) => {
         try {
             const resoponse = await axios.delete(`${apiUrl}/quotation/${quotation._id}`);
             setQuotations(quotations.filter((item) => item._id !== quotation._id));
             alert('Quotation deleted successfully!');
-
-
         }
         catch (error) {
             console.log(error);
-
         }
-
     }
 
-
     return (
-        <div className="w-full h-full bg-white">
-            <h1 className="font-bold text-center text-2xl">Order Confirmation Details</h1>
-            <div className=' flex justify-between items-center'>
-
-                <h1 className='font-bold text-lg'>No of Quotations : {quotations.length}</h1>
+        <div className="w-full h-full bg-white p-2">
+            <h1 className="font-bold text-center text-2xl mb-4">Order Confirmation Details</h1>
+            <div className="flex justify-between items-center mb-4">
+                <h1 className="font-bold text-lg">No of Quotations : {quotations.length}</h1>
                 <input
                     type="text"
-                    placeholder="Search by product name"
+                    placeholder="Search..."
                     className="w-80 p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                 />
             </div>
-
-            <table className="w-full bg-white shadow-md rounded-lg border-collapse mt-2">
-                <thead>
-                    <tr className="h-20 bg-blue-500 text-white text-lg">
-                        <th className="border border-gray-300 py-6">Quotation No</th>
-                        <th className="border border-gray-300 py-6 w-32">Date</th>
-                        <th className="border border-gray-300 py-6">Sales Person Id</th>
-                        <th className="border border-gray-300 py-6">Customer Name</th>
-                        <th className="border border-gray-300 py-6 w-32">Address</th>
-                        <th className="border border-gray-300 py-6">Contact No</th>
-                        <th className="border border-gray-300 py-6">Confirm</th>
-                        <th className="border border-gray-300 py-6">Edit</th>
-                        <th className="border border-gray-300 py-6">Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {quotations.length > 0 ? (
-                        quotations.map((quotation, index) => (
-                            <tr key={index} className="uppercase text-center">
-                                <td className="px-4 py-2 border border-gray-300">{quotation.quotation_no}</td>
-                                <td className="px-4 py-2 border border-gray-300">{quotation.date}</td>
-                                <td className="px-4 py-2 border border-gray-300">{quotation.salesper}</td>
-                                <td className="px-4 py-2 border border-gray-300">{quotation.cus_name}</td>
-                                <td className="px-4 py-2 border border-gray-300">{quotation.cus_add}</td>
-                                <td className="px-4 py-2 border border-gray-300">{quotation.cus_con}</td>
-                                <td className="px-4 py-2 border border-gray-300">
-                                    <button
-                                        className={`px-3 py-1 w-32 h-10 font-bold text-md rounded-md ${confirmedOrders.has(quotation._id)
-                                                ? 'bg-gray-400 cursor-not-allowed'
-                                                : 'bg-green-500 hover:bg-green-600 text-white'
-                                            }`}
-                                        onClick={() => confirmOrder(quotation)}
-                                        disabled={confirmedOrders.has(quotation._id)}
-                                    >
-                                        {confirmedOrders.has(quotation._id) ? 'Confirmed' : 'Confirm'}
-                                    </button>
-                                </td>
-                                <td className="px-4 py-2 border border-gray-300">
-                                    <button
-                                        className="px-3 py-1 w-32 h-10 font-bold text-md bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none"
-                                        onClick={() => editQuotation(quotation)}
-                                    >
-                                        Edit
-                                    </button>
-                                </td>
-                                <td className="px-4 py-2 border border-gray-300">
-                                    <button
-                                        className="px-3 py-1 w-32 h-10 font-bold text-md bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none"
-                                        onClick={() => deleteQuotation(quotation)}
-                                    >
-                                        Delete
-                                    </button>
+            <div className="mb-4 flex items-center gap-3">
+                <h3 className="font-semibold text-lg">Select Order Status : </h3>
+                <label className="flex items-center gap-2">
+                    <input
+                        type="radio"
+                        name="orderStatus"
+                        value="Confirmed"
+                        checked={selectedStatus === "Confirmed"}
+                        onChange={handleChange}
+                        className="w-6 h-6"
+                    />
+                    <span className="text-lg">Confirmed Order</span>
+                </label>
+                <label className="flex items-center gap-2">
+                    <input
+                        type="radio"
+                        name="orderStatus"
+                        value="Unconfirmed"
+                        checked={selectedStatus === "Unconfirmed"}
+                        onChange={handleChange}
+                        className="w-6 h-6"
+                    />
+                    <span className="text-lg">Unconfirmed Quotations</span>
+                </label>
+            </div>
+            {selectedStatus && (
+                <table className="w-full bg-white shadow-md rounded-lg border-collapse mt-2 text-center">
+                    <thead>
+                        <tr className="py-6 bg-blue-500 text-white text-lg">
+                            <th className="border border-gray-300 py-6 px-4 whitespace-nowrap overflow-hidden text-ellipsis">Qtn No</th>
+                            <th className="border border-gray-300 py-6 w-32 whitespace-nowrap overflow-hidden text-ellipsis">Date</th>
+                            <th className="border border-gray-300 py-6 px-4 whitespace-nowrap overflow-hidden text-ellipsis">Staff ID</th>
+                            <th className="border border-gray-300 py-6 whitespace-nowrap overflow-hidden text-ellipsis">Cus Name</th>
+                            <th className="border border-gray-300 py-6 w-32 whitespace-nowrap overflow-hidden text-ellipsis">Address</th>
+                            <th className="border border-gray-300 py-6 whitespace-nowrap overflow-hidden text-ellipsis">Contact No</th>
+                            {selectedStatus === "Unconfirmed" && <th className="border border-gray-300 py-6">Confirm</th>}
+                            <th className="border border-gray-300 py-6">Edit</th>
+                            <th className="border border-gray-300 py-6">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {quotations.length > 0 ? (
+                            quotations.map((quotation, index) => (
+                                <tr key={index} className="uppercase text-center hover:bg-gray-100">
+                                    <td className="px-4 py-2 border border-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">{quotation.quotation_no}</td>
+                                    <td className="px-4 py-2 border border-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">{quotation.date}</td>
+                                    <td className="px-4 py-2 border border-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">{quotation.salesper}</td>
+                                    <td className="px-4 py-2 border border-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">{quotation.cus_name}</td>
+                                    <td className="px-4 py-2 border border-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">{quotation.cus_add}</td>
+                                    <td className="px-4 py-2 border border-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">{quotation.cus_con}</td>
+                                    {selectedStatus === "Unconfirmed" && (
+                                        <td className="px-4 py-2 border border-gray-300">
+                                            <button
+                                                className="px-3 py-1 w-32 h-10 font-bold text-md bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none"
+                                                onClick={() => confirmOrder(quotation)}
+                                            >
+                                                <FontAwesomeIcon icon={faCheck} className="mr-2" />
+                                                Confirm
+                                            </button>
+                                        </td>
+                                    )}
+                                    <td className="px-4 py-2 border border-gray-300">
+                                        <button
+                                            className="px-3 py-1 w-32 h-10 font-bold text-md bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none"
+                                            onClick={() => editQuotation(quotation)}
+                                        >
+                                            <FontAwesomeIcon icon={faEdit} className="mr-2" />
+                                            Edit
+                                        </button>
+                                    </td>
+                                    <td className="px-4 py-2 border border-gray-300">
+                                        <button
+                                            className="px-3 py-1 w-32 h-10 font-bold text-md bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none"
+                                            onClick={() => deleteQuotation(quotation)}
+                                        >
+                                            <FontAwesomeIcon icon={faTrash} className="mr-2" />
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td
+                                    colSpan={selectedStatus === "Unconfirmed" ? 9 : 8}
+                                    className="px-4 py-6 border border-gray-300 text-center"
+                                >
+                                    No Quotations Found
                                 </td>
                             </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <td
-                                colSpan="6"
-                                className="px-4 py-2 border border-gray-300 text-center"
-                            >
-                                No Quotations Found
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-
-            {/* Modal */}
+                        )}
+                    </tbody>
+                </table>
+            )}
             {isModalOpen && (
                 <div className="modal-overlay fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
                     <div className="modal-content bg-white p-6 rounded-lg shadow-2xl w-11/12 max-w-4xl">
                         <h2 className="text-lg font-bold mb-4 text-center">Edit Product Details</h2>
-
-                        {/* Scrollable product list with fixed height */}
                         <div className="max-h-96 overflow-y-auto mb-6">
                             {editedProducts.map((product, index) => (
                                 <div key={index} className="product-section mb-8 p-4 rounded-lg shadow-lg bg-gray-100">
                                     <h3 className="text-xl font-semibold mb-3 text-blue-600">Product {index + 1}</h3>
-
                                     <div className="grid grid-cols-3 gap-4">
-                                        {/* Product Details */}
                                         {Object.keys(product).map((key) => (
                                             <div className="flex flex-col mb-4" key={key}>
                                                 <label htmlFor={key} className="mb-1 font-semibold text-sm text-gray-700">
@@ -219,8 +228,6 @@ function Order() {
                                 </div>
                             ))}
                         </div>
-
-                        {/* Modal Buttons */}
                         <div className="flex justify-end gap-2 mt-4">
                             <button
                                 className="px-4 py-2 font-bold text-md bg-gray-300 text-black rounded-md hover:bg-gray-400"
@@ -239,7 +246,7 @@ function Order() {
                 </div>
             )}
         </div>
-    );
+    )
 }
 
 export default Order;
