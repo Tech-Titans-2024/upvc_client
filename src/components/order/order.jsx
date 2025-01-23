@@ -122,9 +122,10 @@ function Order() {
                 <thead>
                     <tr className="h-20 bg-blue-500 text-white text-lg">
                         <th className="border border-gray-300 py-6">Quotation No</th>
+                        <th className="border border-gray-300 py-6 w-32">Date</th>
                         <th className="border border-gray-300 py-6">Sales Person Id</th>
                         <th className="border border-gray-300 py-6">Customer Name</th>
-                        <th className="border border-gray-300 py-6">Address</th>
+                        <th className="border border-gray-300 py-6 w-32">Address</th>
                         <th className="border border-gray-300 py-6">Contact No</th>
                         <th className="border border-gray-300 py-6">Confirm</th>
                         <th className="border border-gray-300 py-6">Edit</th>
@@ -136,6 +137,7 @@ function Order() {
                         quotations.map((quotation, index) => (
                             <tr key={index} className="uppercase text-center">
                                 <td className="px-4 py-2 border border-gray-300">{quotation.quotation_no}</td>
+                                <td className="px-4 py-2 border border-gray-300">{quotation.date}</td>
                                 <td className="px-4 py-2 border border-gray-300">{quotation.salesper}</td>
                                 <td className="px-4 py-2 border border-gray-300">{quotation.cus_name}</td>
                                 <td className="px-4 py-2 border border-gray-300">{quotation.cus_add}</td>
