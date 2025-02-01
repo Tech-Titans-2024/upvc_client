@@ -85,7 +85,7 @@ const PieChart = () =>
 	return (
 		<div style={containerStyle}>
 			<h3 className="pie-heading font-bold mb-2" style={{ textAlign: 'center', fontSize: '20px', marginBottom: '15px' }}>
-				DOOR CHART
+				DOOR
 			</h3>
 			<Pie data={chartData} options={options} />
 		</div>

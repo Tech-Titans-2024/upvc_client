@@ -183,7 +183,7 @@ const StaffManage = () => {
 
                                 <td className="px-4 py-2 border border-gray-300 text-center">
                                     <button
-                                        className="p-2 w-32 h-10 font-bold text-md bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none"
+                                        className="p-2 w-32 h-10 font-bold text-md bg-teal-600 text-white rounded-md hover:bg-teal-700 focus:outline-none"
                                         onClick={() => handleEdit(value)}                                                                           >
                                         <FontAwesomeIcon icon={faEdit} className="mr-2" />
                                         Edit

@@ -86,7 +86,7 @@ const PieChart = () =>
 				className="pie-heading font-bold mb-2"
 				style={{ textAlign: 'center', fontSize: '20px', marginBottom: '15px' }}
 			>
-				LOUVERS CHART
+				LOUVERS
 			</h3>
 			<Pie data={chartData} options={options} />
 		</div>

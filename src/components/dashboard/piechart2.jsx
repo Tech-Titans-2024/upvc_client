@@ -11,7 +11,7 @@ const PieChart = () =>
 		labels: ['Fixed Window - 50', 'Sliding Window - 30', 'Open Window - 20'],
 		datasets: [
 			{
-				data: [50, 30, 20],
+				data: [40, 40, 20],
 				backgroundColor: [
 					'#4CAF50', // Green
 					'#FFC107', // Amber
@@ -86,7 +86,7 @@ const PieChart = () =>
 				className="pie-heading font-bold mb-2"
 				style={{ textAlign: 'center', fontSize: '20px', marginBottom: '15px' }}
 			>
-				WINDOW CHART
+				WINDOW
 			</h3>
 			<Pie data={chartData} options={options} />
 		</div>
